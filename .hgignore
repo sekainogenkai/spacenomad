@@ -1,0 +1,41 @@
+# -*- mode: sh; -*-
+syntax: regexp
+
+# general files
+# core dumps, remove if you have a directory called “core”
+(^|/)core(\.\d+)?$
+# editor save files
+~$
+# emacs swap/lock file
+(^|/)\.#
+
+# autotools
+(^|/)\.deps$
+(^|/)\.dirstamp$
+(^|/)Makefile(\.in)?$
+(^|/)autom4te\.cache$
+(^|/)aclocal\.m4$
+(^|/)compile$
+(^|/)config\.(guess|log|status|sub)$
+(^|/)configure$
+(^|/)depcomp$
+(^|/)install-sh$
+(^|/)libtool$
+(^|/)ltmain\.sh$
+(^|/)missing$
+
+# Macro files copied from the system for AC_CONFIG_MACRO_DIR.  To ship
+# program-specific m4 files, use an alternative directory such as
+# m4-internal and have “ACLOCAL_AMFLAGS = -I m4-internal -I m4” in
+# your Makefile.am
+(^|/)m4$
+
+# compiler output+libtool archive/object files
+\.l?[ao]$
+\.(dll|so|dylib)$
+\.exe$
+(^|/)\.libs$
+
+# pkg-config files should be created at ./configure-time, at least to
+# set modversion to PACKAGE_VERSION:
+\.pc$
