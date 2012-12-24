@@ -8,6 +8,8 @@ syntax: regexp
 ~$
 # emacs swap/lock file
 (^|/)\.#
+# Hg merge files
+\.(orig|rej)$
 
 # autotools
 (^|/)\.deps$
