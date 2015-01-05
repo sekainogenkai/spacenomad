@@ -14,7 +14,15 @@ extern "C" {
 
 #include "mode.hxx"
 
-class menu_option{public: menu_option(const char *p){}};
+class menu_option{
+public:
+	typedef bool (*do_thing_func_t)(mode *&);
+	do_thing_func_t do_thing;
+	menu_option(do_thing_func_t do_thing)
+	: do_thing(do_thing)
+	{
+	}
+};
 
 class menu_mode : public mode
 {

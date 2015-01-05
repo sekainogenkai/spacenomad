@@ -9,6 +9,7 @@ LIBS = $$(pkg-config --libs $(SDL2_PKG))
 MY_CXXFLAGS = -Wall -std=c++0x $$(pkg-config --cflags $(SDL2_PKG))
 EXEEXT = .exe
 OBJ = \
+	src/game_mode.o \
 	src/main.o \
 	src/menu_mode.o \
 	src/mode.o \

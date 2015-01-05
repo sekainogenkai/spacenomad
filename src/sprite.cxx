@@ -9,7 +9,11 @@ extern "C" {
 #include <string>
 #include <iostream>
 
-sprite::sprite(std::string path, SDL_Texture* texture, int ticksPerFrame, int posX, int posY){
+sprite::sprite(std::string path, SDL_Texture* texture, int ticksPerFrame, int posX, int posY)
+: height(0)
+, width(0)
+, numberOfFrames(0)
+{
 	
 	std::ifstream ifs (("images/"+ path + ".sprite").c_str(), std::ifstream::in);
 	
