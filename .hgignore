@@ -10,6 +10,7 @@ Makefile.win
 windurrs.mk
 Thumbs.db
 *.orig
-
+*~
+*#
 
 .settings
