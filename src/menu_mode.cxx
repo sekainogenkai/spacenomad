@@ -29,7 +29,7 @@ static bool menu_option_quit(mode *&new_mode)
 }
 
 menu_mode::menu_mode(SDL_Renderer *ren)
-: tex_menu_back(loadTexture(ren, "menu/menu_back.png"))
+: tex_menu_back(loadTexture(ren, "menu/main.png"))
 , tex_choose_bar(loadTexture(ren, "menu/choose_bar.png"))
 , selection_index(0) // menu bar selection
 , menu_options({

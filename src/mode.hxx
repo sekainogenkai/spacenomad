@@ -1,5 +1,5 @@
-#ifndef _TESTSDL_GAME_MODE_HXX
-#define _TESTSDL_GAME_MODE_HXX
+#ifndef _TESTSDL_MODE_HXX
+#define _TESTSDL_MODE_HXX
 
 extern "C" {
 #include <SDL.h>
@@ -20,4 +20,4 @@ public:
 	virtual ~mode();
 };
 
-#endif /* _TESTSDL_GAME_MODE_HXX */
+#endif /* _TESTSDL_MODE_HXX */

@@ -10,11 +10,16 @@
 
 game_mode::game_mode()
 {
+
 }
 
 
 bool game_mode::processEvents(SDL_Event *event, mode *& new_mode)
 {
+
+
+
+
 	return false;
 }
 void game_mode::animate()

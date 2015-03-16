@@ -18,14 +18,14 @@ OBJ = \
 RASTERS = \
 	images/favicon.png \
 	\
-	images/menu/menu_back.png \
-	images/menu/choose_bar.png
-	
+	images/menu/choose_bar.png \
+	images/menu/main.png
+
 
 MY_GIMP = $${GIMP-gimp}
 
-all: testsdl$(EXEEXT) $(RASTERS)
-testsdl$(EXEEXT): $(OBJ) $(RES) windurrs.mk
+all: spacenomad$(EXEEXT) $(RASTERS)
+spacenomad$(EXEEXT): $(OBJ) $(RES) windurrs.mk
 	./ecommand.sh $(CXX) $(MY_CXXFLAGS) $(CXXFLAGS) -o '$(@)' $(OBJ) $(RES) $(LIBS)
 
 windurrs.mk: Makefile
