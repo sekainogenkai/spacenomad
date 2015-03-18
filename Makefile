@@ -17,6 +17,7 @@ OBJ = \
 
 RASTERS = \
 	images/favicon.png \
+	images/cursor.png \
 	\
 	images/menu/choose_bar.png \
 	images/menu/main.png

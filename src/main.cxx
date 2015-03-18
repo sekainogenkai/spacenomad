@@ -67,7 +67,7 @@ public:
 	}
 
 	// Create window
-	SDL_Window *win =  SDL_CreateWindow("Airgo Run", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE);
+	SDL_Window *win =  SDL_CreateWindow("Space Nomad", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE);
 	if (win == NULL){
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
 		return 1;
@@ -114,7 +114,27 @@ public:
 
 	//Start the things needed to run the game
 	SDL_Event event;
-	SDL_ShowCursor(SDL_DISABLE);
+
+	// Customize the cursor
+	space_nomad_SDL_Surface_unique_ptr cursor(loadSurface("cursor.png"));
+	auto cursor_data = new Uint8[cursor->w*cursor->h/8]();
+	auto cursor_mask = new Uint8[cursor->w*cursor->h/8]();
+	SDL_LockSurface(cursor.get());
+	for (int i = 0; i < cursor->w*cursor->h; i++) {
+		Uint8 r, g, b, a;
+		SDL_GetRGBA(
+				*(Uint32*)((Uint8*)cursor->pixels + cursor->format->BytesPerPixel*i),
+				cursor->format,
+				&r, &g, &b, &a);
+		Uint8 pixelBit = (1<<(7-(i%8)));
+		cursor_data[i/8] |= r || !a ? 0 : pixelBit;
+		cursor_mask[i/8] |= !a ? 0 : pixelBit;
+	}
+	SDL_UnlockSurface(cursor.get());
+	auto customCursor = SDL_CreateCursor(cursor_data, cursor_mask, cursor->w, cursor->h, (cursor->w-2)/2, (cursor->h-2)/2);
+	SDL_SetCursor(customCursor);
+	delete [] cursor_data;
+	delete [] cursor_mask;
 
 	// Initial mode: the top level main menu
 	modes.push(new menu_mode(ren));
@@ -197,6 +217,8 @@ public:
 
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /end player one game
 	// Cleanup
+	SDL_SetCursor(SDL_GetDefaultCursor());
+	SDL_FreeCursor(customCursor);
 	SDL_RemoveTimer(tickTimerID);
 	TTF_CloseFont(font);
 	TTF_Quit();
@@ -219,29 +241,29 @@ int main(int argc, char *argv[])
 
 // http://stackoverflow.com/a/19054280/2948122
 void
-airgo_SDL_Texture_deleter::operator()(SDL_Texture *texture)
+space_nomad_SDL_Texture_deleter::operator()(SDL_Texture *texture)
 {
 	SDL_DestroyTexture(texture);
 }
 // Load a surface
-airgo_SDL_Surface_unique_ptr loadSurface(const char *filename)
+space_nomad_SDL_Surface_unique_ptr loadSurface(const char *filename)
 {
 	SDL_Surface *bmp = IMG_Load(("images/" + std::string(filename)).c_str());
 	if (!bmp)
 	{
-			 std::cout << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
-			 abort();
-			 return airgo_SDL_Surface_unique_ptr();
+		std::cout << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
+		abort();
+		return space_nomad_SDL_Surface_unique_ptr();
 	}
-	return airgo_SDL_Surface_unique_ptr(bmp);
+	return space_nomad_SDL_Surface_unique_ptr(bmp);
 }
 void
-airgo_SDL_Surface_deleter::operator()(SDL_Surface *surface)
+space_nomad_SDL_Surface_deleter::operator()(SDL_Surface *surface)
 {
 	SDL_FreeSurface(surface);
 }
 // Load surface then convert to texture and unload surface because of memory leaking. # it isn't that bad though
-airgo_SDL_Texture_unique_ptr loadTexture(SDL_Renderer *ren, const char *filename)
+space_nomad_SDL_Texture_unique_ptr loadTexture(SDL_Renderer *ren, const char *filename)
 {
 	auto bmp = loadSurface(filename);
 
@@ -250,9 +272,9 @@ airgo_SDL_Texture_unique_ptr loadTexture(SDL_Renderer *ren, const char *filename
 	{
 			 std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
 			 abort();
-			 return airgo_SDL_Texture_unique_ptr();
+			 return space_nomad_SDL_Texture_unique_ptr();
 	}
-	return airgo_SDL_Texture_unique_ptr(tex);
+	return space_nomad_SDL_Texture_unique_ptr(tex);
 }
 
 static Uint32 tickTimerCallback(Uint32 interval, void *param)

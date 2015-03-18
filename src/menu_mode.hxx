@@ -33,10 +33,10 @@ public:
 	virtual void render(SDL_Renderer *ren, TTF_Font *font);
 	virtual ~menu_mode();
 private:
-	airgo_SDL_Texture_unique_ptr tex_menu_back;
-	airgo_SDL_Texture_unique_ptr tex_choose_bar;
+	space_nomad_SDL_Texture_unique_ptr tex_menu_back;
+	space_nomad_SDL_Texture_unique_ptr tex_choose_bar;
 	unsigned int selection_index;
-	menu_option menu_options[3];
+	menu_option menu_options[4];
 };
 
 

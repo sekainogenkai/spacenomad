@@ -17,6 +17,12 @@ static bool menu_option_start(mode *&new_mode)
 	return false;
 }
 
+static bool menu_option_option(mode *&new_mode)
+{
+	new_mode = NULL;
+	return false;
+}
+
 static bool menu_option_credits(mode *&new_mode)
 {
 	new_mode = NULL;
@@ -34,6 +40,7 @@ menu_mode::menu_mode(SDL_Renderer *ren)
 , selection_index(0) // menu bar selection
 , menu_options({
 			menu_option(menu_option_start),
+			menu_option(menu_option_option),
 			menu_option(menu_option_credits),
 			menu_option(menu_option_quit),
 	})
@@ -59,7 +66,7 @@ bool menu_mode::processEvents(SDL_Event *event, mode *& new_mode)
 		// case down
 		case SDLK_DOWN:
 		case SDLK_s:
-			if (selection_index < AIRGO_ARRAY_SIZE(menu_options) - 1)
+			if (selection_index < SPACE_NOMAD_ARRAY_SIZE(menu_options) - 1)
 				selection_index++;
 			break;
 
@@ -70,7 +77,6 @@ bool menu_mode::processEvents(SDL_Event *event, mode *& new_mode)
 		// case enter or space
 		case SDLK_KP_ENTER:
 		case SDLK_RETURN:
-		case SDLK_KP_SPACE:
 			return menu_options[selection_index].do_thing(new_mode);
 		}
 	}
@@ -91,10 +97,10 @@ menu_mode::render(SDL_Renderer *ren, TTF_Font *font)
 	dst.x = dst.y = 0;
 	SDL_QueryTexture(tex_menu_back.get(), NULL, NULL, &dst.w, &dst.h);
 	SDL_RenderCopy(ren, tex_menu_back.get(),NULL, &dst);
-	// CHoose bar
-	dst.x = 294;
+	// Choose bar
+	dst.x = 656;
 	SDL_QueryTexture(tex_choose_bar.get(), NULL, NULL, &dst.w, &dst.h);
-	dst.y = 688 + selection_index * (dst.h - 11);
+	dst.y = 525 + selection_index * 130;
 	SDL_RenderCopy(ren, tex_choose_bar.get(), NULL, &dst);
 }
 
