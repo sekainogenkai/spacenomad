@@ -23,6 +23,7 @@ public:
 	~game_mode();
 private:
 	space_nomad_SDL_Texture_unique_ptr space_suit_texture_uptr;
+	// Player
 	player myPlayer;
 };
 

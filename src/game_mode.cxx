@@ -24,17 +24,59 @@ bool game_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *
 		{
 		case SDLK_BACKSPACE:
 			return true;
+		// WASD
+		case SDLK_w:
+			myPlayer.up = true;
+			break;
+		case SDLK_s:
+			myPlayer.down = true;
+			break;
+		case SDLK_a:
+			myPlayer.left = true;
+			break;
+		case SDLK_d:
+			myPlayer.right = true;
+			break;
+		//Shift
+		case SDLK_LSHIFT:
+			myPlayer.shift = true;
+			break;
 		}
+		break;
+	case SDL_KEYUP:
+		switch (event->key.keysym.sym)
+		{
+		// WASD
+		case SDLK_w:
+			myPlayer.up = false;
+			break;
+		case SDLK_s:
+			myPlayer.down = false;
+			break;
+		case SDLK_a:
+			myPlayer.left = false;
+			break;
+		case SDLK_d:
+			myPlayer.right = false;
+			break;
+		//Shift
+		case SDLK_LSHIFT:
+			myPlayer.shift = false;
+			break;
+		}
+		break;
 	}
 	return false;
 }
 void game_mode::animate()
 {
+	myPlayer.animate();
 }
 void game_mode::render(SDL_Renderer *ren, TTF_Font *font)
 {
-	myPlayer.draw(ren);
 	SDL_RenderCopy(ren, space_suit_texture_uptr.get(), NULL, NULL);
+
+	myPlayer.draw(ren);
 }
 
 game_mode::~game_mode()
