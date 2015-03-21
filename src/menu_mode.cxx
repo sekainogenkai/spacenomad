@@ -11,25 +11,25 @@
 #include "main.hxx"
 #include "menu_mode.hxx"
 
-static bool menu_option_start(mode *&new_mode)
+static bool menu_option_start(mode *&new_mode, SDL_Renderer *ren)
 {
-	new_mode = new game_mode();
+	new_mode = new game_mode(ren);
 	return false;
 }
 
-static bool menu_option_option(mode *&new_mode)
-{
-	new_mode = NULL;
-	return false;
-}
-
-static bool menu_option_credits(mode *&new_mode)
+static bool menu_option_option(mode *&new_mode, SDL_Renderer *ren)
 {
 	new_mode = NULL;
 	return false;
 }
 
-static bool menu_option_quit(mode *&new_mode)
+static bool menu_option_credits(mode *&new_mode, SDL_Renderer *ren)
+{
+	new_mode = NULL;
+	return false;
+}
+
+static bool menu_option_quit(mode *&new_mode, SDL_Renderer *ren)
 {
 	return true;
 }
@@ -47,7 +47,7 @@ menu_mode::menu_mode(SDL_Renderer *ren)
 {
 }
 
-bool menu_mode::processEvents(SDL_Event *event, mode *& new_mode)
+bool menu_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren)
 {
 	switch (event->type)
 	{
@@ -77,7 +77,7 @@ bool menu_mode::processEvents(SDL_Event *event, mode *& new_mode)
 		// case enter or space
 		case SDLK_KP_ENTER:
 		case SDLK_RETURN:
-			return menu_options[selection_index].do_thing(new_mode);
+			return menu_options[selection_index].do_thing(new_mode, ren);
 		}
 	}
 

@@ -19,6 +19,8 @@ RASTERS = \
 	images/favicon.png \
 	images/cursor.png \
 	\
+	images/astronaut/space_suit.png \
+	\
 	images/menu/choose_bar.png \
 	images/menu/main.png
 

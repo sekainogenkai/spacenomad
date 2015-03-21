@@ -150,7 +150,7 @@ public:
 			{
 				// call mode-specific event handler
 				mode *new_mode = NULL;
-				if (modes.top()->processEvents(&event, new_mode))
+				if (modes.top()->processEvents(&event, new_mode, ren))
 					delete_top_mode();
 				if (new_mode)
 					modes.push(new_mode);
@@ -265,6 +265,7 @@ space_nomad_SDL_Surface_deleter::operator()(SDL_Surface *surface)
 // Load surface then convert to texture and unload surface because of memory leaking. # it isn't that bad though
 space_nomad_SDL_Texture_unique_ptr loadTexture(SDL_Renderer *ren, const char *filename)
 {
+	std::cerr << "Loading " << filename << std::endl;
 	auto bmp = loadSurface(filename);
 
 	SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, bmp.get());
