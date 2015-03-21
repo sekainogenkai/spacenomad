@@ -11,6 +11,7 @@
 game_mode::game_mode(
 		SDL_Renderer *ren)
 : space_suit_texture_uptr(loadTexture(ren, "astronaut/space_suit.png"))
+, myPlayer(ren, "astronaut/space_suit.png")
 {
 }
 
@@ -32,6 +33,7 @@ void game_mode::animate()
 }
 void game_mode::render(SDL_Renderer *ren, TTF_Font *font)
 {
+	myPlayer.draw(ren);
 	SDL_RenderCopy(ren, space_suit_texture_uptr.get(), NULL, NULL);
 }
 

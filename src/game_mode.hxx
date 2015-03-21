@@ -10,6 +10,7 @@
 
 #include "main.hxx"
 #include "mode.hxx"
+#include "player.hxx"
 
 class game_mode
 : public mode
@@ -21,8 +22,8 @@ public:
 	virtual void render(SDL_Renderer *ren, TTF_Font *font);
 	~game_mode();
 private:
-	space_nomad_SDL_Texture_unique_ptr
-		space_suit_texture_uptr;
+	space_nomad_SDL_Texture_unique_ptr space_suit_texture_uptr;
+	player myPlayer;
 };
 
 

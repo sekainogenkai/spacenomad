@@ -243,6 +243,7 @@ int main(int argc, char *argv[])
 void
 space_nomad_SDL_Texture_deleter::operator()(SDL_Texture *texture)
 {
+	std::cerr << "uniquely freeing " << ((void *)texture) << std::endl;
 	SDL_DestroyTexture(texture);
 }
 // Load a surface
@@ -275,6 +276,7 @@ space_nomad_SDL_Texture_unique_ptr loadTexture(SDL_Renderer *ren, const char *fi
 			 abort();
 			 return space_nomad_SDL_Texture_unique_ptr();
 	}
+	std::cerr << "Loaded texture " << filename << " to " << ((void *)tex) << std::endl;
 	return space_nomad_SDL_Texture_unique_ptr(tex);
 }
 

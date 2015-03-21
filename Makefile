@@ -13,7 +13,17 @@ OBJ = \
 	src/main.o \
 	src/menu_mode.o \
 	src/mode.o \
+	src/object.o \
+	src/player.o \
 	src/sprite.o
+HEADERS = \
+	src/game_mode.hxx \
+	src/main.hxx \
+	src/menu_mode.hxx \
+	src/mode.hxx \
+	src/object.hxx \
+	src/player.hxx \
+	src/sprite.hxx
 
 RASTERS = \
 	images/favicon.png \
@@ -52,6 +62,7 @@ main.res: main.rc images/favicon.ico
 	windres '$(<)' -O coff -o '$(@)'
 
 $(OBJ) $(RASTERS): Makefile
+$(OBJ): $(HEADERS)
 
 clean:
 	rm -f $(OBJ) $(RASTERS) $(RES) testsdl$(EXEEXT)
