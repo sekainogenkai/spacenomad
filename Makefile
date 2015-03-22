@@ -16,7 +16,9 @@ OBJ = \
 	src/mode.o \
 	src/object.o \
 	src/player.o \
-	src/sprite.o
+	src/sprite.o \
+	src/star_block.o \
+	src/star_field.o
 HEADERS = \
 	src/camera.hxx \
 	src/game_mode.hxx \
@@ -25,7 +27,9 @@ HEADERS = \
 	src/mode.hxx \
 	src/object.hxx \
 	src/player.hxx \
-	src/sprite.hxx
+	src/sprite.hxx \
+	src/star_block.o \
+	src/star_field.o
 
 RASTERS = \
 	images/favicon.png \
@@ -34,7 +38,11 @@ RASTERS = \
 	images/astronaut/space_suit.png \
 	\
 	images/menu/choose_bar.png \
-	images/menu/main.png
+	images/menu/main.png \
+	\
+	images/star_field/star_0.png \
+	images/star_field/star_1.png \
+	images/star_field/star_2.png 
 
 
 MY_GIMP = $${GIMP-gimp}

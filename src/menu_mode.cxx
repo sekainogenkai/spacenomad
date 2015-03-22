@@ -6,7 +6,6 @@
  */
 
 
-
 #include "game_mode.hxx"
 #include "main.hxx"
 #include "menu_mode.hxx"
@@ -44,6 +43,15 @@ menu_mode::menu_mode(SDL_Renderer *ren)
 			menu_option(menu_option_credits),
 			menu_option(menu_option_quit),
 	})
+, star_0_texture(loadTexture(ren, "star_field/star_0.png"))
+, star_1_texture(loadTexture(ren, "star_field/star_1.png"))
+, star_2_texture(loadTexture(ren, "star_field/star_2.png"))
+, star_texture_ptrs({
+			star_0_texture.get(),
+			star_1_texture.get(),
+			star_2_texture.get(),
+})
+, stars(SPACE_NOMAD_ARRAY_SIZE(star_texture_ptrs))
 {
 }
 
@@ -90,8 +98,14 @@ menu_mode::animate()
 }
 
 void
-menu_mode::render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font)
+menu_mode::render(SDL_Renderer *ren, camera& display_camera, TTF_Font *font)
 {
+	display_camera.clear();
+	display_camera.considerObject(1024, 1024, 512);
+	display_camera.calculateTransforms();
+
+	stars.draw(ren, display_camera, star_texture_ptrs, 0, 0);
+
 	SDL_Rect dst;
 	// Menu back
 	dst.x = dst.y = 0;
