@@ -6,6 +6,8 @@ extern "C" {
 #include <SDL_ttf.h>
 }
 
+#include "camera.hxx"
+
 class mode {
 public:
 	/**
@@ -16,7 +18,7 @@ public:
 	 */
 	virtual bool processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren) = 0;
 	virtual void animate() = 0;
-	virtual void render(SDL_Renderer *ren, TTF_Font *font) = 0;
+	virtual void render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font) = 0;
 	virtual ~mode();
 };
 

@@ -9,6 +9,7 @@ LIBS = $$(pkg-config --libs $(SDL2_PKG))
 MY_CXXFLAGS = -Wall -std=c++0x $$(pkg-config --cflags $(SDL2_PKG))
 EXEEXT = .exe
 OBJ = \
+	src/camera.o \
 	src/game_mode.o \
 	src/main.o \
 	src/menu_mode.o \
@@ -17,6 +18,7 @@ OBJ = \
 	src/player.o \
 	src/sprite.o
 HEADERS = \
+	src/camera.hxx \
 	src/game_mode.hxx \
 	src/main.hxx \
 	src/menu_mode.hxx \

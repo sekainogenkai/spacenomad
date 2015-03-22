@@ -15,6 +15,7 @@ extern "C" {
 #include <SDL_ttf.h>
 }
 
+#include "camera.hxx"
 #include "main.hxx"
 #include "menu_mode.hxx"
 #include "mode.hxx"
@@ -139,6 +140,8 @@ public:
 	// Initial mode: the top level main menu
 	modes.push(new menu_mode(ren));
 
+	camera displayCamera(0, 0);
+	bool resize = true;
 	while (!modes.empty())
 	{
 		//Set up needed variables
@@ -166,7 +169,7 @@ public:
 					switch (event.window.event)
 					{
 					case SDL_WINDOWEVENT_RESIZED:
-						redraw = true;
+						resize = true;
 						break;
 					case SDL_WINDOWEVENT_CLOSE:
 						delete_modes();
@@ -204,10 +207,18 @@ public:
 				animate = false;
 			}
 
+			if (resize)
+			{
+				int displayWidth, displayHeight;
+				SDL_GetWindowSize(win, &displayWidth, &displayHeight);
+				displayCamera = camera(displayWidth, displayHeight);
+				redraw = true;
+			}
+
 			if (redraw)
 			{
 				SDL_RenderClear(ren);
-				modes.top()->render(ren, font);
+				modes.top()->render(ren, displayCamera, font);
 
 				SDL_RenderPresent(ren);
 				redraw = false;

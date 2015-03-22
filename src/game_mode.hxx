@@ -8,6 +8,7 @@
 #ifndef SRC_GAME_MODE_HXX_
 #define SRC_GAME_MODE_HXX_
 
+#include "camera.hxx"
 #include "main.hxx"
 #include "mode.hxx"
 #include "player.hxx"
@@ -19,12 +20,12 @@ public:
 	game_mode(SDL_Renderer *ren);
 	virtual bool processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren);
 	virtual void animate();
-	virtual void render(SDL_Renderer *ren, TTF_Font *font);
+	virtual void render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font);
 	~game_mode();
 private:
-	space_nomad_SDL_Texture_unique_ptr space_suit_texture_uptr;
 	// Player
 	player myPlayer;
+	player myStaticPlayer;
 };
 
 

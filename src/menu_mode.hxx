@@ -12,6 +12,7 @@ extern "C" {
 #include <SDL.h>
 }
 
+#include "camera.hxx"
 #include "mode.hxx"
 
 class menu_option{
@@ -30,7 +31,7 @@ public:
 	menu_mode(SDL_Renderer *ren);
 	virtual bool processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren);
 	virtual void animate();
-	virtual void render(SDL_Renderer *ren, TTF_Font *font);
+	virtual void render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font);
 	virtual ~menu_mode();
 private:
 	space_nomad_SDL_Texture_unique_ptr tex_menu_back;

@@ -90,7 +90,7 @@ menu_mode::animate()
 }
 
 void
-menu_mode::render(SDL_Renderer *ren, TTF_Font *font)
+menu_mode::render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font)
 {
 	SDL_Rect dst;
 	// Menu back

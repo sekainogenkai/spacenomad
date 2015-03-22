@@ -10,8 +10,8 @@
 
 game_mode::game_mode(
 		SDL_Renderer *ren)
-: space_suit_texture_uptr(loadTexture(ren, "astronaut/space_suit.png"))
-, myPlayer(ren, "astronaut/space_suit.png")
+: myPlayer(ren, "astronaut/space_suit.png")
+, myStaticPlayer(ren, "astronaut/space_suit.png")
 {
 }
 
@@ -72,11 +72,16 @@ void game_mode::animate()
 {
 	myPlayer.animate();
 }
-void game_mode::render(SDL_Renderer *ren, TTF_Font *font)
+void game_mode::render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font)
 {
-	SDL_RenderCopy(ren, space_suit_texture_uptr.get(), NULL, NULL);
+	// Set the camera.
+	displayCamera.clear();
+	myPlayer.considerCamera(displayCamera, 6);
+	myStaticPlayer.considerCamera(displayCamera, 1);
+	displayCamera.calculateTransforms();
 
-	myPlayer.draw(ren);
+	myPlayer.draw(ren, displayCamera);
+	myStaticPlayer.draw(ren, displayCamera);
 }
 
 game_mode::~game_mode()
