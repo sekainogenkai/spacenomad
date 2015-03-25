@@ -12,5 +12,7 @@ Thumbs.db
 *.orig
 *~
 *\#
+*.dll
+ttf-bitstream-*
 
 .settings
