@@ -12,6 +12,7 @@
 #include "main.hxx"
 #include "mode.hxx"
 #include "player.hxx"
+#include "star_field.hxx"
 
 class game_mode
 : public mode
@@ -26,6 +27,7 @@ private:
 	// Player
 	player myPlayer;
 	player myStaticPlayer;
+	star_field stars;
 };
 
 

@@ -81,8 +81,21 @@ bool camera::transform(SDL_Rect *r)
 	auto estimating_side_length = 2 * std::max(r->w, r->h);
 	return r->x + estimating_side_length > 0
 			&& r->y + estimating_side_length > 0
-			&& r->x - estimating_side_length < aspect*displayHeight
+			&& r->x - estimating_side_length < get_display_width()
 			&& r->y - estimating_side_length < displayHeight;
+}
+
+void camera::get_visible_area(SDL_Rect *r) const
+{
+	r->x = -offsetX;
+	r->y = -offsetY;
+	r->w = get_display_width()/scale;
+	r->h = displayHeight/scale;
+}
+
+double camera::get_display_width() const
+{
+	return aspect*displayHeight;
 }
 
 camera::~camera()

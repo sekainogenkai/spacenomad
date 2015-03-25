@@ -14,7 +14,7 @@ extern "C" {
 
 #include "camera.hxx"
 #include "mode.hxx"
-#include "star_block.hxx"
+#include "star_field.hxx"
 
 class menu_option{
 public:
@@ -39,11 +39,7 @@ private:
 	space_nomad_SDL_Texture_unique_ptr tex_choose_bar;
 	unsigned int selection_index;
 	menu_option menu_options[4];
-	space_nomad_SDL_Texture_unique_ptr star_0_texture;
-	space_nomad_SDL_Texture_unique_ptr star_1_texture;
-	space_nomad_SDL_Texture_unique_ptr star_2_texture;
-	SDL_Texture *star_texture_ptrs[3];
-	star_block stars;
+	star_field stars;
 };
 
 

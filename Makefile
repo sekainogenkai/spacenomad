@@ -28,8 +28,8 @@ HEADERS = \
 	src/object.hxx \
 	src/player.hxx \
 	src/sprite.hxx \
-	src/star_block.o \
-	src/star_field.o
+	src/star_block.hxx \
+	src/star_field.hxx
 
 RASTERS = \
 	images/favicon.png \

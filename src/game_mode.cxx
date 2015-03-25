@@ -12,6 +12,7 @@ game_mode::game_mode(
 		SDL_Renderer *ren)
 : myPlayer(ren, "astronaut/space_suit.png")
 , myStaticPlayer(ren, "astronaut/space_suit.png")
+, stars(ren)
 {
 }
 
@@ -80,6 +81,7 @@ void game_mode::render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font)
 	myStaticPlayer.considerCamera(displayCamera, 1);
 	displayCamera.calculateTransforms();
 
+	stars.draw(ren, displayCamera);
 	myPlayer.draw(ren, displayCamera);
 	myStaticPlayer.draw(ren, displayCamera);
 }

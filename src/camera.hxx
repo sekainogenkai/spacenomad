@@ -39,11 +39,17 @@ public:
 	 *   true if the object would appear on the display.
 	 */
 	bool transform(SDL_Rect *r);
+	/**
+	 * \brief
+	 *   Get the drawing/screen area in game coordinates.
+	 */
+	void get_visible_area(SDL_Rect *r) const;
 	virtual ~camera();
 private:
 	// display
 	double aspect;
 	int displayHeight;
+	double get_display_width() const;
 
 	// again, in game units
 	int leftMost;

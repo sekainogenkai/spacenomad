@@ -37,6 +37,7 @@ object::object(
 {
 }
 
+// This is for making a number that is close enough to zero become zero.
 static bool min_to_zero(double* number, double min) {
 	if (*number < min && *number > -min) {
 		number = 0;
