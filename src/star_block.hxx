@@ -27,7 +27,7 @@ class star_block {
 public:
 	star_block(int texture_count, int block_size_length, std::default_random_engine& random_engine,
 				int grid_x, int grid_y);
-	bool draw(SDL_Renderer *ren, camera& display_camera, SDL_Texture **textures) const;
+	bool draw(SDL_Renderer *ren, camera& display_camera, SDL_Texture **textures, double parallax_factor) const;
 	double get_x() const;
 	double get_y() const;
 	/**

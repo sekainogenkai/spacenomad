@@ -35,15 +35,17 @@ public:
 	 * This should be the function that gets called the most because all things
 	 * to be drawn on-screen will need to be transformed first.
 	 *
+	 * \param parallax_factor
+	 *   1.0 for normal objects. Larger means closer to the viewer, smaller means further.
 	 * \returns
 	 *   true if the object would appear on the display.
 	 */
-	bool transform(SDL_Rect *r);
+	bool transform(SDL_Rect *r, double parallax_factor = 1.0);
 	/**
 	 * \brief
-	 *   Get the drawing/screen area in game coordinates.
+	 *   Get the drawing/screen area in game coordinates for a particular parallax layer.
 	 */
-	void get_visible_area(SDL_Rect *r) const;
+	void get_visible_area(SDL_Rect *r, double parallax_factor = 1.0) const;
 	virtual ~camera();
 private:
 	// display

@@ -15,7 +15,12 @@
 const int block_side_length = 4096;
 
 star_field::star_field(SDL_Renderer *ren)
-: star_0_texture(loadTexture(ren, "star_field/star_0.png"))
+: layers {
+	star_layer(0.01),
+	star_layer(0.1),
+	star_layer(0.25),
+}
+, star_0_texture(loadTexture(ren, "star_field/star_0.png"))
 , star_1_texture(loadTexture(ren, "star_field/star_1.png"))
 , star_2_texture(loadTexture(ren, "star_field/star_2.png"))
 , star_texture_ptrs {
@@ -28,21 +33,24 @@ star_field::star_field(SDL_Renderer *ren)
 }
 
 void star_field::draw(SDL_Renderer* ren, camera& display_camera) {
-	layer.draw(ren, display_camera, star_texture_ptrs, SPACE_NOMAD_ARRAY_SIZE(star_texture_ptrs), random_engine);
+	for (auto i = 0; i < SPACE_NOMAD_ARRAY_SIZE(layers); i++)
+		layers[i].draw(ren, display_camera, star_texture_ptrs, SPACE_NOMAD_ARRAY_SIZE(star_texture_ptrs), random_engine);
 }
 
-star_layer::star_layer()
+star_layer::star_layer(
+		double parallax_factor)
 : grid_x_min(0)
 , grid_y_min(0)
 , grid_x_max(0)
 , grid_y_max(0)
+, parallax_factor(parallax_factor)
 {
 }
 
 void star_layer::draw(SDL_Renderer* ren, camera& display_camera, SDL_Texture **textures, int textures_count, std::default_random_engine& random_engine) {
 	// What two coordinates do we need to hit?
 	SDL_Rect visible_area;
-	display_camera.get_visible_area(&visible_area);
+	display_camera.get_visible_area(&visible_area, parallax_factor);
 	int new_grid_x_min, new_grid_y_min;
 	star_block::snap(block_side_length, visible_area.x, visible_area.y, new_grid_x_min, new_grid_y_min);
 	int new_grid_x_max, new_grid_y_max;
@@ -104,7 +112,7 @@ void star_layer::draw(SDL_Renderer* ren, camera& display_camera, SDL_Texture **t
 	std::cerr << "num_blocks=" << star_blocks.size() << "\n";
 
 	for (auto block_i = star_blocks.cbegin(); block_i != star_blocks.cend(); block_i++)
-		block_i->draw(ren, display_camera, textures);
+		block_i->draw(ren, display_camera, textures, parallax_factor);
 }
 
 void star_layer::add_block(int textures_count, int block_side_length, std::default_random_engine& random_engine, int grid_x, int grid_y) {

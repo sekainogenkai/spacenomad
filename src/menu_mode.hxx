@@ -40,6 +40,7 @@ private:
 	unsigned int selection_index;
 	menu_option menu_options[4];
 	star_field stars;
+	double pos;
 };
 
 

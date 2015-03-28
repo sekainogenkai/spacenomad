@@ -44,6 +44,7 @@ menu_mode::menu_mode(SDL_Renderer *ren)
 			menu_option(menu_option_quit),
 })
 , stars(ren)
+, pos(0)
 {
 }
 
@@ -87,13 +88,14 @@ bool menu_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *
 void
 menu_mode::animate()
 {
+	pos+=3;
 }
 
 void
 menu_mode::render(SDL_Renderer *ren, camera& display_camera, TTF_Font *font)
 {
 	display_camera.clear();
-	display_camera.considerObject(1024, 1024, 512);
+	display_camera.considerObject(pos, 1024, 512);
 	display_camera.calculateTransforms();
 
 	stars.draw(ren, display_camera);
