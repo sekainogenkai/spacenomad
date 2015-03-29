@@ -61,18 +61,15 @@ main.res: main.rc images/favicon.ico
 .cxx.exx:
 	./ecommand.sh $(CXX) -E $(MY_CXXFLAGS) $(CXXFLAGS) $(CPPFLAGS) -o '$(@)' '$(<)'
 .xcf.png:
-	if [[ '$(<)' == *.animation.xcf ]]; then \
-		$(MY_GIMP) -i -b "(let* ((output-meta-file (open-output-file \"$(@).sprite\")) (image (car (gimp-file-load RUN-NONINTERACTIVE \"$(<)\" \"$(<)\"))) (layers (reverse (vector->list (cadr (gimp-image-get-layers image))))) (x 0) (y 0) (w (car (gimp-drawable-width (car layers)))) (h (car (gimp-drawable-height (car layers))))) (write (list (length layers) w h) output-meta-file) (close-output-port output-meta-file) (while (> (length layers) 0) (if (> (+ x w) 8192) (list (set! x 0) (set! y (+ y h)))) (gimp-layer-resize (car layers) w h 0 0) (gimp-layer-translate (car layers) x y) (set! x (+ x w)) (set! layers (cdr layers))) (gimp-image-resize-to-layers image) (file-png-save-defaults RUN-NONINTERACTIVE image (car (gimp-image-merge-visible-layers image CLIP-TO-IMAGE)) \"$(@)\" \"$(@)\"))" -b '(gimp-quit FALSE)'; \
-	else \
-		$(MY_GIMP) -i -b '(let* ((image (car (gimp-file-load RUN-NONINTERACTIVE "$(<)" "$(<)")))) (file-png-save-defaults RUN-NONINTERACTIVE image (car (gimp-image-merge-visible-layers image CLIP-TO-IMAGE)) "$(@)" "$(@)"))' -b '(gimp-quit FALSE)'; \
-	fi
+	./p-xcf2png.sh '$(<)' '$(@)'
 .svg.png:
 	inkscape -e '$(@)' -d 120 '$(<)'
 .rc.res:
 	windres '$(<)' -O coff -o '$(@)'
 
-$(OBJ) $(RASTERS): Makefile
+$(OBJ): Makefile
 $(OBJ): $(HEADERS)
+$(RASTERS): p-xcf2png.sh
 
 clean:
 	rm -f $(OBJ) $(RASTERS) $(RES) testsdl$(EXEEXT)
