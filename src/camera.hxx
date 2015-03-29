@@ -28,6 +28,19 @@ public:
 	 *   Computes transforms, call before calling transform() and after all your considerObject() calls.
 	 */
 	void calculateTransforms();
+        /**
+         * \brief
+         *   Prepare a camera in a relatively different parallax layer.
+         *
+         * Must be called after calculateTransforms.
+         *
+         * \param parallax_factor
+         *   Higher values are closer to the camera, lower further.
+         *   Must be positive.
+         * \returns
+         *   A camera which positions objects correctly for the given parallax layer.
+         */
+        camera calculateParallax(double parallax_factor) const;
 	/**
 	 * \brief
 	 *   Take a rect with game coordinates and translate them into display coordinates.
@@ -40,12 +53,12 @@ public:
 	 * \returns
 	 *   true if the object would appear on the display.
 	 */
-	bool transform(SDL_Rect *r, double parallax_factor = 1.0);
+	bool transform(SDL_Rect *r) const;
 	/**
 	 * \brief
 	 *   Get the drawing/screen area in game coordinates for a particular parallax layer.
 	 */
-	void get_visible_area(SDL_Rect *r, double parallax_factor = 1.0) const;
+	void get_visible_area(SDL_Rect *r) const;
 	virtual ~camera();
 private:
 	// display

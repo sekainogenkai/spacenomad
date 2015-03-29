@@ -69,10 +69,19 @@ void camera::calculateTransforms()
 	offsetY = -topMost;
 }
 
-bool camera::transform(SDL_Rect *r, double parallax_factor)
+camera camera::calculateParallax(double parallax_factor) const
 {
-	r->x = (r->x + (offsetX - get_display_width()/2) * parallax_factor + get_display_width()/2) * scale ;
-	r->y = (r->y + (offsetY - displayHeight/2) * parallax_factor + displayHeight/2) * scale;
+        camera ret(*this);
+        // Parallax about the center of the screen.
+        ret.offsetX = (offsetX - get_display_width()/2) * parallax_factor + get_display_width()/2;
+        ret.offsetY = (offsetY - displayHeight/2) * parallax_factor + displayHeight/2;
+        return ret;
+}
+
+bool camera::transform(SDL_Rect *r) const
+{
+	r->x = (r->x + offsetX) * scale;
+	r->y = (r->y + offsetY) * scale;
 	r->w = r->w * scale;
 	r->h = r->h * scale;
 
@@ -85,10 +94,10 @@ bool camera::transform(SDL_Rect *r, double parallax_factor)
 			&& r->y - estimating_side_length < displayHeight;
 }
 
-void camera::get_visible_area(SDL_Rect *r, double parallax_factor) const
+void camera::get_visible_area(SDL_Rect *r) const
 {
-	r->x = -((offsetX - get_display_width()/2) * parallax_factor + get_display_width()/2);
-	r->y = -((offsetY - displayHeight/2) * parallax_factor + displayHeight/2);
+	r->x = -offsetX;
+	r->y = -offsetY;
 	r->w = get_display_width()/scale;
 	r->h = displayHeight/scale;
 }

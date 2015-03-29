@@ -7,7 +7,6 @@
 
 #include "main.hxx"
 #include "star_field.hxx"
-
 #include <algorithm>
 #include <ctime>
 #include <iostream>
@@ -50,7 +49,8 @@ star_layer::star_layer(
 void star_layer::draw(SDL_Renderer* ren, camera& display_camera, SDL_Texture **textures, int textures_count, std::default_random_engine& random_engine) {
 	// What two coordinates do we need to hit?
 	SDL_Rect visible_area;
-	display_camera.get_visible_area(&visible_area, parallax_factor);
+        auto parallax_display_camera(display_camera.calculateParallax(parallax_factor));
+	parallax_display_camera.get_visible_area(&visible_area);
 	int new_grid_x_min, new_grid_y_min;
 	star_block::snap(block_side_length, visible_area.x, visible_area.y, new_grid_x_min, new_grid_y_min);
 	int new_grid_x_max, new_grid_y_max;
@@ -112,7 +112,7 @@ void star_layer::draw(SDL_Renderer* ren, camera& display_camera, SDL_Texture **t
 	std::cerr << "num_blocks=" << star_blocks.size() << "\n";
 
 	for (auto block_i = star_blocks.cbegin(); block_i != star_blocks.cend(); block_i++)
-		block_i->draw(ren, display_camera, textures, parallax_factor);
+		block_i->draw(ren, parallax_display_camera, textures);
 }
 
 void star_layer::add_block(int textures_count, int block_side_length, std::default_random_engine& random_engine, int grid_x, int grid_y) {

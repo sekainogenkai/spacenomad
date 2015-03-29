@@ -39,7 +39,7 @@ void star_block::snap(int block_size_length, double x, double y, int& grid_x, in
 	grid_y = (int)y/block_size_length;
 }
 
-bool star_block::draw(SDL_Renderer *ren, camera& display_camera, SDL_Texture **textures, double parallax_factor) const {
+bool star_block::draw(SDL_Renderer *ren, camera& display_camera, SDL_Texture **textures) const {
 	auto x = get_x();
 	auto y = get_y();
 	for (auto stars_iter = stars.cbegin(); stars_iter != stars.cend(); stars_iter++) {
@@ -47,7 +47,7 @@ bool star_block::draw(SDL_Renderer *ren, camera& display_camera, SDL_Texture **t
 		SDL_QueryTexture(textures[stars_iter->texture_i], NULL, NULL, &dst.w, &dst.h);
 		dst.x = x + stars_iter->x;
 		dst.y = y + stars_iter->y;
-		if (display_camera.transform(&dst, parallax_factor))
+		if (display_camera.transform(&dst))
 			SDL_RenderCopyEx(ren, textures[stars_iter->texture_i], NULL, &dst, 0, NULL, SDL_FLIP_NONE);
 	}
 }
