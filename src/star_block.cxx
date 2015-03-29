@@ -39,7 +39,7 @@ void star_block::snap(int block_size_length, double x, double y, int& grid_x, in
 	grid_y = (int)y/block_size_length;
 }
 
-bool star_block::draw(SDL_Renderer *ren, camera& display_camera, SDL_Texture **textures) const {
+void star_block::draw(SDL_Renderer *ren, camera& display_camera, SDL_Texture **textures) const {
 	auto x = get_x();
 	auto y = get_y();
 	for (auto stars_iter = stars.cbegin(); stars_iter != stars.cend(); stars_iter++) {

@@ -32,7 +32,7 @@ star_field::star_field(SDL_Renderer *ren)
 }
 
 void star_field::draw(SDL_Renderer* ren, camera& display_camera) {
-	for (auto i = 0; i < SPACE_NOMAD_ARRAY_SIZE(layers); i++)
+	for (auto i = SPACE_NOMAD_ARRAY_SIZE(layers) - SPACE_NOMAD_ARRAY_SIZE(layers); i < SPACE_NOMAD_ARRAY_SIZE(layers); i++)
 		layers[i].draw(ren, display_camera, star_texture_ptrs, SPACE_NOMAD_ARRAY_SIZE(star_texture_ptrs), random_engine);
 }
 
