@@ -15,25 +15,17 @@ object::object(
 		SDL_Renderer *ren,
 		const char *textureFilename,
 		double x,
-		double y)
+		double y,
+		double xVel,
+		double yVel,
+		double angularVel)
 : x(x)
 , y(y)
-, xVel(0)
-, yVel(0)
+, xVel(xVel)
+, yVel(yVel)
 , facingDirection(0)
-, angularVel(0)
+, angularVel(angularVel)
 , texture(loadTexture(ren, textureFilename))
-{
-}
-
-object::object(
-		SDL_Renderer *ren,
-		const char *textureFilename)
-: object(
-		ren,
-		textureFilename,
-		0,
-		0)
 {
 }
 

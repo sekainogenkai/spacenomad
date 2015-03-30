@@ -15,6 +15,7 @@ OBJ = \
 	src/menu_mode.o \
 	src/mode.o \
 	src/object.o \
+	src/planet.o \
 	src/player.o \
 	src/sprite.o \
 	src/star_block.o \
@@ -26,6 +27,7 @@ HEADERS = \
 	src/menu_mode.hxx \
 	src/mode.hxx \
 	src/object.hxx \
+	src/planet.hxx \
 	src/player.hxx \
 	src/sprite.hxx \
 	src/star_block.hxx \
@@ -36,6 +38,7 @@ RASTERS = \
 	images/cursor.png \
 	\
 	images/astronaut/space_suit.png \
+	images/planet/plain.png \
 	\
 	images/menu/choose_bar.png \
 	images/menu/main.png \

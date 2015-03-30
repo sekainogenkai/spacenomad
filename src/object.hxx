@@ -20,11 +20,11 @@ public:
 	object(
 		SDL_Renderer *ren,
 		const char *texture,
-		double x,
-		double y);
-	object(
-		SDL_Renderer *ren,
-		const char *texture);
+		double x = 0,
+		double y = 0,
+		double xVel = 0,
+		double yVel = 0,
+		double angular = 0);
 	virtual void animate();
 	void draw(SDL_Renderer *ren, camera& displayCamera);
 	void angularVel_dampening(double dampening);

@@ -11,6 +11,7 @@
 #include "camera.hxx"
 #include "main.hxx"
 #include "mode.hxx"
+#include "planet.hxx"
 #include "player.hxx"
 #include "star_field.hxx"
 
@@ -27,6 +28,7 @@ private:
 	// Player
 	player myPlayer;
 	player myStaticPlayer;
+	planet myPlanet;
 	star_field stars;
 };
 

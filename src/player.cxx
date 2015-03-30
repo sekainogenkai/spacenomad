@@ -25,28 +25,18 @@ player::player(SDL_Renderer *ren, const char *textureFilename)
 
 
 void player::animate() {
-//	const auto speedMax = 5.0;
-//	const auto speedFactor = 0.05;
-//	const auto slowFactor = 1.1;
-//	if (left)
-//		xVel = std::max(xVel - speedFactor, -speedMax);
-//	else if (right)
-//		xVel = std::min(xVel + speedFactor, speedMax);
-//	else
-//		xVel /= slowFactor;
-//	if (up)
-//		yVel = std::max(yVel - speedFactor, -speedMax);
-//	else if (down)
-//		yVel = std::min(yVel + speedFactor, speedMax);
-//	else
-//		yVel /= slowFactor;
-
 	// Turning
 	const auto turnAccelSpeed = .2;
 	if (left) {
+		if (angularVel > 0) {
+			object::angularVel_dampening(1.2);
+		}
 		angularVel -= turnAccelSpeed;
 	}
 	if (right) {
+		if (angularVel < 0) {
+			object::angularVel_dampening(1.2);
+		}
 		angularVel += turnAccelSpeed;
 	}
 	if (!right && !left){
@@ -73,6 +63,5 @@ void player::animate() {
 
 
 player::~player() {
-	// TODO Auto-generated destructor stub
 }
 
