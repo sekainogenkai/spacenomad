@@ -12,6 +12,7 @@ game_mode::game_mode(
 		SDL_Renderer *ren)
 : myPlayer(ren, "astronaut/space_suit.png")
 , myStaticPlayer(ren, "astronaut/space_suit.png")
+, myPlanet(ren, 300, 400, 8, 2, 2, 400, 1)
 , stars(ren)
 {
 }
@@ -72,16 +73,18 @@ bool game_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *
 void game_mode::animate()
 {
 	myPlayer.animate();
+	myPlanet.animate();
 }
 void game_mode::render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font)
 {
 	// Set the camera.
 	displayCamera.clear();
 	myPlayer.considerCamera(displayCamera, 6);
-	myStaticPlayer.considerCamera(displayCamera, 1);
+	//myStaticPlayer.considerCamera(displayCamera, 1); // Static player is weird
 	displayCamera.calculateTransforms();
 
 	stars.draw(ren, displayCamera);
+	myPlanet.draw(ren, displayCamera);
 	myPlayer.draw(ren, displayCamera);
 	myStaticPlayer.draw(ren, displayCamera);
 }

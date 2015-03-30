@@ -61,13 +61,13 @@ void star_layer::draw(SDL_Renderer* ren, camera& display_camera, SDL_Texture **t
 	new_grid_y_min--;
 	new_grid_x_max++;
 	new_grid_y_max++;
-	std::cerr << "min-=(" << new_grid_x_min << "," << new_grid_y_min << "), max+=(" << new_grid_x_max << "," << new_grid_y_max << ")\n";
+	//std::cerr << "min-=(" << new_grid_x_min << "," << new_grid_y_min << "), max+=(" << new_grid_x_max << "," << new_grid_y_max << ")\n";
 
 	// Drop blocks outside our displayed/kept area.
 	for (auto i = star_blocks.size(); i > 0; i--)
 	{
 		auto star_block_i = star_blocks.begin() + i - 1;
-		std::cerr << "have (" << star_block_i->grid_x << "," << star_block_i->grid_y << ")\n";
+		//std::cerr << "have (" << star_block_i->grid_x << "," << star_block_i->grid_y << ")\n";
 		if (star_block_i->grid_x > new_grid_x_max
 				|| star_block_i->grid_x < new_grid_x_min
 				|| star_block_i->grid_y > new_grid_y_max
@@ -87,12 +87,12 @@ void star_layer::draw(SDL_Renderer* ren, camera& display_camera, SDL_Texture **t
 	else
 		// No overlap, reset.
 	{
-		std::cerr << "reset\n";
+		//std::cerr << "reset\n";
 		grid_x_min = grid_x_max = new_grid_x_min;
 		grid_y_min = grid_y_max = new_grid_y_min;
 		add_block(textures_count, block_side_length, random_engine, grid_x_min, grid_y_min);
 	}
-	std::cerr << "grid_min=(" << grid_x_min << "," << grid_y_min << "), grid_max=(" << grid_x_max << "," << grid_y_max <<")\n";
+	//std::cerr << "grid_min=(" << grid_x_min << "," << grid_y_min << "), grid_max=(" << grid_x_max << "," << grid_y_max <<")\n";
 
 	// Grow new blocks as necessary.
 	for (; grid_x_min > new_grid_x_min; grid_x_min--)
@@ -109,14 +109,14 @@ void star_layer::draw(SDL_Renderer* ren, camera& display_camera, SDL_Texture **t
 		for (auto grid_x = grid_x_min; grid_x <= grid_x_max; grid_x++)
 			add_block(textures_count, block_side_length, random_engine, grid_x, grid_y_max + 1);
 
-	std::cerr << "num_blocks=" << star_blocks.size() << "\n";
+	//stdrr << "num_blocks=" << star_blocks.size() << "\n";
 
 	for (auto block_i = star_blocks.cbegin(); block_i != star_blocks.cend(); block_i++)
 		block_i->draw(ren, parallax_display_camera, textures);
 }
 
 void star_layer::add_block(int textures_count, int block_side_length, std::default_random_engine& random_engine, int grid_x, int grid_y) {
-	std::cerr << "add(" << grid_x << "," << grid_y << ")\n";
+	//std::cerr << "add(" << grid_x << "," << grid_y << ")\n";
 	star_blocks.push_back(
 			star_block(
 					textures_count,
