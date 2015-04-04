@@ -19,7 +19,8 @@ OBJ = \
 	src/player.o \
 	src/sprite.o \
 	src/star_block.o \
-	src/star_field.o
+	src/star_field.o \
+	src/universe.o 
 HEADERS = \
 	src/camera.hxx \
 	src/game_mode.hxx \
@@ -31,7 +32,8 @@ HEADERS = \
 	src/player.hxx \
 	src/sprite.hxx \
 	src/star_block.hxx \
-	src/star_field.hxx
+	src/star_field.hxx \
+	src/universe.hxx 
 
 RASTERS = \
 	images/favicon.png \

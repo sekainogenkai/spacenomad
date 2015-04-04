@@ -11,9 +11,9 @@
 #include "camera.hxx"
 #include "main.hxx"
 #include "mode.hxx"
-#include "planet.hxx"
 #include "player.hxx"
 #include "star_field.hxx"
+#include "universe.hxx"
 
 class game_mode
 : public mode
@@ -28,7 +28,7 @@ private:
 	// Player
 	player myPlayer;
 	player myStaticPlayer;
-	planet myPlanet;
+	universe myUniverse;
 	star_field stars;
 };
 

@@ -17,4 +17,3 @@ planet::planet(SDL_Renderer *ren, double x, double y, double xVel, double yVel, 
 
 planet::~planet() {
 }
-
