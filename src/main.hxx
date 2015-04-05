@@ -11,6 +11,8 @@ extern "C" {
 
 #define SPACE_NOMAD_ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 
+extern int space_nomad_fps;
+
 //Number to string done  Copyright © 2014 Nathan Phillip Brink <ohnobinki@ohnopublishing.net>
 template <class T> static std::string str(const T &o)
 {

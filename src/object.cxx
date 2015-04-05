@@ -26,7 +26,11 @@ object::object(
 , facingDirection(0)
 , angularVel(angularVel)
 , texture(loadTexture(ren, textureFilename))
+, gravitational_radius_of_influence(0)
 {
+	radius = 0;
+	attractive = false;
+	mass = 0;
 }
 
 // This is for making a number that is close enough to zero become zero.
@@ -71,6 +75,25 @@ void object::draw(SDL_Renderer *ren, camera& displayCamera) {
 	dst.y = y - dst.h/2;
 	if (displayCamera.transform(&dst))
 		SDL_RenderCopyEx(ren, texture.get(), NULL, &dst, facingDirection, NULL, SDL_FLIP_NONE);
+}
+
+static void normalize_vector(double& x, double& y)
+{
+	auto current_magnitude = sqrt(pow(x, 2) + pow(y, 2));
+	x /= current_magnitude;
+	y /= current_magnitude;
+}
+
+void object::applyForce(double magnitude, double towards_x, double towards_y) {
+	towards_x -= x;
+	towards_y -= y;
+	normalize_vector(towards_x, towards_y);
+
+	auto acceleration_magnitude = magnitude / mass / space_nomad_fps;
+	xVel += acceleration_magnitude * towards_x;
+	yVel += acceleration_magnitude * towards_y;
+
+	std::cerr << ((size_t)this) << ":" << x << "," << y << std::endl;
 }
 
 object::~object() {

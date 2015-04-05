@@ -22,6 +22,8 @@ extern "C" {
 
 static Uint32 tickTimerCallback(Uint32 interval, void *param);
 
+int space_nomad_fps = 60;
+
 class main_class
 {
 private:
@@ -102,8 +104,8 @@ public:
 	// Set up a user event for detecting timer events.
 	// See http://wiki.libsdl.org/SDL_AddTimer
 	Uint32 tickSdlEventCode = SDL_RegisterEvents(1);
-	//60 fps
-	int tickMilliseconds = 1000/60;
+	//space_nomad_fpds fps
+	int tickMilliseconds = 1000/space_nomad_fps;
 	//double tickSeconds = tickMilliseconds / 1000.0;
 	SDL_TimerID tickTimerID = SDL_AddTimer(tickMilliseconds, tickTimerCallback, &tickSdlEventCode);
 	if (!tickTimerID)

@@ -30,6 +30,13 @@ public:
 	void angularVel_dampening(double dampening);
 	void movement_dampening(double dampening);
 	void considerCamera(camera& displayCamera, int clearFactor);
+	bool getAttractive() const { return attractive;};
+	double getX() const { return x; };
+	double getY() const { return y; };
+	int getRadius() const { return radius; };
+	double getGROI() const { return gravitational_radius_of_influence; };
+	double getMass() const { return mass; };
+	void applyForce(double magnitude, double towards_x, double towards_y);
 	virtual ~object();
 protected:
 	double x;
@@ -38,7 +45,10 @@ protected:
 	double yVel;
 	double facingDirection;
 	double angularVel;
-
+	bool attractive;
+	double mass;
+	int radius;
+	double gravitational_radius_of_influence;
 	space_nomad_SDL_Texture_unique_ptr texture;
 };
 
