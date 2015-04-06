@@ -36,7 +36,13 @@ public:
 	int getRadius() const { return radius; };
 	double getGROI() const { return gravitational_radius_of_influence; };
 	double getMass() const { return mass; };
-	void applyForce(double magnitude, double towards_x, double towards_y);
+	/**
+	 * \param x
+	 *   Normalized x component of force vector.
+	 * \param y
+	 *   Normalized y component of force vector.
+	 */
+	void applyForce(double magnitude, double x, double y);
 	virtual ~object();
 protected:
 	double x;

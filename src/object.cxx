@@ -77,23 +77,13 @@ void object::draw(SDL_Renderer *ren, camera& displayCamera) {
 		SDL_RenderCopyEx(ren, texture.get(), NULL, &dst, facingDirection, NULL, SDL_FLIP_NONE);
 }
 
-static void normalize_vector(double& x, double& y)
-{
-	auto current_magnitude = sqrt(pow(x, 2) + pow(y, 2));
-	x /= current_magnitude;
-	y /= current_magnitude;
-}
 
-void object::applyForce(double magnitude, double towards_x, double towards_y) {
-	towards_x -= x;
-	towards_y -= y;
-	normalize_vector(towards_x, towards_y);
+
+void object::applyForce(double magnitude, double x, double y) {
 
 	auto acceleration_magnitude = magnitude / mass / space_nomad_fps;
-	xVel += acceleration_magnitude * towards_x;
-	yVel += acceleration_magnitude * towards_y;
-
-	std::cerr << ((size_t)this) << ":" << x << "," << y << std::endl;
+	xVel += acceleration_magnitude * x;
+	yVel += acceleration_magnitude * y;
 }
 
 object::~object() {
