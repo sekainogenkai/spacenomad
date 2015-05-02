@@ -33,9 +33,12 @@ public:
 	bool getAttractive() const { return attractive;};
 	double getX() const { return x; };
 	double getY() const { return y; };
+        void setPosition(double x, double y) { this->x = x; this->y = y; };
 	int getRadius() const { return radius; };
 	double getGROI() const { return gravitational_radius_of_influence; };
 	double getMass() const { return mass; };
+        void getVelocity(double& xVel, double& yVel) const { xVel = this->xVel; yVel = this->yVel; };
+        void setVelocity(double xVel, double yVel) { this->xVel = xVel; this->yVel = yVel; };
 	/**
 	 * \param x
 	 *   Normalized x component of force vector.
@@ -54,8 +57,8 @@ protected:
 	bool attractive;
 	double mass;
 	int radius;
-	double gravitational_radius_of_influence;
 	space_nomad_SDL_Texture_unique_ptr texture;
+	double gravitational_radius_of_influence;
 };
 
 #endif /* SRC_OBJECT_HXX_ */
