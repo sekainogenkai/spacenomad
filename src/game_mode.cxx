@@ -43,6 +43,10 @@ bool game_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *
 		case SDLK_LSHIFT:
 			myPlayer.shift = true;
 			break;
+
+                case SDLK_LEFT:
+                        // Menuish stuff
+                        return true;
 		}
 		break;
 	case SDL_KEYUP:
