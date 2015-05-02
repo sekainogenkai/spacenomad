@@ -14,8 +14,8 @@ static void circleCollisionResponse(object& obj1, object& obj2, double& circleOn
 universe::universe(SDL_Renderer *ren, player& player)
 : myPlayer(player)
 {
-	planets.push_back(std::unique_ptr<planet>(new planet(ren, 300, 400, 8, -9, 2, 400, 1)));
-	planets.push_back(std::unique_ptr<planet>(new planet(ren, -700, 0, 8, 1, 2, 400, 1)));
+	planets.push_back(std::unique_ptr<planet>(new planet(ren, 300, 400, 8, -9, 2, 1)));
+	planets.push_back(std::unique_ptr<planet>(new planet(ren, -700, 0, 8, 1, 2, 1)));
 	//myPlanet(ren, 300, 400, 8, 2, 2, 400, 1)
 }
 

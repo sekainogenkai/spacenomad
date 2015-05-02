@@ -28,7 +28,9 @@ object::object(
 , texture(loadTexture(ren, textureFilename))
 , gravitational_radius_of_influence(0)
 {
-	radius = 0;
+        int w;
+        SDL_QueryTexture(texture.get(), NULL, NULL, &w, NULL);
+	radius = w/2;
 	attractive = false;
 	mass = 0;
 }

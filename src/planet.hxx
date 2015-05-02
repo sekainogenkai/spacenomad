@@ -12,7 +12,7 @@
 
 class planet : public object{
 public:
-	planet(SDL_Renderer *ren, double x, double y, double xVel, double yVel, double angleVel, int radius, double density);
+	planet(SDL_Renderer *ren, double x, double y, double xVel, double yVel, double angleVel, double density);
 	virtual ~planet();
 };
 
