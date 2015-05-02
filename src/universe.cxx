@@ -66,6 +66,7 @@ void universe::animate() {
 			auto planet2 = pt2->get();
 			gravity(*planet, *planet2);
 		}
+                gravity(*planet, myPlayer);
 		planet->animate();
 	}
 	myPlayer.animate();

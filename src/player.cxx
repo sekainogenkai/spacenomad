@@ -20,7 +20,7 @@ player::player(SDL_Renderer *ren, const char *textureFilename)
 , shift(false)
 , space(false)
 {
-	// TODO Auto-generated constructor stub
+        mass = 1;
 }
 
 
