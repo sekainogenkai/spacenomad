@@ -6,6 +6,7 @@
  */
 
 #include "object.hxx"
+#include "universe.hxx"
 
 #include <algorithm>
 #include <iostream>
@@ -18,21 +19,37 @@ object::object(
 		double y,
 		double xVel,
 		double yVel,
-		double angularVel)
+		double angularVel,
+		double mass)
 : x(x)
 , y(y)
 , xVel(xVel)
 , yVel(yVel)
 , facingDirection(0)
 , angularVel(angularVel)
+, mass(mass)
 , texture(loadTexture(ren, textureFilename))
-, gravitational_radius_of_influence(0)
+  // Given two objects that have this object’s mass, what is the
+  // maximum distance they can be from each other to at least have an
+  // attractive force of 0.01 «units?»?
+  //
+  // F = {G M_1 M_2}\over{r^2}
+  //
+  // Solve for r when F=0.01
+  //
+  // r = \sqrt\(F\over{G M_1 M_2}\)
+  // r = \sqrt\(0.01\over{G M_1 M_2}\)
+  //
+  // Assuming M_1 is M_2:
+  //
+  // r = \sqrt\(0.01\over{G \{M_1\}^2}\)
+  // r = \sqrt\(0.01\over G\)\over M_1
+, gravitational_radius_of_influence(sqrt(0.01/universe::G)/mass)
 {
         int w;
         SDL_QueryTexture(texture.get(), NULL, NULL, &w, NULL);
 	radius = w/2;
 	attractive = false;
-	mass = 0;
 }
 
 // This is for making a number that is close enough to zero become zero.

@@ -10,13 +10,15 @@
 
 #include "planet.hxx"
 #include "player.hxx"
-#include "object.hxx"
 #include <memory>
 #include <vector>
 
 
 class universe {
 public:
+	// Gravitational constant.
+	static constexpr double G = 10;
+
 	universe(SDL_Renderer *ren, player& player);
 	void animate();
 	void draw(SDL_Renderer *ren, camera& displayCamera);

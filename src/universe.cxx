@@ -41,7 +41,7 @@ static void normalize_vector(double& x, double& y)
 static void gravity(object& obj1, object& obj2, double distance) {
 	// Has attractiveness
 	if (obj1.getAttractive() || obj2.getAttractive()) {
-		double force = 10*obj1.getMass()*obj2.getMass()/pow(distance, 2);
+		double force = universe::G*obj1.getMass()*obj2.getMass()/pow(distance, 2);
 
 		// norm_x/norm_y are direction towards obj1 from obj2's perspective
 		double norm_x = obj1.getX() - obj2.getX();
