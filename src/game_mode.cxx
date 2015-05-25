@@ -14,6 +14,7 @@ game_mode::game_mode(
 , myStaticPlayer(ren, "astronaut/space_suit.png")
 , myUniverse(ren, myPlayer)
 , stars(ren)
+, zoom(true)
 {
 }
 
@@ -44,9 +45,12 @@ bool game_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *
 			myPlayer.shift = true;
 			break;
 
-                case SDLK_LEFT:
+        case SDLK_LEFT:
                         // Menuish stuff
                         return true;
+        case SDLK_z:
+        	zoom = !zoom;
+        	break;
 		}
 		break;
 	case SDL_KEYUP:
@@ -82,7 +86,7 @@ void game_mode::render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font)
 {
 	// Set the camera.
 	displayCamera.clear();
-	myPlayer.considerCamera(displayCamera, 6);
+	myPlayer.considerCamera(displayCamera, 6 * (zoom ? 1 : 10));
 	displayCamera.calculateTransforms();
 	// Draw stars
 	stars.draw(ren, displayCamera);

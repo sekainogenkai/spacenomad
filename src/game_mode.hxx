@@ -30,6 +30,7 @@ private:
 	player myStaticPlayer;
 	universe myUniverse;
 	star_field stars;
+	bool zoom;
 };
 
 
