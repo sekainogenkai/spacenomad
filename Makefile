@@ -67,7 +67,7 @@ spacenomad$(EXEEXT): $(OBJ) $(RES) windurrs.mk
 windurrs.mk: Makefile
 	echo > windurrs.mk
 	n="$$(which ls)"; test "$${n##*ls}" = ".exe" && echo 'RES = main.res' >> windurrs.mk
-main.res: main.rc images/favicon.ico
+main.res: main.rc images/favicon.ico app.manifest
 
 .cxx.o:
 	./ecommand.sh $(CXX) -c $(MY_CXXFLAGS) $(CXXFLAGS) $(CPPFLAGS) -o '$(@)' '$(<)'
