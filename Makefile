@@ -9,12 +9,16 @@ LIBS = $$(pkg-config --libs $(SDL2_PKG))
 MY_CXXFLAGS = -Wall -std=c++0x $$(pkg-config --cflags $(SDL2_PKG))
 EXEEXT = .exe
 OBJ = \
+	src/block.o \
 	src/camera.o \
+	src/field.o \
 	src/game_mode.o \
 	src/main.o \
 	src/menu_mode.o \
 	src/mode.o \
 	src/object.o \
+	src/object_block.o \
+	src/object_field.o \
 	src/planet.o \
 	src/player.o \
 	src/sprite.o \
@@ -22,12 +26,16 @@ OBJ = \
 	src/star_field.o \
 	src/universe.o 
 HEADERS = \
+	src/block.hxx \
 	src/camera.hxx \
+	src/field.hxx \
 	src/game_mode.hxx \
 	src/main.hxx \
 	src/menu_mode.hxx \
 	src/mode.hxx \
 	src/object.hxx \
+	src/object_block.hxx \
+	src/object_field.hxx \
 	src/planet.hxx \
 	src/player.hxx \
 	src/sprite.hxx \

@@ -14,9 +14,6 @@ static void circleCollisionResponse(object& obj1, object& obj2, double& circleOn
 universe::universe(SDL_Renderer *ren, player& player)
 : myPlayer(player)
 {
-	planets.push_back(std::unique_ptr<planet>(new planet(ren, 300, 400, 8, -9, 2, 1)));
-	planets.push_back(std::unique_ptr<planet>(new planet(ren, -700, 0, 8, 1, 2, 1)));
-	//myPlanet(ren, 300, 400, 8, 2, 2, 400, 1)
 }
 
 static bool circlesAreColliding(double x1, double y1, double r1, double x2, double y2, double r2, double& distance)
@@ -80,23 +77,12 @@ static void interact(object& obj1, object& obj2) {
 }
 
 void universe::animate() {
-	for (auto pt = planets.begin() ; pt != planets.end(); ++pt) {
-		auto planet = pt->get();
-		for (auto pt2 = pt + 1 ; pt2 != planets.end(); ++pt2) {
-			auto planet2 = pt2->get();
-                        interact(*planet, *planet2);
-		}
-                interact(*planet, myPlayer);
-		planet->animate();
-	}
+	objects.animate(interact, myPlayer);
 	myPlayer.animate();
 }
 
 void universe::draw(SDL_Renderer *ren, camera& displayCamera){
-	for (auto pt = planets.begin() ; pt != planets.end(); ++pt) {
-		auto planet = pt->get();
-		planet->draw(ren, displayCamera);
-	}
+	objects.draw(ren, displayCamera);
 	// Draw player
 	myPlayer.draw(ren, displayCamera);
 }

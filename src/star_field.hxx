@@ -13,25 +13,29 @@ extern "C" {
 #include <SDL.h>
 }
 
+#include "field.hxx"
 #include "main.hxx"
 #include "star_block.hxx"
 #include <vector>
 
 
-struct star_layer {
+class star_layer
+: public field_layer {
+public:
+	star_layer(SDL_Texture **textures, int textures_count, int block_side_length, double parallax_factor);
+	void add_block(std::default_random_engine& random_engine, int grid_x, int grid_y, SDL_Renderer *ren);
+	void citerate(std::function<bool(const block&)> visit);
+private:
 	std::vector<star_block> star_blocks;
-	int grid_x_min, grid_y_min;
-	int grid_x_max, grid_y_max;
-	double parallax_factor;
-	star_layer(double parallax_factor);
-	void draw(SDL_Renderer* ren, camera& display_camera, SDL_Texture **textures, int textures_count, std::default_random_engine& random_engine);
-	void add_block(int textures_count, int block_side_length, std::default_random_engine& random_engine, int grid_x, int grid_y);
+	int textures_count;
+	SDL_Texture **textures;
 };
 
-class star_field {
+class star_field
+: public field {
 public:
 	star_field(SDL_Renderer *ren);
-	void draw(SDL_Renderer* ren, camera& display_camera);
+	void iterate(std::function<void(field_layer&)> visit);
 	virtual ~star_field();
 private:
 	star_layer layers[3];
@@ -39,7 +43,6 @@ private:
 	space_nomad_SDL_Texture_unique_ptr star_1_texture;
 	space_nomad_SDL_Texture_unique_ptr star_2_texture;
 	SDL_Texture *star_texture_ptrs[3];
-	std::default_random_engine random_engine;
 };
 
 

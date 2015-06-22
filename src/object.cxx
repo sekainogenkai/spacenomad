@@ -87,7 +87,7 @@ void object::considerCamera(camera& displayCamera, int clearFactor)
 	displayCamera.considerObject(x, y, clearFactor * std::max(w, h));
 }
 
-void object::draw(SDL_Renderer *ren, camera& displayCamera) {
+void object::draw(SDL_Renderer *ren, const camera& displayCamera) const {
 	SDL_Rect dst;
 	SDL_QueryTexture(texture.get(), NULL, NULL, &dst.w, &dst.h);
 	dst.x = x - dst.w/2;

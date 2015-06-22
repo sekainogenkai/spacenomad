@@ -70,7 +70,7 @@ public:
 	}
 
 	// Create window
-	SDL_Window *win =  SDL_CreateWindow("Space Nomad", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE);
+	SDL_Window *win =  SDL_CreateWindow("Space Nomad", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE|SDL_WINDOW_ALLOW_HIGHDPI);
 	if (win == NULL){
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
 		return 1;
@@ -259,6 +259,7 @@ space_nomad_SDL_Texture_deleter::operator()(SDL_Texture *texture)
 	std::cerr << "uniquely freeing " << ((void *)texture) << std::endl;
 	SDL_DestroyTexture(texture);
 }
+
 // Load a surface
 space_nomad_SDL_Surface_unique_ptr loadSurface(const char *filename)
 {

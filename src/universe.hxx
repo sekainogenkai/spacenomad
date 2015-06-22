@@ -8,7 +8,7 @@
 #ifndef SRC_UNIVERSE_HXX_
 #define SRC_UNIVERSE_HXX_
 
-#include "planet.hxx"
+#include "object_field.hxx"
 #include "player.hxx"
 #include <memory>
 #include <vector>
@@ -24,7 +24,7 @@ public:
 	void draw(SDL_Renderer *ren, camera& displayCamera);
 	virtual ~universe();
 private:
-	std::vector<std::unique_ptr<planet> > planets;
+	object_field objects;
 	player& myPlayer;
 };
 

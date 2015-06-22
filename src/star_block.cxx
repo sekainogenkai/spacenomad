@@ -10,14 +10,13 @@
 #include <iostream>
 
 star_block::star_block(
-		int texture_count, int block_size_length,
+		SDL_Texture **textures, int texture_count, int block_size_length,
 		std::default_random_engine& random_engine, int grid_x, int grid_y)
-: grid_x(grid_x)
-, grid_y(grid_y)
+: block(block_size_length, grid_x, grid_y)
 , stars(256)
-, block_side_length(block_size_length)
+, textures(textures)
 {
-	std::uniform_int_distribution<int> coord_distribution(0, block_side_length - 1);
+	std::uniform_int_distribution<int> coord_distribution(0, get_block_side_length() - 1);
 	std::uniform_int_distribution<int> texture_distribution(0, texture_count - 1);
 	for (auto stars_iter = stars.begin(); stars_iter != stars.end(); stars_iter++) {
 		stars_iter->x = coord_distribution(random_engine);
@@ -26,20 +25,7 @@ star_block::star_block(
 	}
 }
 
-double star_block::get_x() const {
-	return block_side_length * (double)grid_x;
-}
-
-double star_block::get_y() const {
-	return block_side_length * (double)grid_y;
-}
-
-void star_block::snap(int block_size_length, double x, double y, int& grid_x, int& grid_y) {
-	grid_x = (int)x/block_size_length;
-	grid_y = (int)y/block_size_length;
-}
-
-void star_block::draw(SDL_Renderer *ren, camera& display_camera, SDL_Texture **textures) const {
+void star_block::draw(SDL_Renderer *ren, const camera& display_camera) const {
 	auto x = get_x();
 	auto y = get_y();
 	for (auto stars_iter = stars.cbegin(); stars_iter != stars.cend(); stars_iter++) {
