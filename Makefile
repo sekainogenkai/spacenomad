@@ -20,6 +20,7 @@ OBJ = \
 	src/object_block.o \
 	src/object_field.o \
 	src/planet.o \
+	src/planet_generation_mode.o \
 	src/player.o \
 	src/sprite.o \
 	src/star_block.o \

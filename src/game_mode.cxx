@@ -27,7 +27,7 @@ bool game_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *
 		{
 		case SDLK_BACKSPACE:
 			return true;
-		// WASD
+			// WASD
 		case SDLK_w:
 			myPlayer.up = true;
 			break;
@@ -40,41 +40,41 @@ bool game_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *
 		case SDLK_d:
 			myPlayer.right = true;
 			break;
-		//Shift
+			//Shift
 		case SDLK_LSHIFT:
 			myPlayer.shift = true;
 			break;
 
-        case SDLK_LEFT:
-                        // Menuish stuff
-                        return true;
-        case SDLK_z:
-        	zoom = !zoom;
-        	break;
-		}
-		break;
-	case SDL_KEYUP:
-		switch (event->key.keysym.sym)
-		{
-		// WASD
-		case SDLK_w:
-			myPlayer.up = false;
-			break;
-		case SDLK_s:
-			myPlayer.down = false;
-			break;
-		case SDLK_a:
-			myPlayer.left = false;
-			break;
-		case SDLK_d:
-			myPlayer.right = false;
-			break;
-		//Shift
-		case SDLK_LSHIFT:
-			myPlayer.shift = false;
+		case SDLK_LEFT:
+			// Menuish stuff
+			return true;
+		case SDLK_z:
+			zoom = !zoom;
 			break;
 		}
 		break;
+		case SDL_KEYUP:
+			switch (event->key.keysym.sym)
+			{
+			// WASD
+			case SDLK_w:
+				myPlayer.up = false;
+				break;
+			case SDLK_s:
+				myPlayer.down = false;
+				break;
+			case SDLK_a:
+				myPlayer.left = false;
+				break;
+			case SDLK_d:
+				myPlayer.right = false;
+				break;
+				//Shift
+			case SDLK_LSHIFT:
+				myPlayer.shift = false;
+				break;
+			}
+			break;
 	}
 	return false;
 }

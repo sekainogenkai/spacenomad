@@ -9,6 +9,7 @@
 #include "game_mode.hxx"
 #include "main.hxx"
 #include "menu_mode.hxx"
+#include "planet_generation_mode.hxx"
 
 static bool menu_option_start(mode *&new_mode, SDL_Renderer *ren)
 {
@@ -79,6 +80,10 @@ bool menu_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *
 		case SDLK_KP_ENTER:
 		case SDLK_RETURN:
 			return menu_options[selection_index].do_thing(new_mode, ren);
+		// case derpy testing by Kristofer Brink the one and only who would dare for their name to be like that
+		case SDLK_F12:
+			new_mode = new planet_generation_mode(ren);
+			return false;
 		}
 	}
 
