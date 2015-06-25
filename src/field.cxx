@@ -7,7 +7,6 @@
 
 
 #include "field.hxx"
-
 #include <ctime>
 #include <functional>
 

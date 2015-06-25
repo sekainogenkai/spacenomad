@@ -15,6 +15,9 @@
 #include "star_field.hxx"
 #include "universe.hxx"
 
+#include <functional>
+#include <random>
+
 class planet_generation_mode
 : public mode {
 public:
@@ -25,6 +28,8 @@ public:
 	virtual ~planet_generation_mode();
 private:
 	space_nomad_SDL_Texture_unique_ptr meBraggingAbout4k;
+protected:
+	std::default_random_engine random_engine;
 };
 
 #endif /* SRC_PLANET_GENERATION_MODE_HXX_ */

@@ -10,6 +10,7 @@ MY_CXXFLAGS = -Wall -std=c++0x $$(pkg-config --cflags $(SDL2_PKG))
 EXEEXT = .exe
 OBJ = \
 	src/block.o \
+	src/brush_creation.o \
 	src/camera.o \
 	src/field.o \
 	src/game_mode.o \
@@ -28,6 +29,7 @@ OBJ = \
 	src/universe.o 
 HEADERS = \
 	src/block.hxx \
+	src/brush_creation.hxx \
 	src/camera.hxx \
 	src/field.hxx \
 	src/game_mode.hxx \
