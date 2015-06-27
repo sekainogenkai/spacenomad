@@ -71,7 +71,7 @@ public:
 		}
 
 		// Create window
-		SDL_Window *win =  SDL_CreateWindow("Space Nomad", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE|SDL_WINDOW_ALLOW_HIGHDPI);
+		SDL_Window *win =  SDL_CreateWindow("Space Nomad", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE|SDL_WINDOW_ALLOW_HIGHDPI|SDL_WINDOW_INPUT_GRABBED);
 		if (win == NULL){
 			std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
 			return 1;
@@ -137,6 +137,7 @@ public:
 		SDL_UnlockSurface(cursor.get());
 		auto customCursor = SDL_CreateCursor(cursor_data, cursor_mask, cursor->w, cursor->h, (cursor->w-2)/2, (cursor->h-2)/2);
 		SDL_SetCursor(customCursor);
+
 		delete [] cursor_data;
 		delete [] cursor_mask;
 
@@ -200,9 +201,6 @@ public:
 									SDL_ToggleFS(win, ren);
 								}
 								break;
-
-
-
 							}
 							break;
 							case SDL_USEREVENT:
