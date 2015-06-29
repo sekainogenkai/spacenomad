@@ -16,6 +16,8 @@ game_mode::game_mode(
 , stars(ren)
 , zoom(true)
 {
+	// Lock cursor to screen
+
 }
 
 bool game_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren)

@@ -71,11 +71,13 @@ public:
 		}
 
 		// Create window
-		SDL_Window *win =  SDL_CreateWindow("Space Nomad", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE|SDL_WINDOW_ALLOW_HIGHDPI|SDL_WINDOW_INPUT_GRABBED);
+		SDL_Window *win =  SDL_CreateWindow("Space Nomad", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE|SDL_WINDOW_ALLOW_HIGHDPI);
 		if (win == NULL){
 			std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
 			return 1;
 		}
+
+
 
 		// Loads the icon
 		auto ico = loadSurface("favicon.png");
@@ -196,11 +198,17 @@ public:
 							case SDLK_LALT:
 								alt_pressed = true;
 								break;
+							case SDLK_d:
+								SDL_SetWindowGrab(win, SDL_TRUE);
+								break;
 							case SDLK_RETURN:
+								SDL_SetWindowGrab(win, SDL_TRUE);
 								if (alt_pressed) {
 									SDL_ToggleFS(win, ren);
 								}
 								break;
+							case SDLK_BACKSPACE:
+								SDL_SetWindowGrab(win, SDL_FALSE);
 							}
 							break;
 							case SDL_USEREVENT:
