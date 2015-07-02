@@ -1,4 +1,4 @@
-AM_CPPFLAGS -DPKGDATADIR=\"$(pkgdatadir)\"
+AM_CPPFLAGS = -DPKGDATADIR=\"$(pkgdatadir)\"
 SUFFIXES = .o .rc
 ACLOCAL_AMFLAGS = -Im4
 
