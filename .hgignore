@@ -67,3 +67,4 @@ syntax: regexp
 \.res$
 Thumbs\.db$
 (^|/).settings$
+^spacenomad$
