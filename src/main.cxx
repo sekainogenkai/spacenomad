@@ -25,254 +25,251 @@ int SDL_ToggleFS(SDL_Window* win, SDL_Renderer *ren);
 
 int space_nomad_fps = 60;
 
-class main_class
+void main_class::push_mode(mode *mode)
 {
-private:
-	std::stack<mode *> modes;
-	void push_mode(mode *mode)
+	modes.push(mode);
+}
+void main_class::delete_modes()
+{
+	while (!modes.empty())
+		delete_top_mode();
+}
+void main_class::delete_top_mode()
+{
+	delete modes.top();
+	modes.pop();
+}
+int main_class::main_method(int argc, char *argv[])
+{
+	/* http://twinklebear.github.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world/ */
+
+	// Starts SDL
+	if (SDL_Init(SDL_INIT_TIMER|SDL_INIT_VIDEO|SDL_INIT_EVENTS) != 0)
 	{
-		modes.push(mode);
+		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+		return 1;
 	}
-	void delete_modes()
+
+	// Loads the font loading system # seriously # end world hunger games
+	if (TTF_Init()==-1)
 	{
-		while (!modes.empty())
-			delete_top_mode();
+		std::cout << "TTF_Init: " << TTF_GetError() << std::endl;
+		return 1;
 	}
-	void delete_top_mode()
+
+	TTF_Font *font;
+	font=TTF_OpenFont("VeraMono.ttf", 90);
+	if (!font)
 	{
-		delete modes.top();
-		modes.pop();
+		std::cout <<"TTF_OpenFont:" << TTF_GetError() << std::endl;
+		return 1;
 	}
-public:
-	int main_method(int argc, char *argv[])
+
+	// Create window
+	win =  SDL_CreateWindow("Space Nomad", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE|SDL_WINDOW_ALLOW_HIGHDPI);
+	if (win == NULL){
+		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+
+
+
+	// Loads the icon
+	auto ico = loadSurface("favicon.png");
+	SDL_SetWindowIcon(win, ico.get());
+
+	//Creating a Renderer: Using hardware accelerated rendering and with vsync.
+	ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
+	if (ren == NULL)
 	{
-		/* http://twinklebear.github.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world/ */
-
-		// Starts SDL
-		if (SDL_Init(SDL_INIT_TIMER|SDL_INIT_VIDEO|SDL_INIT_EVENTS) != 0)
-		{
-			std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-			return 1;
-		}
-
-		// Loads the font loading system # seriously # end world hunger games
-		if (TTF_Init()==-1)
-		{
-			std::cout << "TTF_Init: " << TTF_GetError() << std::endl;
-			return 1;
-		}
-
-		TTF_Font *font;
-		font=TTF_OpenFont("VeraMono.ttf", 90);
-		if (!font)
-		{
-			std::cout <<"TTF_OpenFont:" << TTF_GetError() << std::endl;
-			return 1;
-		}
-
-		// Create window
-		SDL_Window *win =  SDL_CreateWindow("Space Nomad", 100, 100, 1280, 1024, SDL_WINDOW_RESIZABLE|SDL_WINDOW_ALLOW_HIGHDPI);
-		if (win == NULL){
-			std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-			return 1;
-		}
-
-
-
-		// Loads the icon
-		auto ico = loadSurface("favicon.png");
-		SDL_SetWindowIcon(win, ico.get());
-
-		//Creating a Renderer: Using hardware accelerated rendering and with vsync.
-		SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
-		if (ren == NULL)
+		std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
+		std::cerr << "Trying without VSYNC" << std::endl;
+		ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+		if (!ren)
 		{
 			std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-			std::cerr << "Trying without VSYNC" << std::endl;
-			ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+			std::cerr << "Falling back to low-quality (no alpha blending, game may be unplayable) renderer." << std::endl;
+			ren = SDL_CreateRenderer(win, -1, 0);
 			if (!ren)
 			{
 				std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-				std::cerr << "Falling back to low-quality (no alpha blending, game may be unplayable) renderer." << std::endl;
-				ren = SDL_CreateRenderer(win, -1, 0);
-				if (!ren)
-				{
-					std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-					std::cerr << "Well, I need a renderer and I can’t even get a low-quality one. Giving up." << std::endl;
-					return 1;
-				}
+				std::cerr << "Well, I need a renderer and I can’t even get a low-quality one. Giving up." << std::endl;
+				return 1;
 			}
 		}
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Setting timer
-		// Set up a user event for detecting timer events.
-		// See http://wiki.libsdl.org/SDL_AddTimer
-		Uint32 tickSdlEventCode = SDL_RegisterEvents(1);
-		//space_nomad_fpds fps
-		int tickMilliseconds = 1000/space_nomad_fps;
-		//double tickSeconds = tickMilliseconds / 1000.0;
-		SDL_TimerID tickTimerID = SDL_AddTimer(tickMilliseconds, tickTimerCallback, &tickSdlEventCode);
-		if (!tickTimerID)
-		{
-			std::cerr << "SDL_AddTimer() Error: " << SDL_GetError() << std::endl;
-			return 1;
-		}
-		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	}
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Setting timer
+	// Set up a user event for detecting timer events.
+	// See http://wiki.libsdl.org/SDL_AddTimer
+	Uint32 tickSdlEventCode = SDL_RegisterEvents(1);
+	//space_nomad_fpds fps
+	int tickMilliseconds = 1000/space_nomad_fps;
+	//double tickSeconds = tickMilliseconds / 1000.0;
+	SDL_TimerID tickTimerID = SDL_AddTimer(tickMilliseconds, tickTimerCallback, &tickSdlEventCode);
+	if (!tickTimerID)
+	{
+		std::cerr << "SDL_AddTimer() Error: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		//Start the things needed to run the game
-		SDL_Event event;
+	//Start the things needed to run the game
+	SDL_Event event;
 
-		// Customize the cursor
-		space_nomad_SDL_Surface_unique_ptr cursor(loadSurface("cursor.png"));
-		auto cursor_data = new Uint8[cursor->w*cursor->h/8]();
-		auto cursor_mask = new Uint8[cursor->w*cursor->h/8]();
-		SDL_LockSurface(cursor.get());
-		for (int i = 0; i < cursor->w*cursor->h; i++) {
-			Uint8 r, g, b, a;
-			SDL_GetRGBA(
-					*(Uint32*)((Uint8*)cursor->pixels + cursor->format->BytesPerPixel*i),
-					cursor->format,
-					&r, &g, &b, &a);
-			Uint8 pixelBit = (1<<(7-(i%8)));
-			cursor_data[i/8] |= r || !a ? 0 : pixelBit;
-			cursor_mask[i/8] |= !a ? 0 : pixelBit;
-		}
-		SDL_UnlockSurface(cursor.get());
-		auto customCursor = SDL_CreateCursor(cursor_data, cursor_mask, cursor->w, cursor->h, (cursor->w-2)/2, (cursor->h-2)/2);
-		SDL_SetCursor(customCursor);
+	// Customize the cursor
+	space_nomad_SDL_Surface_unique_ptr cursor(loadSurface("cursor.png"));
+	auto cursor_data = new Uint8[cursor->w*cursor->h/8]();
+	auto cursor_mask = new Uint8[cursor->w*cursor->h/8]();
+	SDL_LockSurface(cursor.get());
+	for (int i = 0; i < cursor->w*cursor->h; i++) {
+		Uint8 r, g, b, a;
+		SDL_GetRGBA(
+				*(Uint32*)((Uint8*)cursor->pixels + cursor->format->BytesPerPixel*i),
+				cursor->format,
+				&r, &g, &b, &a);
+		Uint8 pixelBit = (1<<(7-(i%8)));
+		cursor_data[i/8] |= r || !a ? 0 : pixelBit;
+		cursor_mask[i/8] |= !a ? 0 : pixelBit;
+	}
+	SDL_UnlockSurface(cursor.get());
+	auto customCursor = SDL_CreateCursor(cursor_data, cursor_mask, cursor->w, cursor->h, (cursor->w-2)/2, (cursor->h-2)/2);
+	SDL_SetCursor(customCursor);
 
-		delete [] cursor_data;
-		delete [] cursor_mask;
+	delete [] cursor_data;
+	delete [] cursor_mask;
 
-		// Initial mode: the top level main menu
-		modes.push(new menu_mode(ren));
+	// Initial mode: the top level main menu
+	modes.push(new menu_mode(ren));
 
-		camera displayCamera(0, 0);
-		bool resize = true;
-		while (!modes.empty())
-		{
-			//Set up needed variables
-			bool animate = true;
-			bool redraw = true;
-			bool alt_pressed = false;
+	camera displayCamera(0, 0);
+	bool resize = true;
+	while (!modes.empty())
+	{
+		//Set up needed variables
+		bool animate = true;
+		bool redraw = true;
+		bool alt_pressed = false;
 
-			while(!modes.empty() && SDL_WaitEvent(&event)){
-				do
-				{
+		while(!modes.empty() && SDL_WaitEvent(&event)){
+			do
+			{
 
-					// call mode-specific event handler
-					mode *new_mode = NULL;
-					if (modes.top()->processEvents(&event, new_mode, ren))
-						delete_top_mode();
-					if (new_mode)
-						modes.push(new_mode);
-					if (modes.empty())
-						break;
-					// run generic event handlers
-					switch (event.type)
-					{
-					case SDL_QUIT:
-						delete_modes();
-						break;
-					case SDL_WINDOWEVENT:
-						switch (event.window.event)
-						{
-						case SDL_WINDOWEVENT_RESIZED:
-							resize = true;
-							break;
-						case SDL_WINDOWEVENT_CLOSE:
-							delete_modes();
-							break;
-						}
-						break;
-						case SDL_KEYDOWN:
-							if (event.key.repeat)
-								break;
-							switch (event.key.keysym.sym)
-							{
-							case SDLK_ESCAPE:
-								delete_modes();
-								break;
-							case SDLK_F11:
-								SDL_ToggleFS(win, ren);
-								break;
-							case SDLK_LALT:
-								alt_pressed = true;
-								break;
-							case SDLK_d:
-								SDL_SetWindowGrab(win, SDL_TRUE);
-								break;
-							case SDLK_RETURN:
-								SDL_SetWindowGrab(win, SDL_TRUE);
-								if (alt_pressed) {
-									SDL_ToggleFS(win, ren);
-								}
-								break;
-							case SDLK_BACKSPACE:
-								SDL_SetWindowGrab(win, SDL_FALSE);
-							}
-							break;
-							case SDL_USEREVENT:
-								if (event.user.type == tickSdlEventCode)
-									animate = true;
-								break;
-							case SDL_KEYUP:
-							case SDLK_LALT:
-								alt_pressed = false;
-								break;
-								break;
-					}
-
-
-					// Eat all of the other events while we're at it.
-				} while (!modes.empty() && SDL_PollEvent(&event));
+				// call mode-specific event handler
+				if (modes.top()->processEvents(&event, *this))
+					delete_top_mode();
 				if (modes.empty())
 					break;
-
-				if (animate)
+				// run generic event handlers
+				switch (event.type)
 				{
-					modes.top()->animate();
-
-					// After updating animation stuffs, mark that we're ready for a redraw
-					redraw = true;
-					animate = false;
+				case SDL_QUIT:
+					delete_modes();
+					break;
+				case SDL_WINDOWEVENT:
+					switch (event.window.event)
+					{
+					case SDL_WINDOWEVENT_RESIZED:
+						resize = true;
+						break;
+					case SDL_WINDOWEVENT_CLOSE:
+						delete_modes();
+						break;
+					}
+					break;
+					case SDL_KEYDOWN:
+						if (event.key.repeat)
+							break;
+						switch (event.key.keysym.sym)
+						{
+						case SDLK_ESCAPE:
+							delete_modes();
+							break;
+						case SDLK_F11:
+							SDL_ToggleFS(win, ren);
+							break;
+						case SDLK_LALT:
+							alt_pressed = true;
+							break;
+						case SDLK_d:
+							SDL_SetWindowGrab(win, SDL_TRUE);
+							break;
+						case SDLK_RIGHT:
+							SDL_SetWindowGrab(win, SDL_TRUE);
+							break;
+						case SDLK_LEFT:
+							SDL_SetWindowGrab(win, SDL_TRUE);
+							break;
+						case SDLK_RETURN:
+							SDL_SetWindowGrab(win, SDL_TRUE);
+							if (alt_pressed) {
+								SDL_ToggleFS(win, ren);
+							}
+							break;
+						case SDLK_BACKSPACE:
+							SDL_SetWindowGrab(win, SDL_FALSE);
+						}
+						break;
+						case SDL_USEREVENT:
+							if (event.user.type == tickSdlEventCode)
+								animate = true;
+							break;
+						case SDL_KEYUP:
+						case SDLK_LALT:
+							alt_pressed = false;
+							break;
+							break;
 				}
 
-				if (resize)
-				{
-					int displayWidth, displayHeight;
-					SDL_GetWindowSize(win, &displayWidth, &displayHeight);
-					displayCamera = camera(displayWidth, displayHeight);
-					redraw = true;
-				}
 
-				if (redraw)
-				{
-					SDL_RenderClear(ren);
-					modes.top()->render(ren, displayCamera, font);
+				// Eat all of the other events while we're at it.
+			} while (!modes.empty() && SDL_PollEvent(&event));
+			if (modes.empty())
+				break;
 
-					SDL_RenderPresent(ren);
-					redraw = false;
-				}
+			if (animate)
+			{
+				modes.top()->animate();
+
+				// After updating animation stuffs, mark that we're ready for a redraw
+				redraw = true;
+				animate = false;
 			}
-		} /* while (!modes.empty()) */
 
-		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /end player one game
-		// Cleanup
-		SDL_SetCursor(SDL_GetDefaultCursor());
-		SDL_FreeCursor(customCursor);
-		SDL_RemoveTimer(tickTimerID);
-		TTF_CloseFont(font);
-		TTF_Quit();
-		SDL_Quit();
+			if (resize)
+			{
+				int displayWidth, displayHeight;
+				SDL_GetWindowSize(win, &displayWidth, &displayHeight);
+				displayCamera = camera(displayWidth, displayHeight);
+				redraw = true;
+			}
 
-		/*system("PAUSE");*/
-		return EXIT_SUCCESS;
-	}
-	~main_class()
-	{
-		delete_modes();
-	}
-};
+			if (redraw)
+			{
+				SDL_RenderClear(ren);
+				modes.top()->render(ren, displayCamera, font);
+
+				SDL_RenderPresent(ren);
+				redraw = false;
+			}
+		}
+	} /* while (!modes.empty()) */
+
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /end player one game
+	// Cleanup
+	SDL_SetCursor(SDL_GetDefaultCursor());
+	SDL_FreeCursor(customCursor);
+	SDL_RemoveTimer(tickTimerID);
+	TTF_CloseFont(font);
+	TTF_Quit();
+	SDL_Quit();
+
+	/*system("PAUSE");*/
+	return EXIT_SUCCESS;
+}
+main_class::~main_class()
+{
+	delete_modes();
+}
 
 int main(int argc, char *argv[])
 {

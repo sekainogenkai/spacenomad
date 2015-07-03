@@ -20,7 +20,7 @@ class game_mode
 {
 public:
 	game_mode(SDL_Renderer *ren);
-	virtual bool processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren);
+	virtual bool processEvents(SDL_Event *event, main_class& main);
 	virtual void animate();
 	virtual void render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font);
 	~game_mode();

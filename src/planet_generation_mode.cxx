@@ -22,7 +22,7 @@ planet_generation_mode::planet_generation_mode(SDL_Renderer *ren)
 {
 }
 
-bool planet_generation_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren) {
+bool planet_generation_mode::processEvents(SDL_Event *event, main_class& main) {
 	switch (event->type)
 	{
 	case SDL_KEYDOWN:

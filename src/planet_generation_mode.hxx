@@ -22,7 +22,7 @@ class planet_generation_mode
 : public mode {
 public:
 	planet_generation_mode(SDL_Renderer *ren);
-	virtual bool processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren);
+	virtual bool processEvents(SDL_Event *event, main_class& main);
 	virtual void animate();
 	virtual void render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font);
 	virtual ~planet_generation_mode();

@@ -7,6 +7,7 @@ extern "C" {
 }
 
 #include "camera.hxx"
+#include "main.hxx"
 
 class mode {
 public:
@@ -16,7 +17,7 @@ public:
 	 * \returns
 	 *   true to pop this mode from the mode stack.
 	 */
-	virtual bool processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren) = 0;
+	virtual bool processEvents(SDL_Event *event, main_class& main) = 0;
 	virtual void animate() = 0;
 	virtual void render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font) = 0;
 	virtual ~mode();

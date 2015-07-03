@@ -20,7 +20,7 @@ game_mode::game_mode(
 
 }
 
-bool game_mode::processEvents(SDL_Event *event, mode *& new_mode, SDL_Renderer *ren)
+bool game_mode::processEvents(SDL_Event *event, main_class& main)
 {
 	switch (event->type)
 	{

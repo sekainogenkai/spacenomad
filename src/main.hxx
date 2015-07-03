@@ -2,12 +2,30 @@
 #define _TESTSDL_MAIN_HXX
 
 #include <memory>
+#include <stack>
 #include <sstream>
 #include <string> 
 
 extern "C" {
 #include <SDL.h>
 }
+
+class mode;
+
+class main_class
+{
+private:
+	std::stack<mode *> modes;
+	void delete_modes();
+	void delete_top_mode();
+public:
+	int main_method(int argc, char *argv[]);
+	void push_mode(mode *mode);
+	virtual ~main_class();
+
+	SDL_Renderer *ren;
+	SDL_Window *win;
+};
 
 #define SPACE_NOMAD_ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 
