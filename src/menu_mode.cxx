@@ -13,7 +13,7 @@
 
 static bool menu_option_start(main_class& main)
 {
-	main.push_mode(new game_mode(main.ren));
+	main.push_mode(new game_mode(main.ren, main.win));
 	return false;
 }
 

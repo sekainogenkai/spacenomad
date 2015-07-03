@@ -19,7 +19,7 @@ class game_mode
 : public mode
 {
 public:
-	game_mode(SDL_Renderer *ren);
+	game_mode(SDL_Renderer *ren, SDL_Window *win);
 	virtual bool processEvents(SDL_Event *event, main_class& main);
 	virtual void animate();
 	virtual void render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font);
@@ -31,6 +31,7 @@ private:
 	universe myUniverse;
 	star_field stars;
 	bool zoom;
+	SDL_Window *win;
 };
 
 

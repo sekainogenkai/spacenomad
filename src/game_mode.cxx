@@ -9,15 +9,17 @@
 #include "game_mode.hxx"
 
 game_mode::game_mode(
-		SDL_Renderer *ren)
+		SDL_Renderer *ren,
+		SDL_Window *win)
 : myPlayer(ren, "astronaut/space_suit.png")
 , myStaticPlayer(ren, "astronaut/space_suit.png")
 , myUniverse(ren, myPlayer)
 , stars(ren)
 , zoom(true)
+, win(win)
 {
 	// Lock cursor to screen
-
+	SDL_SetWindowGrab(win, SDL_TRUE);
 }
 
 bool game_mode::processEvents(SDL_Event *event, main_class& main)
@@ -98,4 +100,5 @@ void game_mode::render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font)
 
 game_mode::~game_mode()
 {
+	SDL_SetWindowGrab(win, SDL_FALSE);
 }

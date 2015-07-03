@@ -190,23 +190,12 @@ int main_class::main_method(int argc, char *argv[])
 						case SDLK_LALT:
 							alt_pressed = true;
 							break;
-						case SDLK_d:
-							SDL_SetWindowGrab(win, SDL_TRUE);
-							break;
-						case SDLK_RIGHT:
-							SDL_SetWindowGrab(win, SDL_TRUE);
-							break;
-						case SDLK_LEFT:
-							SDL_SetWindowGrab(win, SDL_TRUE);
-							break;
+
 						case SDLK_RETURN:
-							SDL_SetWindowGrab(win, SDL_TRUE);
 							if (alt_pressed) {
 								SDL_ToggleFS(win, ren);
 							}
 							break;
-						case SDLK_BACKSPACE:
-							SDL_SetWindowGrab(win, SDL_FALSE);
 						}
 						break;
 						case SDL_USEREVENT:
