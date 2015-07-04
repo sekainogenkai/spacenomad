@@ -17,11 +17,18 @@
  * Type of dots, reacts to Number of dots
  * Per dot, shape, size, opacity, position
  */
-
 #include "brush_creation.hxx"
 
-brush_creation::brush_creation() {
+#include <iostream>
 
+brush_creation::brush_creation() {
+	// DO nothing
+}
+
+brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & random_engine) {
+	std::cout << "Making brush" << std::endl;
+	std::uniform_int_distribution<int> randomNumberDist(0,10000);
+	std::cout << "Testing the randomness in brush_creation " << randomNumberDist(random_engine) << std::endl;
 }
 
 brush_creation::~brush_creation() {

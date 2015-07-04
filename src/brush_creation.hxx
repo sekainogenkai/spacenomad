@@ -18,9 +18,13 @@
 class brush_creation {
 public:
 	brush_creation();
+	brush_creation(SDL_Renderer * ren, std::default_random_engine & random_engine);
 	void draw(int x, int y);
 	space_nomad_SDL_Texture_unique_ptr get();
 	virtual ~brush_creation();
+private:
+	std::default_random_engine random_engine;
+
 };
 
 #endif /* SRC_BRUSH_CREATION_HXX_ */
