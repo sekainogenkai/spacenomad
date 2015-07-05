@@ -22,9 +22,6 @@ public:
 	void draw(int x, int y);
 	space_nomad_SDL_Texture_unique_ptr get();
 	virtual ~brush_creation();
-private:
-	std::default_random_engine random_engine;
-
 };
 
 #endif /* SRC_BRUSH_CREATION_HXX_ */
