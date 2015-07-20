@@ -55,4 +55,11 @@ public:
 typedef std::unique_ptr<SDL_Surface, space_nomad_SDL_Surface_deleter> space_nomad_SDL_Surface_unique_ptr;
 space_nomad_SDL_Surface_unique_ptr loadSurface(const char *filename);
 
+class space_nomad_SDL_Renderer_deleter
+{
+public:
+	void operator()(SDL_Renderer *ren);
+};
+typedef std::unique_ptr<SDL_Renderer, space_nomad_SDL_Renderer_deleter> space_nomad_SDL_Renderer_unique_ptr;
+
 #endif /* _TESTSDL_MAIN_HXX */

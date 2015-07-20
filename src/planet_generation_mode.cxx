@@ -23,15 +23,20 @@ planet_generation_mode::planet_generation_mode(SDL_Renderer *ren)
 : meBraggingAbout4k(loadTexture(ren, "planet_generation_mode/This is 4k.png"))
 , random_engine(time(NULL))
 {
-
+	// So, uniform_int_distribution treats very large numbers that
+	// differ only in the hundreds place or below as the
+	// same. Because our time() values are very large and near
+	// each other, and because the random_engine() yields the seed
+	// value as the first number, we have to iterate past that to
+	// make future uses of the random_engine() happy…	random_engine();
+	random_engine();
 
 	std::uniform_int_distribution<int> random_number(1,100);
 	// Amount of brushes to make
 	int brush_amount = random_number(random_engine);
 	std::cout << "I am going to make " << brush_amount << " brushes.";
-	brush_creation brushes[brush_amount];
 	for (int i = 0; i < brush_amount; i++) {
-		brushes[i] = brush_creation(ren, random_engine);
+		brushes.push_back(brush_creation(ren, random_engine));
 	}
 
 }

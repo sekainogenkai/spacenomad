@@ -308,6 +308,12 @@ space_nomad_SDL_Texture_unique_ptr loadTexture(SDL_Renderer *ren, const char *fi
 	return space_nomad_SDL_Texture_unique_ptr(tex);
 }
 
+void
+space_nomad_SDL_Renderer_deleter::operator()(SDL_Renderer *ren)
+{
+	SDL_DestroyRenderer(ren);
+}
+
 static Uint32 tickTimerCallback(Uint32 interval, void *param)
 {
 	Uint32 tickSdlEventCode = *(Uint32*)param;

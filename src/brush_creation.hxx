@@ -15,13 +15,21 @@
 #include "star_field.hxx"
 #include "universe.hxx"
 
+#include <vector>
+
+
+
+
+
 class brush_creation {
 public:
-	brush_creation();
-	brush_creation(SDL_Renderer * ren, std::default_random_engine & random_engine);
+	brush_creation(SDL_Renderer *ren, std::default_random_engine& random_engine);
+	brush_creation(brush_creation&& orig);
 	void draw(int x, int y);
 	space_nomad_SDL_Texture_unique_ptr get();
 	virtual ~brush_creation();
+private:
+	space_nomad_SDL_Surface_unique_ptr surface;
 };
 
 #endif /* SRC_BRUSH_CREATION_HXX_ */

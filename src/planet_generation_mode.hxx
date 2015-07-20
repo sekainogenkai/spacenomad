@@ -8,6 +8,7 @@
 #ifndef SRC_PLANET_GENERATION_MODE_HXX_
 #define SRC_PLANET_GENERATION_MODE_HXX_
 
+#include "brush_creation.hxx"
 #include "camera.hxx"
 #include "main.hxx"
 #include "mode.hxx"
@@ -30,6 +31,7 @@ private:
 	space_nomad_SDL_Texture_unique_ptr meBraggingAbout4k;
 protected:
 	std::default_random_engine random_engine;
+	std::vector<brush_creation> brushes;
 };
 
 #endif /* SRC_PLANET_GENERATION_MODE_HXX_ */
