@@ -22,11 +22,26 @@
 #include <iostream>
 
 // Assumes that coordinates are pixels or whatever that means
-static void render_circle(SDL_Renderer *ren, SDL_Rect bounds) {
-	// apparently an ellipse is just a scaled circle according to some part of the internets
-	for (auto y_offset = 0; y_offset < bounds.h; y_offset++) {
-		auto unit_y = ((double)y_offset)/bounds.h/2.0 - 1.0;
-	}
+void
+brush_creation::fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds) {
+	// Using ellipse standard form (x - h)^2/a^2 + (y-k)^2/b^2 = 1.
+	// Draw a pixel if its center satisfies <= 1.
+	auto a = bounds.w / 2.0;
+	auto h = bounds.x + a;
+	auto b = bounds.h / 2.0;
+	auto k = bounds.y + b;
+
+	for (auto x = bounds.x; x < bounds.x + bounds.w; x++)
+		for (auto y = bounds.y; y < bounds.y + bounds.h; y++)
+		{
+			// Measure from the center of each pixel rather than something else.
+			double pix_center_x = x + 0.5;
+			double pix_center_y = y + 0.5;
+
+			if ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b) <= 1)
+				SDL_RenderDrawPoint(ren, x, y);
+			//std::cerr << x << "," << y << ": " << ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b)) << std::endl;
+		}
 }
 
 brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & random_engine) {
@@ -45,7 +60,7 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 	// Make the specs
 	auto numSpecs = randSpecs(random_engine);
 	for (int i = 0; i < numSpecs; i++) {
-		SDL_RenderDrawPoint(surface_ren, )
+		//SDL_RenderDrawPoint(surface_ren, )
 	}
 }
 

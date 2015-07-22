@@ -69,6 +69,15 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 	// This Renders the image about me bragging about 4k
 	SDL_QueryTexture(meBraggingAbout4k.get(), NULL, NULL, &dst.w, &dst.h);
 	SDL_RenderCopy(ren, meBraggingAbout4k.get(),NULL, &dst);
+
+	SDL_SetRenderDrawColor(ren, 128, 0, 255, 0);
+	dst.x = 200;
+	dst.y = 300;
+	dst.h = 400;
+	dst.w = 500;
+	SDL_RenderDrawRect(ren, &dst);
+	SDL_SetRenderDrawColor(ren, 255, 0, 128, 0);
+	brush_creation::fill_circle(ren, dst);
 }
 
 planet_generation_mode::~planet_generation_mode() {
