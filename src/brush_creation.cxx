@@ -30,16 +30,21 @@ brush_creation::fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds) {
 	auto h = bounds.x + a;
 	auto b = bounds.h / 2.0;
 	auto k = bounds.y + b;
+	auto y = bounds.y + b;
 
-	for (auto x = bounds.x; x < bounds.x + bounds.w; x++)
-		for (auto y = bounds.y; y < bounds.y + bounds.h; y++)
-		{
+	for (auto x = bounds.x; x < bounds.x + bounds.w/2 + 1; x++) {
 			// Measure from the center of each pixel rather than something else.
 			double pix_center_x = x + 0.5;
-			double pix_center_y = y + 0.5;
-
-			if ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b) <= 1)
-				SDL_RenderDrawPoint(ren, x, y);
+			double pix_center_y;
+			do {
+				y--;
+				pix_center_y = y + 0.5;
+			} while ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b) <= 1);
+			y++;
+				SDL_RenderDrawLine(ren, x, y, x,  bounds.y + bounds.h - (y - bounds.y));
+				auto x_mirrored = bounds.x + bounds.w - (x - bounds.x);
+				SDL_RenderDrawLine(ren, x_mirrored, y, x_mirrored,  bounds.y + bounds.h - (y - bounds.y));
+				continue;
 			//std::cerr << x << "," << y << ": " << ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b)) << std::endl;
 		}
 }
