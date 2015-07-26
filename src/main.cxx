@@ -297,14 +297,19 @@ space_nomad_SDL_Texture_unique_ptr loadTexture(SDL_Renderer *ren, const char *fi
 	std::cerr << "Loading " << filename << std::endl;
 	auto bmp = loadSurface(filename);
 
-	SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, bmp.get());
+	auto ret = createTexture(ren, bmp);
+	std::cerr << "Loaded texture " << filename << " to " << ((void *)ret.get()) << std::endl;
+	return ret;
+}
+
+space_nomad_SDL_Texture_unique_ptr createTexture(SDL_Renderer *ren, space_nomad_SDL_Surface_unique_ptr& surface)
+{
+	SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, surface.get());
 	if (!tex)
 	{
 		std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
 		abort();
-		return space_nomad_SDL_Texture_unique_ptr();
 	}
-	std::cerr << "Loaded texture " << filename << " to " << ((void *)tex) << std::endl;
 	return space_nomad_SDL_Texture_unique_ptr(tex);
 }
 

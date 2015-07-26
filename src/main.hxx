@@ -45,7 +45,7 @@ public:
 	void operator()(SDL_Texture *texture);
 };
 typedef std::unique_ptr<SDL_Texture, space_nomad_SDL_Texture_deleter> space_nomad_SDL_Texture_unique_ptr;
-space_nomad_SDL_Texture_unique_ptr loadTexture(SDL_Renderer *ren, const char *filename);
+extern  space_nomad_SDL_Texture_unique_ptr loadTexture(SDL_Renderer *ren, const char *filename);
 
 class space_nomad_SDL_Surface_deleter
 {
@@ -54,6 +54,7 @@ public:
 };
 typedef std::unique_ptr<SDL_Surface, space_nomad_SDL_Surface_deleter> space_nomad_SDL_Surface_unique_ptr;
 space_nomad_SDL_Surface_unique_ptr loadSurface(const char *filename);
+extern  space_nomad_SDL_Texture_unique_ptr createTexture(SDL_Renderer *ren, space_nomad_SDL_Surface_unique_ptr& surface);
 
 class space_nomad_SDL_Renderer_deleter
 {
