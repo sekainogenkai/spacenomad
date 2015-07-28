@@ -50,22 +50,36 @@ brush_creation::fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds) {
 }
 
 brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & random_engine) {
+
+	// Test to see if randomness works
 	std::cout << "Making brush" << std::endl;
 	std::uniform_int_distribution<int> randomNumberDist(0,10000);
 	std::cout << "Testing the randomness in brush_creation " << randomNumberDist(random_engine) << std::endl;
 
 	// Size of brush
-	std::uniform_int_distribution<int> randSize(5, 300);
-	auto size = randSize(random_engine);
-	surface = std::move(space_nomad_SDL_Surface_unique_ptr(SDL_CreateRGBSurface(0, size, size, 8*4, 0, 0, 0, 0)));
+	std::uniform_int_distribution<int> distr_randSize(5, 300);
+	auto size = distr_randSize(random_engine);
+	// Make surface
+	surface = std::move(space_nomad_SDL_Surface_unique_ptr(SDL_CreateRGBSurface(0, size, size, 32, 0, 0, 0, 0)));
 	space_nomad_SDL_Renderer_unique_ptr surface_ren(SDL_CreateSoftwareRenderer(surface.get()));
 
 	// Amount of specs in brush
-	std::uniform_int_distribution<int> randSpecs(1, 5);
+	std::uniform_int_distribution<int> distr_randSpecs(1, 5);
 	// Make the specs
-	auto numSpecs = randSpecs(random_engine);
+	auto numSpecs = distr_randSpecs(random_engine);
+	SDL_Rect dst;
+
+
 	for (int i = 0; i < numSpecs; i++) {
-		//SDL_RenderDrawPoint(surface_ren, )
+		std::uniform_int_distribution<int> distr_length(1, size/2);
+		dst.w = distr_length(random_engine);
+		dst.h = distr_length(random_engine);
+		std::uniform_int_distribution<int> distr_pos_x(dst.w, size - dst.w);
+		std::uniform_int_distribution<int> distr_pos_y(dst.h, size - dst.h);
+		dst.x = distr_pos_x(random_engine);
+		dst.y = distr_pos_y(random_engine);
+
+		fill_circle(surface_ren.get(), dst);
 	}
 }
 
