@@ -26,11 +26,11 @@ public:
 	static void fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds);
 	brush_creation(SDL_Renderer *ren, std::default_random_engine& random_engine);
 	brush_creation(brush_creation&& orig);
-	void draw(int x, int y);
-	space_nomad_SDL_Texture_unique_ptr get();
+	space_nomad_SDL_Renderer_unique_ptr& get_renderer();
 	virtual ~brush_creation();
 private:
 	space_nomad_SDL_Surface_unique_ptr surface;
+	space_nomad_SDL_Renderer_unique_ptr surface_ren;
 };
 
 #endif /* SRC_BRUSH_CREATION_HXX_ */

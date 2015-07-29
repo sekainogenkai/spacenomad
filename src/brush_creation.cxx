@@ -65,12 +65,15 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 
 	// Amount of specs in brush
 	std::uniform_int_distribution<int> distr_randSpecs(1, 5);
-	// Make the specs
+
+	// Set up to make specs
 	auto numSpecs = distr_randSpecs(random_engine);
 	SDL_Rect dst;
 
-
+	// Making the specs
 	for (int i = 0; i < numSpecs; i++) {
+
+		// Location and size
 		std::uniform_int_distribution<int> distr_length(1, size/2);
 		dst.w = distr_length(random_engine);
 		dst.h = distr_length(random_engine);
@@ -78,6 +81,9 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 		std::uniform_int_distribution<int> distr_pos_y(dst.h, size - dst.h);
 		dst.x = distr_pos_x(random_engine);
 		dst.y = distr_pos_y(random_engine);
+
+		// Random color
+
 
 		fill_circle(surface_ren.get(), dst);
 	}
@@ -87,6 +93,10 @@ brush_creation::brush_creation(brush_creation&& orig) {
 	surface = std::move(orig.surface);
 }
 
+space_nomad_SDL_Renderer_unique_ptr&
+brush_creation::get_renderer() {
+	return surface_ren;
+}
 
 brush_creation::~brush_creation() {
 	// TODO Auto-generated destructor stub
