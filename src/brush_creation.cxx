@@ -20,6 +20,7 @@
 #include "brush_creation.hxx"
 
 #include <iostream>
+#include <vector>
 
 // Assumes that coordinates are pixels or whatever that means
 void
@@ -59,6 +60,7 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 	// Size of brush
 	std::uniform_int_distribution<int> distr_randSize(5, 300);
 	auto size = distr_randSize(random_engine);
+
 	// Make surface
 	surface = std::move(space_nomad_SDL_Surface_unique_ptr(SDL_CreateRGBSurface(0, size, size, 32, 0, 0, 0, 0)));
 	space_nomad_SDL_Renderer_unique_ptr surface_ren(SDL_CreateSoftwareRenderer(surface.get()));
@@ -69,6 +71,14 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 	// Set up to make specs
 	auto numSpecs = distr_randSpecs(random_engine);
 	SDL_Rect dst;
+
+	// Set up base random color
+	std::uniform_int_distribution<int> distr_randColor(0, 255);
+	std::vector<int> rcs;
+	for (int i = 0; i < 4; i++) {
+		rcs.push_back(distr_randColor(random_engine));
+	}
+	std::cout << rcs[0] << "Next" << rcs[1];
 
 	// Making the specs
 	for (int i = 0; i < numSpecs; i++) {
@@ -83,20 +93,17 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 		dst.y = distr_pos_y(random_engine);
 
 		// Random color
-
+		SDL_SetRenderDrawColor(surface_ren.get(), rcs[0], rcs[1], rcs[2], rcs[3]);
 
 		fill_circle(surface_ren.get(), dst);
 	}
 }
 
+
 brush_creation::brush_creation(brush_creation&& orig) {
 	surface = std::move(orig.surface);
 }
 
-space_nomad_SDL_Renderer_unique_ptr&
-brush_creation::get_renderer() {
-	return surface_ren;
-}
 
 brush_creation::~brush_creation() {
 	// TODO Auto-generated destructor stub

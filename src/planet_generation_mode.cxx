@@ -39,7 +39,12 @@ planet_generation_mode::planet_generation_mode(SDL_Renderer *ren)
 		brushes.push_back(brush_creation(ren, random_engine));
 	}
 
-}
+	// Make surface
+	int size = 1000;
+	surface = space_nomad_SDL_Surface_unique_ptr(
+							SDL_CreateRGBSurface(0, size, size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
+	auto surface_ren = space_nomad_SDL_Renderer_unique_ptr(
+								SDL_CreateSoftwareRenderer(surface.get()));}
 
 bool planet_generation_mode::processEvents(SDL_Event *event, main_class& main) {
 	switch (event->type)
@@ -59,7 +64,6 @@ bool planet_generation_mode::processEvents(SDL_Event *event, main_class& main) {
 }
 
 void planet_generation_mode::animate() {
-
 
 }
 
@@ -138,8 +142,10 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 		SDL_RenderCopy(ren, createTexture(ren, *brush_iter).get(), NULL, &dst);
 		palette_y += brush_s + 16;
 	}
-
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
+	// Make all the testing stuff go away.
+	SDL_RenderClear(ren);
+
 }
 
 planet_generation_mode::~planet_generation_mode() {
