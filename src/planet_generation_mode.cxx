@@ -164,8 +164,8 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 	SDL_SetRenderDrawColor(ren, 127, 127, 127, 0);
 	// Make all the testing stuff go away.
 	SDL_RenderClear(ren);
-	dst.x = 1000;
-	dst.y = 1000;
+	dst.x = 100;
+	dst.y = 100;
 	SDL_QueryTexture(planet_texture.get(), NULL, NULL, &dst.w, & dst.h);
 	SDL_RenderCopy(ren, planet_texture.get(), NULL, &dst);
 }

@@ -23,7 +23,7 @@
 
 class brush_creation {
 public:
-	static void fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds);
+	static void fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds, bool inverted = false);
 	brush_creation(SDL_Renderer *ren, std::default_random_engine& random_engine);
 	brush_creation(brush_creation&& orig);
 	space_nomad_SDL_Surface_unique_ptr& get_surface() { return surface; }

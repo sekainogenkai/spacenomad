@@ -24,7 +24,7 @@
 
 // Assumes that coordinates are pixels or whatever that means
 void
-brush_creation::fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds) {
+brush_creation::fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds, bool inverted) {
 	// Using ellipse standard form (x - h)^2/a^2 + (y-k)^2/b^2 = 1.
 	// Draw a pixel if its center satisfies <= 1.
 	auto a = bounds.w / 2.0;
@@ -42,10 +42,21 @@ brush_creation::fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds) {
 				pix_center_y = y + 0.5;
 			} while ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b) <= 1);
 			y++;
+			auto x_mirrored = bounds.x + bounds.w - (x - bounds.x);
+			if (inverted)
+			{
+				SDL_RenderDrawLine(ren, x, y, x, bounds.y);
+				SDL_RenderDrawLine(ren, x, bounds.y + bounds.h - (y - bounds.y), x, bounds.y + bounds.h);
+				SDL_RenderDrawLine(ren, x_mirrored, y, x_mirrored, bounds.y);
+				SDL_RenderDrawLine(ren, x_mirrored, bounds.y + bounds.h - (y - bounds.y), x_mirrored, bounds.y + bounds.h);
+			}
+			else
+			{
 				SDL_RenderDrawLine(ren, x, y, x,  bounds.y + bounds.h - (y - bounds.y));
-				auto x_mirrored = bounds.x + bounds.w - (x - bounds.x);
 				SDL_RenderDrawLine(ren, x_mirrored, y, x_mirrored,  bounds.y + bounds.h - (y - bounds.y));
-				continue;
+			}
+
+			continue;
 			//std::cerr << x << "," << y << ": " << ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b)) << std::endl;
 		}
 }
