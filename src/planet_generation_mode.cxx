@@ -39,10 +39,13 @@ planet_generation_mode::planet_generation_mode(SDL_Renderer *ren)
 			SDL_CreateRGBSurface(0, size, size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
 	auto planet_surface_ren = space_nomad_SDL_Renderer_unique_ptr(
 			SDL_CreateSoftwareRenderer(planet_surface.get()));
+
+	// Fill the square to get ready for the circle
+	SDL_SetRenderDrawColor(planet_surface_ren.get(), 255, 255, 255, 255);
 	SDL_RenderClear(planet_surface_ren.get());
 
 	// Make brushes
-	std::uniform_int_distribution<int> distr_random_number(1,100);
+	std::uniform_int_distribution<int> distr_random_number(1, 100);
 
 	// Amount of brushes to make
 	int brush_amount = distr_random_number(random_engine);
@@ -60,6 +63,13 @@ planet_generation_mode::planet_generation_mode(SDL_Renderer *ren)
 		SDL_QueryTexture(brush_texture.get(), NULL, NULL, &dst.w, & dst.h);
 		SDL_RenderCopy(planet_surface_ren.get(), brush_texture.get(), NULL, &dst);
 	}
+
+	// Turn it into a circle
+	dst.x = dst.y = 0;
+	dst.w = dst.h = size;
+	SDL_SetRenderDrawColor(planet_surface_ren.get(), 0, 0, 0, 0);
+	brush_creation::fill_circle(planet_surface_ren.get(), dst, true);
+
 	// Make the thingy be a texture
 	planet_texture = createTexture(ren, planet_surface);
 }
@@ -164,6 +174,7 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 	SDL_SetRenderDrawColor(ren, 127, 127, 127, 0);
 	// Make all the testing stuff go away.
 	SDL_RenderClear(ren);
+
 	dst.x = 100;
 	dst.y = 100;
 	SDL_QueryTexture(planet_texture.get(), NULL, NULL, &dst.w, & dst.h);
