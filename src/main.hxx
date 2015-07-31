@@ -62,5 +62,6 @@ public:
 	void operator()(SDL_Renderer *ren);
 };
 typedef std::unique_ptr<SDL_Renderer, space_nomad_SDL_Renderer_deleter> space_nomad_SDL_Renderer_unique_ptr;
+extern  space_nomad_SDL_Texture_unique_ptr createTexture(space_nomad_SDL_Renderer_unique_ptr& ren, space_nomad_SDL_Surface_unique_ptr& surface);
 
 #endif /* _TESTSDL_MAIN_HXX */

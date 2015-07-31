@@ -29,7 +29,7 @@ public:
 	virtual ~planet_generation_mode();
 private:
 	space_nomad_SDL_Texture_unique_ptr meBraggingAbout4k;
-	space_nomad_SDL_Surface_unique_ptr surface;
+	space_nomad_SDL_Texture_unique_ptr planet_texture;
 
 protected:
 	std::default_random_engine random_engine;

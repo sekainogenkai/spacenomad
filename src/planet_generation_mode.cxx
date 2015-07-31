@@ -31,20 +31,39 @@ planet_generation_mode::planet_generation_mode(SDL_Renderer *ren)
 	// make future uses of the random_engine() happy…	random_engine();
 	random_engine();
 
+
+
+	// Make planet_surface
+	int size = 1000;
+	auto planet_surface = space_nomad_SDL_Surface_unique_ptr(
+			SDL_CreateRGBSurface(0, size, size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
+	auto planet_surface_ren = space_nomad_SDL_Renderer_unique_ptr(
+			SDL_CreateSoftwareRenderer(planet_surface.get()));
+	SDL_RenderClear(planet_surface_ren.get());
+
+	// Make brushes
 	std::uniform_int_distribution<int> distr_random_number(1,100);
+
 	// Amount of brushes to make
 	int brush_amount = distr_random_number(random_engine);
+
 	std::cout << "I am going to make " << brush_amount << " brushes.";
+
+	SDL_Rect dst;
+
 	for (int i = 0; i < brush_amount; i++) {
 		brushes.push_back(brush_creation(ren, random_engine));
-	}
+		auto brush_texture = createTexture(planet_surface_ren, brushes[i].get_surface());
 
-	// Make surface
-	int size = 1000;
-	surface = space_nomad_SDL_Surface_unique_ptr(
-							SDL_CreateRGBSurface(0, size, size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
-	auto surface_ren = space_nomad_SDL_Renderer_unique_ptr(
-								SDL_CreateSoftwareRenderer(surface.get()));}
+		dst.x = 500;
+		dst.y = 500;
+		SDL_QueryTexture(brush_texture.get(), NULL, NULL, &dst.w, & dst.h);
+		SDL_RenderCopy(planet_surface_ren.get(), brush_texture.get(), NULL, &dst);
+	}
+	// Make the thingy be a texture
+	planet_texture = createTexture(ren, planet_surface);
+}
+
 
 bool planet_generation_mode::processEvents(SDL_Event *event, main_class& main) {
 	switch (event->type)
@@ -74,7 +93,7 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 	dst.x = 0;
 	dst.y = 0;
 	SDL_QueryTexture(meBraggingAbout4k.get(), NULL, NULL, &dst.w, &dst.h);
-	SDL_RenderCopy(ren, meBraggingAbout4k.get(),NULL, &dst);
+	SDL_RenderCopy(ren, meBraggingAbout4k.get(), NULL, &dst);
 
 	SDL_SetRenderDrawColor(ren, 128, 0, 255, 0);
 	dst.x = 200;
@@ -142,10 +161,13 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 		SDL_RenderCopy(ren, createTexture(ren, *brush_iter).get(), NULL, &dst);
 		palette_y += brush_s + 16;
 	}
-	SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
+	SDL_SetRenderDrawColor(ren, 127, 127, 127, 0);
 	// Make all the testing stuff go away.
 	SDL_RenderClear(ren);
-
+	dst.x = 1000;
+	dst.y = 1000;
+	SDL_QueryTexture(planet_texture.get(), NULL, NULL, &dst.w, & dst.h);
+	SDL_RenderCopy(ren, planet_texture.get(), NULL, &dst);
 }
 
 planet_generation_mode::~planet_generation_mode() {

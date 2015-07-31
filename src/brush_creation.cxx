@@ -62,7 +62,7 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 	auto size = distr_randSize(random_engine);
 
 	// Make surface
-	surface = std::move(space_nomad_SDL_Surface_unique_ptr(SDL_CreateRGBSurface(0, size, size, 32, 0, 0, 0, 0)));
+	surface = std::move(space_nomad_SDL_Surface_unique_ptr(SDL_CreateRGBSurface(0, size, size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000)));
 	space_nomad_SDL_Renderer_unique_ptr surface_ren(SDL_CreateSoftwareRenderer(surface.get()));
 
 	// Amount of specs in brush
@@ -94,6 +94,7 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 
 		// Random color
 		SDL_SetRenderDrawColor(surface_ren.get(), rcs[0], rcs[1], rcs[2], rcs[3]);
+		//TODO make the color vary slightly
 
 		fill_circle(surface_ren.get(), dst);
 	}

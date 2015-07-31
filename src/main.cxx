@@ -312,6 +312,10 @@ space_nomad_SDL_Texture_unique_ptr createTexture(SDL_Renderer *ren, space_nomad_
 	}
 	return space_nomad_SDL_Texture_unique_ptr(tex);
 }
+space_nomad_SDL_Texture_unique_ptr createTexture(space_nomad_SDL_Renderer_unique_ptr& ren, space_nomad_SDL_Surface_unique_ptr& surface)
+{
+	return createTexture(ren.get(), surface);
+}
 
 void
 space_nomad_SDL_Renderer_deleter::operator()(SDL_Renderer *ren)
