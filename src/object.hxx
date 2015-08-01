@@ -26,6 +26,17 @@ public:
 		double yVel = 0,
 		double angular = 0,
 		double mass = 0);
+	object(
+		SDL_Renderer *ren,
+		space_nomad_SDL_Surface_unique_ptr&& surface,
+		double x = 0,
+		double y = 0,
+		double xVel = 0,
+		double yVel = 0,
+		double angular = 0,
+		double mass = 0);
+	object(
+			object&& src);
 	virtual void animate();
 	void draw(SDL_Renderer *ren, const camera& displayCamera) const;
 	void angularVel_dampening(double dampening);

@@ -5,75 +5,40 @@
  *      Author: Kristofer
  */
 
-#include "brush_creation.hxx"
 #include "main.hxx"
 #include "camera.hxx"
 #include "player.hxx"
 #include "star_field.hxx"
 #include "universe.hxx"
-#include "planet_generation_mode.hxx"
-
+#include "planet_generation/brush.hxx"
+#include "planet_generation/planet_generation_mode.hxx"
+#include "planet_generation/planet_generator.hxx"
 
 #include <ctime>
 #include <functional>
 #include <iostream>
 #include <array>
 
+namespace spacenomad {
+
 planet_generation_mode::planet_generation_mode(SDL_Renderer *ren)
 : meBraggingAbout4k(loadTexture(ren, "planet_generation_mode/This is 4k.png"))
 , random_engine(time(NULL))
-{
+, planet(std::move(planet_generator().generate(ren, prod_random_engine(random_engine)))) {
+}
+
+
+std::default_random_engine&
+planet_generation_mode::prod_random_engine(std::default_random_engine& engine) {
 	// So, uniform_int_distribution treats very large numbers that
 	// differ only in the hundreds place or below as the
 	// same. Because our time() values are very large and near
 	// each other, and because the random_engine() yields the seed
 	// value as the first number, we have to iterate past that to
 	// make future uses of the random_engine() happy…	random_engine();
-	random_engine();
-
-
-
-	// Make planet_surface
-	int size = 1000;
-	auto planet_surface = space_nomad_SDL_Surface_unique_ptr(
-			SDL_CreateRGBSurface(0, size, size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
-	auto planet_surface_ren = space_nomad_SDL_Renderer_unique_ptr(
-			SDL_CreateSoftwareRenderer(planet_surface.get()));
-
-	// Fill the square to get ready for the circle
-	SDL_SetRenderDrawColor(planet_surface_ren.get(), 255, 255, 255, 255);
-	SDL_RenderClear(planet_surface_ren.get());
-
-	// Make brushes
-	std::uniform_int_distribution<int> distr_random_number(1, 100);
-
-	// Amount of brushes to make
-	int brush_amount = distr_random_number(random_engine);
-
-	std::cout << "I am going to make " << brush_amount << " brushes.";
-
-	SDL_Rect dst;
-
-	for (int i = 0; i < brush_amount; i++) {
-		brushes.push_back(brush_creation(ren, random_engine));
-		auto brush_texture = createTexture(planet_surface_ren, brushes[i].get_surface());
-
-		dst.x = 500;
-		dst.y = 500;
-		SDL_QueryTexture(brush_texture.get(), NULL, NULL, &dst.w, & dst.h);
-		SDL_RenderCopy(planet_surface_ren.get(), brush_texture.get(), NULL, &dst);
-	}
-
-	// Turn it into a circle
-	dst.x = dst.y = 0;
-	dst.w = dst.h = size;
-	SDL_SetRenderDrawColor(planet_surface_ren.get(), 0, 0, 0, 0);
-	brush_creation::fill_circle(planet_surface_ren.get(), dst, true);
-
-	// Make the thingy be a texture
-	planet_texture = createTexture(ren, planet_surface);
+	engine();
+	return engine;
 }
-
 
 bool planet_generation_mode::processEvents(SDL_Event *event, main_class& main) {
 	switch (event->type)
@@ -112,7 +77,7 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 	dst.w = 500;
 	SDL_RenderDrawRect(ren, &dst);
 	SDL_SetRenderDrawColor(ren, 255, 0, 128, 0);
-	brush_creation::fill_circle(ren, dst);
+	brush::fill_circle(ren, dst);
 
 	// Build a palette
 	auto brush_s = 48;
@@ -141,7 +106,7 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 					dst.w = brush_s;
 					dst.h = brush_s;
 					SDL_SetRenderDrawColor(brush_ren.get(), 255-r, 255-g, 255-b, 255);
-					brush_creation::fill_circle(brush_ren.get(), dst);
+					brush::fill_circle(brush_ren.get(), dst);
 
 					// Now, to demonstrate how to draw with alpha blending disabled,
 					// I am going to draw a circle ridiculously with full alpha but
@@ -154,7 +119,7 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 					dst.h /= 2;
 					dst.x += dst.w;
 					dst.y += dst.h;
-					brush_creation::fill_circle(brush_ren.get(), dst);
+					brush::fill_circle(brush_ren.get(), dst);
 				}
 				palette.push_back(std::move(myBrush));
 			}
@@ -174,16 +139,14 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 	SDL_SetRenderDrawColor(ren, 127, 127, 127, 0);
 	// Make all the testing stuff go away.
 	SDL_RenderClear(ren);
-
-	dst.x = 100;
-	dst.y = 100;
-	SDL_QueryTexture(planet_texture.get(), NULL, NULL, &dst.w, & dst.h);
-	SDL_RenderCopy(ren, planet_texture.get(), NULL, &dst);
+	displayCamera.clear();
+	this->planet.considerCamera(displayCamera, 1);
+	displayCamera.calculateTransforms();
+	this->planet.draw(ren, displayCamera);
 }
 
 planet_generation_mode::~planet_generation_mode() {
-	// TODO Auto-generated destructor stub
-
 }
 
 
+}; /* namespace spacenomad */

@@ -8,16 +8,20 @@
 #ifndef SRC_PLANET_GENERATION_MODE_HXX_
 #define SRC_PLANET_GENERATION_MODE_HXX_
 
-#include "brush_creation.hxx"
 #include "camera.hxx"
 #include "main.hxx"
 #include "mode.hxx"
+#include "planet.hxx"
+#include "planet_generation/brush.hxx"
+#include "planet_generation/planet_type.hxx"
 #include "player.hxx"
 #include "star_field.hxx"
 #include "universe.hxx"
 
 #include <functional>
 #include <random>
+
+namespace spacenomad {
 
 class planet_generation_mode
 : public mode {
@@ -29,11 +33,14 @@ public:
 	virtual ~planet_generation_mode();
 private:
 	space_nomad_SDL_Texture_unique_ptr meBraggingAbout4k;
-	space_nomad_SDL_Texture_unique_ptr planet_texture;
+	static std::default_random_engine& prod_random_engine(std::default_random_engine& engine);
 
 protected:
 	std::default_random_engine random_engine;
-	std::vector<brush_creation> brushes;
+private:
+	::planet planet;
 };
+
+}; /* namespace spacenomad */
 
 #endif /* SRC_PLANET_GENERATION_MODE_HXX_ */

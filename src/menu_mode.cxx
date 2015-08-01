@@ -9,7 +9,7 @@
 #include "game_mode.hxx"
 #include "main.hxx"
 #include "menu_mode.hxx"
-#include "planet_generation_mode.hxx"
+#include "planet_generation/planet_generation_mode.hxx"
 
 static bool menu_option_start(main_class& main)
 {
@@ -80,7 +80,7 @@ bool menu_mode::processEvents(SDL_Event *event, main_class& main)
 			return menu_options[selection_index].do_thing(main);
 		// case derpy testing by Kristofer Brink the one and only who would dare for their name to be like that
 		case SDLK_F12:
-			main.push_mode(new planet_generation_mode(main.ren));
+			main.push_mode(new spacenomad::planet_generation_mode(main.ren));
 			return false;
 		}
 	}

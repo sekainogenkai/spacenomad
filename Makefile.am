@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -DPKGDATADIR=\"$(pkgdatadir)\"
+AM_CPPFLAGS = -DPKGDATADIR=\"$(pkgdatadir)\" -Isrc
 SUFFIXES = .o .rc
 ACLOCAL_AMFLAGS = -Im4
 
@@ -9,7 +9,6 @@ spacenomad_LDADD = $(SDL2_LIBS)
 spacenomad_SOURCES = \
 	$(RES) \
 	src/block.cxx src/block.hxx \
-	src/brush_creation.cxx src/brush_creation.hxx \
 	src/camera.cxx src/camera.hxx \
 	src/field.cxx src/field.hxx \
 	src/game_mode.cxx src/game_mode.hxx \
@@ -20,7 +19,10 @@ spacenomad_SOURCES = \
 	src/object_block.cxx src/object_block.hxx \
 	src/object_field.cxx src/object_field.hxx \
 	src/planet.cxx src/planet.hxx \
-	src/planet_generation_mode.cxx src/planet_generation_mode.hxx \
+	src/planet_generation/brush.cxx src/planet_generation/brush.hxx \
+	src/planet_generation/planet_generation_mode.cxx src/planet_generation/planet_generation_mode.hxx \
+	src/planet_generation/planet_generator.cxx src/planet_generation/planet_generator.hxx \
+	src/planet_generation/planet_type.cxx src/planet_generation/planet_type.hxx \
 	src/player.cxx src/player.hxx \
 	src/sprite.cxx src/sprite.hxx \
 	src/star_block.cxx src/star_block.hxx \

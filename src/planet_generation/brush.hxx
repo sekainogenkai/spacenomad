@@ -5,8 +5,8 @@
  *      Author: Kristofer
  */
 
-#ifndef SRC_BRUSH_CREATION_HXX_
-#define SRC_BRUSH_CREATION_HXX_
+#ifndef SRC_PLANET_GENERATION_BRUSH_HXX_
+#define SRC_PLANET_GENERATION_BRUSH_HXX_
 
 #include "camera.hxx"
 #include "main.hxx"
@@ -19,17 +19,19 @@
 
 
 
+namespace spacenomad {
 
-
-class brush_creation {
+class brush {
 public:
 	static void fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds, bool inverted = false);
-	brush_creation(SDL_Renderer *ren, std::default_random_engine& random_engine);
-	brush_creation(brush_creation&& orig);
+	brush(std::default_random_engine& random_engine);
+	brush(brush&& orig);
 	space_nomad_SDL_Surface_unique_ptr& get_surface() { return surface; }
-	virtual ~brush_creation();
+	virtual ~brush();
 private:
 	space_nomad_SDL_Surface_unique_ptr surface;
 };
 
-#endif /* SRC_BRUSH_CREATION_HXX_ */
+}; /* namespace spacenomad */
+
+#endif /* SRC_PLANET_GENERATION_BRUSH_HXX_ */

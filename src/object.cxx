@@ -14,7 +14,7 @@
 
 object::object(
 		SDL_Renderer *ren,
-		const char *textureFilename,
+		space_nomad_SDL_Surface_unique_ptr&& surface,
 		double x,
 		double y,
 		double xVel,
@@ -28,7 +28,7 @@ object::object(
 , facingDirection(0)
 , angularVel(angularVel)
 , mass(mass)
-, texture(loadTexture(ren, textureFilename))
+, texture(createTexture(ren, surface))
   // Given two objects that have this object’s mass, what is the
   // maximum distance they can be from each other to at least have an
   // attractive force of 0.01 «units?»?
@@ -50,6 +50,37 @@ object::object(
         SDL_QueryTexture(texture.get(), NULL, NULL, &w, NULL);
 	radius = w/2;
 	attractive = false;
+}
+
+object::object(
+		SDL_Renderer *ren,
+		const char *textureFilename,
+		double x,
+		double y,
+		double xVel,
+		double yVel,
+		double angularVel,
+		double mass)
+: object(
+		ren,
+		loadSurface(textureFilename),
+		x,
+		y,
+		xVel,
+		yVel,
+		angularVel,
+		mass) {
+}
+
+object::object(
+		object&& src) {
+	x = src.x;
+	y = src.y;
+	xVel = src.xVel;
+	yVel = src.yVel;
+	angularVel = src.angularVel;
+	mass = src.mass;
+	texture = std::move(src.texture);
 }
 
 // This is for making a number that is close enough to zero become zero.

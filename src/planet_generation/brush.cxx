@@ -1,5 +1,5 @@
 /*
- * brush_creation.cxx
+ * brush.cxx
  *
  *  Created on: Jun 24, 2015
  *      Author: Kristofer
@@ -17,14 +17,16 @@
  * Type of dots, reacts to Number of dots
  * Per dot, shape, size, opacity, position
  */
-#include "brush_creation.hxx"
+#include "brush.hxx"
 
 #include <iostream>
 #include <vector>
 
+namespace spacenomad {
+
 // Assumes that coordinates are pixels or whatever that means
 void
-brush_creation::fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds, bool inverted) {
+brush::fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds, bool inverted) {
 	// Using ellipse standard form (x - h)^2/a^2 + (y-k)^2/b^2 = 1.
 	// Draw a pixel if its center satisfies <= 1.
 	auto a = bounds.w / 2.0;
@@ -61,12 +63,12 @@ brush_creation::fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds, bool inve
 		}
 }
 
-brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & random_engine) {
+brush::brush(std::default_random_engine & random_engine) {
 
 	// Test to see if randomness works
 	std::cout << "Making brush" << std::endl;
 	std::uniform_int_distribution<int> randomNumberDist(0,10000);
-	std::cout << "Testing the randomness in brush_creation " << randomNumberDist(random_engine) << std::endl;
+	std::cout << "Testing the randomness in brush " << randomNumberDist(random_engine) << std::endl;
 
 	// Size of brush
 	std::uniform_int_distribution<int> distr_randSize(5, 300);
@@ -85,11 +87,13 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 
 	// Set up base random color
 	std::uniform_int_distribution<int> distr_randColor(0, 255);
-	std::vector<int> rcs;
-	for (int i = 0; i < 4; i++) {
-		rcs.push_back(distr_randColor(random_engine));
+	// Don't make invisible/barely visible brushes: constrain the alpha to >15.
+	std::uniform_int_distribution<int> distr_randAlpha(16, 255);
+	std::vector<int> rgb;
+	for (int i = 0; i < 3; i++) {
+		rgb.push_back(distr_randColor(random_engine));
 	}
-	std::cout << rcs[0] << "Next" << rcs[1];
+	auto alpha = distr_randAlpha(random_engine);
 
 	// Making the specs
 	for (int i = 0; i < numSpecs; i++) {
@@ -104,7 +108,7 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 		dst.y = distr_pos_y(random_engine);
 
 		// Random color
-		SDL_SetRenderDrawColor(surface_ren.get(), rcs[0], rcs[1], rcs[2], rcs[3]);
+		SDL_SetRenderDrawColor(surface_ren.get(), rgb[0], rgb[1], rgb[2], alpha);
 		//TODO make the color vary slightly
 
 		fill_circle(surface_ren.get(), dst);
@@ -112,11 +116,12 @@ brush_creation::brush_creation(SDL_Renderer * ren, std::default_random_engine & 
 }
 
 
-brush_creation::brush_creation(brush_creation&& orig) {
+brush::brush(brush&& orig) {
 	surface = std::move(orig.surface);
 }
 
 
-brush_creation::~brush_creation() {
-	// TODO Auto-generated destructor stub
+brush::~brush() {
 }
+
+}; /* namespace spacenomad */
