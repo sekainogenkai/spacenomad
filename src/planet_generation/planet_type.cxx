@@ -26,6 +26,11 @@ planet_type::add_feature(feature_type type, const color& color_min, const color&
 	features.push_back({ type, color_min, color_max, sharpness });
 }
 
+const std::vector<planet_type::feature>&
+planet_type::get_features() const {
+	return features;
+}
+
 planet_type::~planet_type() {
 }
 

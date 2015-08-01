@@ -48,8 +48,21 @@ planet_generator::planet_generator() {
 	planet_types.push_back(molten);
 }
 
+static planet_type::color random_color(std::default_random_engine& random_engine, const planet_type::color& color_min, const planet_type::color& color_max) {
+	return {
+		std::uniform_int_distribution<int>(color_min.r, color_max.r)(random_engine),
+				std::uniform_int_distribution<int>(color_min.g, color_max.g)(random_engine),
+				std::uniform_int_distribution<int>(color_min.b, color_max.b)(random_engine),
+				std::uniform_int_distribution<int>(color_min.a, color_max.a)(random_engine),
+	};
+}
+
 planet
 planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random_engine) const {
+	// Chose a planet type randomly.
+	const auto& planet_type = planet_types[std::uniform_int_distribution<int>(0, planet_types.size() - 1)(random_engine)];
+	const auto& features = planet_type.get_features();
+
 	// Make planet_surface
 	int size = 1000;
 	auto planet_surface = space_nomad_SDL_Surface_unique_ptr(
@@ -59,12 +72,9 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 
 	// Fill the square with random color to get ready for the circle
 	std::uniform_int_distribution<int> distr_randColor(0, 255);
-	std::vector<int> rcs;
-	for (int i = 0; i < 3; i++) {
-		rcs.push_back(distr_randColor(random_engine));
-	}
 
-	SDL_SetRenderDrawColor(planet_surface_ren.get(), rcs[0], rcs[1], rcs[2], 255);
+	auto bgcolor = random_color(random_engine, features[0].color_min, features[1].color_max);
+	SDL_SetRenderDrawColor(planet_surface_ren.get(), bgcolor.r, bgcolor.g, bgcolor.b, 255);
 	SDL_RenderClear(planet_surface_ren.get());
 
 	// Make brushes
