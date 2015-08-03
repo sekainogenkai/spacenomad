@@ -8,18 +8,14 @@
 #ifndef SRC_PLANET_GENERATION_MODE_HXX_
 #define SRC_PLANET_GENERATION_MODE_HXX_
 
-#include "camera.hxx"
-#include "main.hxx"
-#include "mode.hxx"
-#include "planet.hxx"
-#include "planet_generation/brush.hxx"
-#include "planet_generation/planet_type.hxx"
-#include "player.hxx"
-#include "star_field.hxx"
-#include "universe.hxx"
-
-#include <functional>
 #include <random>
+#include <memory>
+
+#include "../../../../Downloads/SDL2_ttf-2.0.12/i686-w64-mingw32/include/SDL2/SDL_ttf.h"
+#include "../../../../Downloads/SDL2-2.0.3/i686-w64-mingw32/include/SDL2/SDL.h"
+#include "../main.hxx"
+#include "../mode.hxx"
+#include "../planet.hxx"
 
 namespace spacenomad {
 
@@ -34,11 +30,12 @@ public:
 private:
 	space_nomad_SDL_Texture_unique_ptr meBraggingAbout4k;
 	static std::default_random_engine& prod_random_engine(std::default_random_engine& engine);
+	bool planet_switch;
 
 protected:
 	std::default_random_engine random_engine;
 private:
-	::planet planet;
+	std::unique_ptr<::planet> planet;
 };
 
 }; /* namespace spacenomad */

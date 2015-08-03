@@ -24,7 +24,8 @@ namespace spacenomad {
 planet_generation_mode::planet_generation_mode(SDL_Renderer *ren)
 : meBraggingAbout4k(loadTexture(ren, "planet_generation_mode/This is 4k.png"))
 , random_engine(time(NULL))
-, planet(std::move(planet_generator().generate(ren, prod_random_engine(random_engine)))) {
+, planet(new ::planet(std::move(planet_generator().generate(ren, prod_random_engine(random_engine))))) {
+	planet_switch = false;
 }
 
 
@@ -52,6 +53,8 @@ bool planet_generation_mode::processEvents(SDL_Event *event, main_class& main) {
 		// case Up
 		case SDLK_BACKSPACE:
 			return true;
+		case SDLK_RETURN:
+			planet_switch = true;
 		}
 	}
 	return false;
@@ -137,12 +140,20 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 		palette_y += brush_s + 16;
 	}
 	SDL_SetRenderDrawColor(ren, 127, 127, 127, 0);
+
 	// Make all the testing stuff go away.
 	SDL_RenderClear(ren);
 	displayCamera.clear();
-	this->planet.considerCamera(displayCamera, 1);
+
+	if (planet_switch) {
+		planet.reset();
+		planet = std::move(std::unique_ptr<::planet> (new ::planet(std::move(planet_generator().generate(ren, prod_random_engine(random_engine))))));
+		planet_switch = false;
+	}
+
+	(*this->planet).considerCamera(displayCamera, 1);
 	displayCamera.calculateTransforms();
-	this->planet.draw(ren, displayCamera);
+	(*this->planet).draw(ren, displayCamera);
 }
 
 planet_generation_mode::~planet_generation_mode() {
