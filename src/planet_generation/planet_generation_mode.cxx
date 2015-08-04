@@ -146,7 +146,6 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 	displayCamera.clear();
 
 	if (planet_switch) {
-		planet.reset();
 		planet = std::move(std::unique_ptr<::planet> (new ::planet(std::move(planet_generator().generate(ren, prod_random_engine(random_engine))))));
 		planet_switch = false;
 	}

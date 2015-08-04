@@ -9,6 +9,7 @@
 #include "planet_generation/planet_generator.hxx"
 
 #include <iostream>
+#include <cmath>
 
 namespace spacenomad {
 
@@ -95,9 +96,11 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 
 		SDL_QueryTexture(brush_texture.get(), NULL, NULL, &dst.w, & dst.h);
 
-		// Random amount of drawing starts and amount of draw time
+		// Random amount of drawing starts and amount of draw time and starting rotation
 		std::uniform_int_distribution<int> distr_num_draw_start(0, 100);
 		int num_start = distr_num_draw_start(random_engine);
+		std::uniform_int_distribution<int> distr_facing_direction(0, 360);
+		int facing_direction = distr_facing_direction(random_engine);
 		for (int i = 0; i < num_start; i ++) {
 
 			// Draw start
@@ -115,9 +118,12 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 				std::uniform_int_distribution<int> distr_move(-brush_speed_max, brush_speed_max);
 				dst.x += distr_move(random_engine);
 				dst.y += distr_move(random_engine);
-				SDL_RenderCopy(planet_surface_ren.get(), brush_texture.get(), NULL, &dst);
-			}
+				//facing_direction += distr_move(random_engine);
 
+				SDL_RenderCopy(planet_surface_ren.get(), brush_texture.get(), NULL, &dst);
+
+				//SDL_RenderCopyEx(planet_surface_ren.get(), brush_texture.get(), NULL, &dst, facing_direction, NULL, SDL_FLIP_NONE);
+			}
 		}
 	}
 
