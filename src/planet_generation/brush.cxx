@@ -88,7 +88,7 @@ brush::brush(std::default_random_engine & random_engine) {
 	// Set up base random color
 	std::uniform_int_distribution<int> distr_randColor(0, 255);
 	// Don't make invisible/barely visible brushes: constrain the alpha to >15.
-	std::uniform_int_distribution<int> distr_randAlpha(16, 255);
+	std::uniform_int_distribution<int> distr_randAlpha(1, 255);
 	std::vector<int> rgb;
 	for (int i = 0; i < 3; i++) {
 		rgb.push_back(distr_randColor(random_engine));
