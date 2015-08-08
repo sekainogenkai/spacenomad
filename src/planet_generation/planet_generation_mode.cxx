@@ -150,9 +150,9 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 		planet_switch = false;
 	}
 
-	(*this->planet).considerCamera(displayCamera, 1);
+	this->planet->considerCamera(displayCamera, 1);
 	displayCamera.calculateTransforms();
-	(*this->planet).draw(ren, displayCamera);
+	this->planet->draw(ren, displayCamera);
 }
 
 planet_generation_mode::~planet_generation_mode() {

@@ -88,41 +88,68 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 
 	SDL_Rect dst;
 
-	std::vector<brush> brushes;
 	for (int i = 0; i < brush_amount; i++) {
-		brushes.push_back(brush(random_engine));
-		auto brush_texture = createTexture(planet_surface_ren, brushes[i].get_surface());
+
+		// Get brush width and height
+		auto new_brush = brush(random_engine);
+		dst.w = new_brush.get_surface()->w;
+		dst.h = new_brush.get_surface()->h;
+
+		// Make the surface for the rotated brush to draw onto
+		// Calculate max size of rotate brush
+		int max_size = sqrt(pow(dst.w, 2) + pow(dst.h, 2));
+		std::cerr << "max_size=" << max_size << std::endl;
+		auto brush_rotated_surface = space_nomad_SDL_Surface_unique_ptr(
+				SDL_CreateRGBSurface(0, max_size, max_size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
+		auto brush_rotated_ren = space_nomad_SDL_Renderer_unique_ptr(
+				SDL_CreateSoftwareRenderer(brush_rotated_surface.get()));
 
 
+		auto brush_texture = createTexture(brush_rotated_ren, new_brush.get_surface());
+
+		std::cerr<<"bw=" <<dst.w << ",bh="<<dst.h<<std::endl;
 		SDL_QueryTexture(brush_texture.get(), NULL, NULL, &dst.w, & dst.h);
+		std::cerr<<"aw=" <<dst.w << ",ah="<<dst.h<<std::endl;
+		std::uniform_int_distribution<int> distr_draw_start(0-dst.w, size+dst.w);
 
 		// Random amount of drawing starts and amount of draw time and starting rotation
 		std::uniform_int_distribution<int> distr_num_draw_start(0, 100);
 		int num_start = distr_num_draw_start(random_engine);
 		std::uniform_int_distribution<int> distr_facing_direction(0, 360);
-		int facing_direction = distr_facing_direction(random_engine);
 		for (int i = 0; i < num_start; i ++) {
+			// Rotation
+			int facing_direction = distr_facing_direction(random_engine);
+
+
+			dst.x = (max_size - dst.w) / 2;
+			dst.y = (max_size - dst.h) / 2;
+//			SDL_SetRenderDrawColor(brush_rotated_ren.get(), 255, 100, 100, 128);
+//			SDL_RenderClear(brush_rotated_ren.get());
+//			SDL_SetRenderDrawColor(brush_rotated_ren.get(), 100, 255, 255, 128);
+//			SDL_RenderFillRect(brush_rotated_ren.get(), &dst);
+			SDL_RenderCopyEx(brush_rotated_ren.get(), brush_texture.get(), NULL, &dst, facing_direction, NULL, SDL_FLIP_NONE);
+			auto brush_rotated_texture = createTexture(planet_surface_ren, brush_rotated_surface);
 
 			// Draw start
-			std::uniform_int_distribution<int> distr_draw_start(0-dst.w, size+dst.w);
 			dst.x = distr_draw_start(random_engine);
 			dst.y = distr_draw_start(random_engine);
+			dst.w = max_size;
+			dst.h = max_size;
 
 			// Draw time
 			std::uniform_int_distribution<int> distr_draw_loops(0, 200);
 			int draw_loops = distr_draw_loops(random_engine);
+				std::uniform_int_distribution<int> distr_brush_speed_max(0, 20);
+
 			// Drawing around. Right now this isn't done that well.
 			for (int i = 0; i < draw_loops; i++) {
-				std::uniform_int_distribution<int> distr_brush_speed_max(0, 20);
 				int brush_speed_max = distr_brush_speed_max(random_engine);
 				std::uniform_int_distribution<int> distr_move(-brush_speed_max, brush_speed_max);
+				distr_move(random_engine); // do stuff
 				dst.x += distr_move(random_engine);
 				dst.y += distr_move(random_engine);
-				//facing_direction += distr_move(random_engine);
 
-				SDL_RenderCopy(planet_surface_ren.get(), brush_texture.get(), NULL, &dst);
-
-				//SDL_RenderCopyEx(planet_surface_ren.get(), brush_texture.get(), NULL, &dst, facing_direction, NULL, SDL_FLIP_NONE);
+				SDL_RenderCopy(planet_surface_ren.get(), brush_rotated_texture.get(), NULL, &dst);
 			}
 		}
 	}
