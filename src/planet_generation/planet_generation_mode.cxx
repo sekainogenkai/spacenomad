@@ -142,6 +142,7 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 //	SDL_SetRenderDrawColor(ren, 127, 127, 127, 0);
 
 	// Make all the testing stuff go away.
+	SDL_SetRenderDrawColor(ren, 127, 127, 127, 0);
 	SDL_RenderClear(ren);
 	displayCamera.clear();
 

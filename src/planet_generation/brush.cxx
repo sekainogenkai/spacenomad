@@ -77,6 +77,9 @@ brush::brush(std::default_random_engine & random_engine) {
 	// Make surface
 	surface = std::move(space_nomad_SDL_Surface_unique_ptr(SDL_CreateRGBSurface(0, size, size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000)));
 	space_nomad_SDL_Renderer_unique_ptr surface_ren(SDL_CreateSoftwareRenderer(surface.get()));
+	//SDL_SetRenderDrawBlendMode(surface_ren.get(), SDL_BLENDMODE_BLEND);
+	//SDL_SetRenderDrawColor(surface_ren.get(), 0, 0, 0, 0);
+	//SDL_RenderClear(surface_ren.get());
 
 	// Amount of specs in brush
 	std::uniform_int_distribution<int> distr_randSpecs(1, 5);
@@ -87,8 +90,8 @@ brush::brush(std::default_random_engine & random_engine) {
 
 	// Set up base random color
 	std::uniform_int_distribution<int> distr_randColor(0, 255);
-	// Don't make invisible/barely visible brushes: constrain the alpha to >15.
-	std::uniform_int_distribution<int> distr_randAlpha(1, 255);
+	// Don't make invisible/barely visible brushes: constrain the alpha to >1.
+	std::uniform_int_distribution<int> distr_randAlpha(2, 255);
 	std::vector<int> rgb;
 	for (int i = 0; i < 3; i++) {
 		rgb.push_back(distr_randColor(random_engine));
@@ -108,6 +111,7 @@ brush::brush(std::default_random_engine & random_engine) {
 		dst.y = distr_pos_y(random_engine);
 
 		// Random color
+		std::cerr << "c=" << rgb[0] << "," << rgb[1] << "," << rgb[2] << "," << alpha << std::endl;
 		SDL_SetRenderDrawColor(surface_ren.get(), rgb[0], rgb[1], rgb[2], alpha);
 		//TODO make the color vary slightly
 

@@ -70,6 +70,7 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 			SDL_CreateRGBSurface(0, size, size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
 	auto planet_surface_ren = space_nomad_SDL_Renderer_unique_ptr(
 			SDL_CreateSoftwareRenderer(planet_surface.get()));
+//	SDL_SetRenderDrawBlendMode(planet_surface_ren.get(), SDL_BLENDMODE_BLEND);
 
 	// Fill the square with random color to get ready for the circle
 	std::uniform_int_distribution<int> distr_randColor(0, 255);
@@ -95,21 +96,6 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 		dst.w = new_brush.get_surface()->w;
 		dst.h = new_brush.get_surface()->h;
 
-		// Make the surface for the rotated brush to draw onto
-		// Calculate max size of rotate brush
-		int max_size = sqrt(pow(dst.w, 2) + pow(dst.h, 2));
-		std::cerr << "max_size=" << max_size << std::endl;
-		auto brush_rotated_surface = space_nomad_SDL_Surface_unique_ptr(
-				SDL_CreateRGBSurface(0, max_size, max_size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
-		auto brush_rotated_ren = space_nomad_SDL_Renderer_unique_ptr(
-				SDL_CreateSoftwareRenderer(brush_rotated_surface.get()));
-
-
-		auto brush_texture = createTexture(brush_rotated_ren, new_brush.get_surface());
-
-		std::cerr<<"bw=" <<dst.w << ",bh="<<dst.h<<std::endl;
-		SDL_QueryTexture(brush_texture.get(), NULL, NULL, &dst.w, & dst.h);
-		std::cerr<<"aw=" <<dst.w << ",ah="<<dst.h<<std::endl;
 		std::uniform_int_distribution<int> distr_draw_start(0-dst.w, size+dst.w);
 
 		// Random amount of drawing starts and amount of draw time and starting rotation
@@ -120,6 +106,16 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 			// Rotation
 			int facing_direction = distr_facing_direction(random_engine);
 
+			// Make the surface for the rotated brush to draw onto
+			// Calculate max size of rotate brush
+			int max_size = sqrt(pow(dst.w, 2) + pow(dst.h, 2));
+			std::cerr << "max_size=" << max_size << std::endl;
+			auto brush_rotated_surface = space_nomad_SDL_Surface_unique_ptr(
+					SDL_CreateRGBSurface(0, max_size, max_size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
+			{
+			auto brush_rotated_ren = space_nomad_SDL_Renderer_unique_ptr(
+					SDL_CreateSoftwareRenderer(brush_rotated_surface.get()));
+			auto brush_texture = createTexture(brush_rotated_ren, new_brush.get_surface());
 
 			dst.x = (max_size - dst.w) / 2;
 			dst.y = (max_size - dst.h) / 2;
@@ -127,14 +123,21 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 //			SDL_RenderClear(brush_rotated_ren.get());
 //			SDL_SetRenderDrawColor(brush_rotated_ren.get(), 100, 255, 255, 128);
 //			SDL_RenderFillRect(brush_rotated_ren.get(), &dst);
+			SDL_SetTextureBlendMode(brush_texture.get(), SDL_BLENDMODE_NONE);
+			SDL_RenderClear(brush_rotated_ren.get());
 			SDL_RenderCopyEx(brush_rotated_ren.get(), brush_texture.get(), NULL, &dst, facing_direction, NULL, SDL_FLIP_NONE);
+			//SDL_RenderCopy  (brush_rotated_ren.get(), brush_texture.get(), NULL, &dst);
+		}
 			auto brush_rotated_texture = createTexture(planet_surface_ren, brush_rotated_surface);
+
+			auto brush_texture_2 = createTexture(planet_surface_ren, new_brush.get_surface());
 
 			// Draw start
 			dst.x = distr_draw_start(random_engine);
 			dst.y = distr_draw_start(random_engine);
 			dst.w = max_size;
 			dst.h = max_size;
+			dst.x = dst.y = 200;
 
 			// Draw time
 			std::uniform_int_distribution<int> distr_draw_loops(0, 200);
@@ -150,13 +153,19 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 				dst.y += distr_move(random_engine);
 
 				SDL_RenderCopy(planet_surface_ren.get(), brush_rotated_texture.get(), NULL, &dst);
+				dst.x += 200;
+				SDL_RenderCopy(planet_surface_ren.get(), brush_texture_2.get(), NULL, &dst);
+				break;
 			}
+			break;
 		}
+		break;
 	}
 
 	// Turn it into a circle
 	dst.x = dst.y = 0;
 	dst.w = dst.h = size;
+	SDL_SetRenderDrawBlendMode(planet_surface_ren.get(), SDL_BLENDMODE_NONE);
 	SDL_SetRenderDrawColor(planet_surface_ren.get(), 0, 0, 0, 0);
 	brush::fill_circle(planet_surface_ren.get(), dst, true);
 
