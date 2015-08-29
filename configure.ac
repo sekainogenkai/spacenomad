@@ -31,6 +31,14 @@ dnl End search for SVG tool
 AC_ARG_VAR([RASTER_DPI], [Specify the DPI to use when rendering vectors to rasters. Defaults to 120.])
 AS_IF([test "x${RASTER_DPI}" = "x"], [RASTER_DPI=120])
 
+AC_ARG_WITH([meganz-mingw-std-threads], [AS_HELP_STRING([--with-meganz-mingw-std-threads=/path/to/repo], [Enable compiling against https://github.com/meganz/mingw-std-threads.git, optionally specifying where the includes may be found.])], [], [with_meganz_mingw_std_threads=no])
+AS_IF(
+	[test "x$with_meganz_mingw_std_threads" != "xno"],
+	[AC_DEFINE([HAVE_MEGANZ_MINGW_STD_THREADS], [1])
+	AS_IF(
+		[test "x$with_meganz_mingw_std_threads" != "xyes"],
+		[CPPFLAGS="$CPPFLAGS '-I$with_meganz_mingw_std_threads'"])])
+
 PKG_CHECK_MODULES([SDL2], [sdl2 SDL2_image SDL2_ttf])
 
 AC_CONFIG_FILES([Makefile])

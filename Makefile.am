@@ -27,6 +27,7 @@ spacenomad_SOURCES = \
 	src/sprite.cxx src/sprite.hxx \
 	src/star_block.cxx src/star_block.hxx \
 	src/star_field.cxx src/star_field.hxx \
+	src/thread.hxx \
 	src/universe.cxx src/universe.hxx
 if WINDRES
 spacenomad_SOURCES += mainres.rc
