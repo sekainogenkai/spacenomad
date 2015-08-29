@@ -87,16 +87,15 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 
 	std::cout << "I am going to make " << brush_amount << " brushes.";
 
-	SDL_Rect dst;
-
 	for (int i = 0; i < brush_amount; i++) {
+		std::cerr << "brush " << i << std::endl;
 
 		// Get brush width and height
 		auto new_brush = brush(random_engine);
-		dst.w = new_brush.get_surface()->w;
-		dst.h = new_brush.get_surface()->h;
+		std::cerr << "created brush " << i << std::endl;
+		SDL_Rect new_brush_dimensions = { 0, 0, new_brush.get_surface()->w, new_brush.get_surface()->h, };
 
-		std::uniform_int_distribution<int> distr_draw_start(0-dst.w, size+dst.w);
+		std::uniform_int_distribution<int> distr_draw_start(0-new_brush_dimensions.w, size+new_brush_dimensions.w);
 
 		// Random amount of drawing starts and amount of draw time and starting rotation
 		std::uniform_int_distribution<int> distr_num_draw_start(0, 100);
@@ -108,36 +107,39 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 
 			// Make the surface for the rotated brush to draw onto
 			// Calculate max size of rotate brush
-			int max_size = sqrt(pow(dst.w, 2) + pow(dst.h, 2));
+			int max_size = sqrt(pow(new_brush_dimensions.w, 2) + pow(new_brush_dimensions.h, 2));
 			std::cerr << "max_size=" << max_size << std::endl;
 			auto brush_rotated_surface = space_nomad_SDL_Surface_unique_ptr(
 					SDL_CreateRGBSurface(0, max_size, max_size, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000));
 			{
-			auto brush_rotated_ren = space_nomad_SDL_Renderer_unique_ptr(
-					SDL_CreateSoftwareRenderer(brush_rotated_surface.get()));
-			auto brush_texture = createTexture(brush_rotated_ren, new_brush.get_surface());
+				auto brush_rotated_ren = space_nomad_SDL_Renderer_unique_ptr(
+						SDL_CreateSoftwareRenderer(brush_rotated_surface.get()));
+				auto brush_texture = createTexture(brush_rotated_ren, new_brush.get_surface());
 
-			dst.x = (max_size - dst.w) / 2;
-			dst.y = (max_size - dst.h) / 2;
-//			SDL_SetRenderDrawColor(brush_rotated_ren.get(), 255, 100, 100, 128);
-//			SDL_RenderClear(brush_rotated_ren.get());
-//			SDL_SetRenderDrawColor(brush_rotated_ren.get(), 100, 255, 255, 128);
-//			SDL_RenderFillRect(brush_rotated_ren.get(), &dst);
-			SDL_SetTextureBlendMode(brush_texture.get(), SDL_BLENDMODE_NONE);
-			SDL_RenderClear(brush_rotated_ren.get());
-			SDL_RenderCopyEx(brush_rotated_ren.get(), brush_texture.get(), NULL, &dst, facing_direction, NULL, SDL_FLIP_NONE);
-			//SDL_RenderCopy  (brush_rotated_ren.get(), brush_texture.get(), NULL, &dst);
-		}
+				SDL_Rect rotated_dst = {
+						(max_size - new_brush_dimensions.w) / 2,
+						(max_size - new_brush_dimensions.h) / 2,
+						new_brush_dimensions.w,
+						new_brush_dimensions.h,
+				};
+				SDL_SetTextureBlendMode(brush_texture.get(), SDL_BLENDMODE_NONE);
+				SDL_RenderClear(brush_rotated_ren.get());
+				// Right now, libsdl doesn't respect the alpha channel when drawing with SDL_RenderCopyEx().
+				// So we can't draw things with transparency onto a thing.
+				//SDL_RenderCopyEx(brush_rotated_ren.get(), brush_texture.get(), NULL, &rotated_dst, facing_direction, NULL, SDL_FLIP_NONE);
+				SDL_RenderCopy(brush_rotated_ren.get(), brush_texture.get(), NULL, &rotated_dst);
+			}
 			auto brush_rotated_texture = createTexture(planet_surface_ren, brush_rotated_surface);
 
 			auto brush_texture_2 = createTexture(planet_surface_ren, new_brush.get_surface());
 
 			// Draw start
-			dst.x = distr_draw_start(random_engine);
-			dst.y = distr_draw_start(random_engine);
-			dst.w = max_size;
-			dst.h = max_size;
-			dst.x = dst.y = 200;
+			SDL_Rect dst = {
+					distr_draw_start(random_engine),
+					distr_draw_start(random_engine),
+					max_size,
+					max_size,
+			};
 
 			// Draw time
 			std::uniform_int_distribution<int> distr_draw_loops(0, 200);
@@ -153,21 +155,16 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 				dst.y += distr_move(random_engine);
 
 				SDL_RenderCopy(planet_surface_ren.get(), brush_rotated_texture.get(), NULL, &dst);
-				dst.x += 200;
 				SDL_RenderCopy(planet_surface_ren.get(), brush_texture_2.get(), NULL, &dst);
-				break;
 			}
-			break;
 		}
-		break;
 	}
 
 	// Turn it into a circle
-	dst.x = dst.y = 0;
-	dst.w = dst.h = size;
+	SDL_Rect circle_dst = { 0, 0, size, size, };
 	SDL_SetRenderDrawBlendMode(planet_surface_ren.get(), SDL_BLENDMODE_NONE);
 	SDL_SetRenderDrawColor(planet_surface_ren.get(), 0, 0, 0, 0);
-	brush::fill_circle(planet_surface_ren.get(), dst, true);
+	brush::fill_circle(planet_surface_ren.get(), circle_dst, true);
 
 	// Make the thingy be a texture
 	return planet(ren, std::move(planet_surface), 0, 0, 0, 0, 0, 5);
