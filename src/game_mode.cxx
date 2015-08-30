@@ -17,6 +17,7 @@ game_mode::game_mode(
 , stars(ren)
 , zoom(true)
 , win(win)
+, paused(false)
 {
 	// Lock cursor to screen
 	SDL_SetWindowGrab(win, SDL_TRUE);
@@ -44,6 +45,9 @@ bool game_mode::processEvents(SDL_Event *event, main_class& main)
 		case SDLK_d:
 			myPlayer.right = true;
 			break;
+		case SDLK_p:
+			paused = !paused;
+			SDL_SetWindowGrab(win, paused ? SDL_FALSE : SDL_TRUE);
 			//Shift
 		case SDLK_LSHIFT:
 			myPlayer.shift = true;
@@ -84,7 +88,8 @@ bool game_mode::processEvents(SDL_Event *event, main_class& main)
 }
 void game_mode::animate()
 {
-	myUniverse.animate();
+	if (!paused)
+		myUniverse.animate();
 }
 void game_mode::render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font)
 {

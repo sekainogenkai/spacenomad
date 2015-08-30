@@ -32,6 +32,7 @@ private:
 	star_field stars;
 	bool zoom;
 	SDL_Window *win;
+	bool paused;
 };
 
 
