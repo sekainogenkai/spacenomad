@@ -20,7 +20,7 @@ object_block::object_block(
 		int grid_y)
 : block(block_side_length, grid_x, grid_y)
 {
-	std::uniform_int_distribution<int> objects_count_distribution(2, 4);
+	std::uniform_int_distribution<int> objects_count_distribution(1, 2);
 	std::uniform_int_distribution<int> coord_distribution(0, get_block_side_length() - 1);
 	std::uniform_int_distribution<int> vel_distribution(-4, 4);
 	auto objects_count = objects_count_distribution(random_engine);

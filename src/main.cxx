@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
 void
 space_nomad_SDL_Texture_deleter::operator()(SDL_Texture *texture)
 {
-	std::cerr << "uniquely freeing " << ((void *)texture) << std::endl;
+	//std::cerr << "uniquely freeing " << ((void *)texture) << std::endl;
 	SDL_DestroyTexture(texture);
 }
 
