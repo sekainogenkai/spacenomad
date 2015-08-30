@@ -27,6 +27,7 @@ object_field_layer::add_block(std::default_random_engine& random_engine, int gri
 			std::move(
 					object_block(
 							ren,
+							random_engine,
 							get_block_side_length(),
 							grid_x,
 							grid_y)));

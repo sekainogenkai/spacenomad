@@ -234,6 +234,7 @@ int main_class::main_method(int argc, char *argv[])
 
 			if (redraw)
 			{
+				SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 				SDL_RenderClear(ren);
 				modes.top()->render(ren, displayCamera, font);
 

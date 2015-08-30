@@ -9,6 +9,7 @@
 #include "field.hxx"
 #include <ctime>
 #include <functional>
+#include <iostream>
 
 field_layer::field_layer(int block_side_length, double parallax_factor)
 : grid_x_min(0)
@@ -63,7 +64,7 @@ field_layer::draw(SDL_Renderer *ren, const camera& display_camera, std::default_
 	if (no_blocks)
 		// No overlap, reset.
 	{
-		//std::cerr << "reset\n";
+		std::cerr << "reset\n";
 		grid_x_min = grid_x_max = new_grid_x_min;
 		grid_y_min = grid_y_max = new_grid_y_min;
 		add_block(random_engine, grid_x_min, grid_y_min, ren);

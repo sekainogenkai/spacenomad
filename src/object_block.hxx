@@ -11,13 +11,19 @@
 #include "block.hxx"
 #include "object.hxx"
 
+#include <algorithm>
 #include <functional>
 #include <vector>
 
 class object_block
 : public block {
 public:
-	object_block(SDL_Renderer *ren, int block_side_length, int grid_x, int grid_y);
+	object_block(
+			SDL_Renderer *ren,
+			std::default_random_engine& random_engine,
+			int block_side_length,
+			int grid_x,
+			int grid_y);
 	object_block(object_block&& that);
 	void citerate(std::function<void(const object&)> visit);
 	void draw(SDL_Renderer *ren, const camera& display_camera) const;
