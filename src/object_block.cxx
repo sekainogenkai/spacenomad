@@ -45,6 +45,13 @@ object_block::object_block(object_block&& that)
 {
 }
 
+object_block&
+object_block::operator=(object_block&& that) {
+	block::operator=(std::move(that));
+	objects = std::move(that.objects);
+	return *this;
+}
+
 void
 object_block::citerate(std::function<void(const object&)> visit)
 {
@@ -69,12 +76,6 @@ object_block::iterate(std::function<void(object&)> visit)
 {
 	for (auto iter = objects.begin(); iter != objects.end(); iter++)
 		visit(*iter->get());
-}
-
-object_block&
-object_block::operator=(object_block&& that) {
-	objects = std::move(that.objects);
-	return *this;
 }
 
 object_block::~object_block() {
