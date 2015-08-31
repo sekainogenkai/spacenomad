@@ -30,7 +30,7 @@ private:
 	player myStaticPlayer;
 	universe myUniverse;
 	star_field stars;
-	bool zoom;
+	int zoom;
 	SDL_Window *win;
 	bool paused;
 };
