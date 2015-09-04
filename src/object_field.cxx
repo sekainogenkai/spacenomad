@@ -5,13 +5,12 @@
  *      Author: Kristofer
  */
 
+#include <iostream>
 #include "object_field.hxx"
 #include "planet.hxx"
 
-static const int object_field_block_side_length = 4096;
-
-object_field_layer::object_field_layer()
-: field_layer(object_field_block_side_length) {
+object_field_layer::object_field_layer(int block_side_length)
+: field_layer(block_side_length) {
 }
 
 void
@@ -23,14 +22,14 @@ object_field::animate(void(*interact)(object& obj1, object& obj2), player& myPla
 void
 object_field_layer::add_block(std::default_random_engine& random_engine, int grid_x, int grid_y, SDL_Renderer *ren)
 {
+	std::cerr << "o_add(" << grid_x << "," << grid_y << ")\n";
 	object_blocks.push_back(
-			std::move(
-					object_block(
-							ren,
-							random_engine,
-							get_block_side_length(),
-							grid_x,
-							grid_y)));
+			object_block(
+					ren,
+					random_engine,
+					get_block_side_length(),
+					grid_x,
+					grid_y));
 }
 
 void
@@ -38,7 +37,9 @@ object_field_layer::citerate(std::function<bool(const block&)> visit)
 {
 	for (size_t i = object_blocks.size(); i > 0; i--)
 		if (visit(object_blocks[i - 1]))
+			/**/{auto b = (object_blocks.begin () + i - 1);std::cerr << "cit_del(" << b->get_grid_x() << "," << b->get_grid_y() << ")" << std::endl;
 			object_blocks.erase(object_blocks.begin() + i - 1);
+			/**/}
 }
 
 void
@@ -71,7 +72,8 @@ object_field_layer::~object_field_layer() {
 }
 
 object_field::object_field()
-: field(object_field_block_side_length) {
+: field(4096)
+, objects_layer(get_block_side_length()) {
 }
 
 void

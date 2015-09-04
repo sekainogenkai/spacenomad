@@ -98,7 +98,7 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 		std::uniform_int_distribution<int> distr_draw_start(0-new_brush_dimensions.w, size+new_brush_dimensions.w);
 
 		// Random amount of drawing starts and amount of draw time and starting rotation
-		std::uniform_int_distribution<int> distr_num_draw_start(0, 100);
+		std::uniform_int_distribution<int> distr_num_draw_start(0, 10);
 		int num_start = distr_num_draw_start(random_engine);
 		std::uniform_int_distribution<int> distr_facing_direction(0, 360);
 		for (int i = 0; i < num_start; i ++) {
@@ -142,9 +142,9 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 			};
 
 			// Draw time
-			std::uniform_int_distribution<int> distr_draw_loops(0, 200);
+			std::uniform_int_distribution<int> distr_draw_loops(0, 400);
 			int draw_loops = distr_draw_loops(random_engine);
-				std::uniform_int_distribution<int> distr_brush_speed_max(0, 20);
+				std::uniform_int_distribution<int> distr_brush_speed_max(0, 100);
 
 			// Drawing around. Right now this isn't done that well.
 			for (int i = 0; i < draw_loops; i++) {

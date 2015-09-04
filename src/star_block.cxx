@@ -26,8 +26,12 @@ star_block::star_block(
 }
 
 void star_block::draw(SDL_Renderer *ren, const camera& display_camera) const {
+	SDL_SetRenderDrawColor(ren, 128,255,255,255);
 	auto x = get_x();
 	auto y = get_y();
+	SDL_Rect block_dst = { x, y, get_block_side_length(), get_block_side_length(), };
+	display_camera.transform(&block_dst);
+	SDL_RenderDrawRect(ren, &block_dst);
 	for (auto stars_iter = stars.cbegin(); stars_iter != stars.cend(); stars_iter++) {
 		SDL_Rect dst;
 		SDL_QueryTexture(textures[stars_iter->texture_i], NULL, NULL, &dst.w, &dst.h);

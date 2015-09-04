@@ -20,7 +20,7 @@ class object_field_layer
 : public field_layer
 {
 public:
-	object_field_layer();
+	object_field_layer(int block_side_length);
 	void add_block(std::default_random_engine& random_engine, int grid_x, int grid_y, SDL_Renderer *ren);
 	void citerate(std::function<bool(const block&)> visit);
 	void iterate_objects(std::function<void(object&)> visit);

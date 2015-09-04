@@ -30,6 +30,7 @@ field_layer::get_block_side_length() const
 void
 field_layer::draw(SDL_Renderer *ren, const camera& display_camera, std::default_random_engine& random_engine)
 {
+	/**/if (grid_x_min != xmin || grid_y_min != ymin || grid_x_max != xmax || grid_y_max != ymax) std::cerr << "Change! " << xmin << "," << ymin << " " << xmax << "," << ymax << " -> " << grid_x_min << "," << grid_y_min << " " << grid_x_max << "," << grid_y_max << std::endl;xmin = grid_x_min; ymin = grid_y_min; xmax = grid_x_max; ymax = grid_y_max;
 	// What two coordinates do we need to hit?
 	SDL_Rect visible_area;
 	auto parallax_display_camera(display_camera.calculateParallax(parallax_factor));
@@ -44,20 +45,27 @@ field_layer::draw(SDL_Renderer *ren, const camera& display_camera, std::default_
 	new_grid_y_min--;
 	new_grid_x_max++;
 	new_grid_y_max++;
-	//std::cerr << "min-=(" << new_grid_x_min << "," << new_grid_y_min << "), max+=(" << new_grid_x_max << "," << new_grid_y_max << ")\n";
+	bool something_changed = new_grid_x_min != grid_x_min
+			|| new_grid_y_min != grid_y_min
+			|| new_grid_x_max != grid_x_max
+			|| new_grid_x_min != grid_x_min;
+	if (something_changed)
+		std::cerr << "min=(" << grid_x_min <<"," << grid_y_min << "), max=(" << grid_x_max << "," << grid_y_max << ") -> min=(" << new_grid_x_min << "," << new_grid_y_min << "), max=(" << new_grid_x_max << "," << new_grid_y_max << ")" << std::endl;
 
 	bool no_blocks = true;
-	bool *no_blocks_ref = &no_blocks;
 
 	// Drop blocks outside our displayed/kept area.
 	citerate(
-			[no_blocks_ref, new_grid_x_max, new_grid_x_min, new_grid_y_max, new_grid_y_min] (const block& a_block) -> bool {
+			[&no_blocks, new_grid_x_max, new_grid_x_min, new_grid_y_max, new_grid_y_min] (const block& a_block) -> bool {
 		//std::cerr << "have (" << star_block_i->grid_x << "," << star_block_i->grid_y << ")\n";
-		*no_blocks_ref = false;
-		return a_block.get_grid_x() > new_grid_x_max
+		no_blocks = false;
+		auto will_del = a_block.get_grid_x() > new_grid_x_max
 				|| a_block.get_grid_x() < new_grid_x_min
 				|| a_block.get_grid_y() > new_grid_y_max
 				|| a_block.get_grid_y() < new_grid_y_min;
+		if (will_del)
+			std::cerr << "will_del (" << a_block.get_grid_x() << "," << a_block.get_grid_y() << ") vs (" << new_grid_x_min << "," << new_grid_y_min << "), (" << new_grid_x_max << "," << new_grid_y_max << ")" << std::endl;
+		return will_del;
 	});
 
 	// Intersect our rectangles if they overlap. Otherwise, initialize to a point.
@@ -93,6 +101,8 @@ field_layer::draw(SDL_Renderer *ren, const camera& display_camera, std::default_
 	for (; grid_y_max < new_grid_y_max; grid_y_max++)
 		for (auto grid_x = grid_x_min; grid_x <= grid_x_max; grid_x++)
 			add_block(random_engine, grid_x, grid_y_max + 1, ren);
+	if (something_changed)
+		std::cerr << " -> min=(" << grid_x_min <<"," << grid_y_min << "), max=(" << grid_x_max << "," << grid_y_max << ")" << std::endl;
 
 	//std::err << "num_blocks=" << star_blocks.size() << "\n";
 

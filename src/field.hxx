@@ -32,6 +32,7 @@ protected:
 private:
 	int grid_x_min, grid_y_min;
 	int grid_x_max, grid_y_max;
+	/**/int xmin, ymin, xmax, ymax;
 	int block_side_length;
 	double parallax_factor;
 };
