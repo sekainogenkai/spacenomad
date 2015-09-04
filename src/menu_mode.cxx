@@ -11,6 +11,8 @@
 #include "menu_mode.hxx"
 #include "planet_generation/planet_generation_mode.hxx"
 
+#include <iostream>
+
 static bool menu_option_start(main_class& main)
 {
 	main.push_mode(new game_mode(main.ren, main.win));
@@ -33,8 +35,7 @@ static bool menu_option_quit(main_class& main)
 }
 
 menu_mode::menu_mode(SDL_Renderer *ren)
-: tex_menu_back(loadTexture(ren, "menu/main.png"))
-, tex_choose_bar(loadTexture(ren, "menu/choose_bar.png"))
+: tex_choose_bar(loadTexture(ren, "menu/choose_bar.png"))
 , selection_index(0) // menu bar selection
 , menu_options({
 			menu_option(menu_option_start),
@@ -94,11 +95,13 @@ menu_mode::animate()
 	pos+=3;
 }
 
+
+
 void
 menu_mode::render(SDL_Renderer *ren, camera& display_camera, TTF_Font *font)
 {
 	display_camera.clear();
-	display_camera.considerObject(pos, 1024, 512);
+	display_camera.considerObject(pos, 0, 512);
 	display_camera.calculateTransforms();
 
 	stars.draw(ren, display_camera);
@@ -106,13 +109,31 @@ menu_mode::render(SDL_Renderer *ren, camera& display_camera, TTF_Font *font)
 	SDL_Rect dst;
 	// Menu back
 	dst.x = dst.y = 0;
-	SDL_QueryTexture(tex_menu_back.get(), NULL, NULL, &dst.w, &dst.h);
-	SDL_RenderCopy(ren, tex_menu_back.get(),NULL, &dst);
+	//SDL_QueryTexture(tex_menu_back.get(), NULL, NULL, &dst.w, &dst.h);
+	//SDL_RenderCopy(ren, tex_menu_back.get(),NULL, &dst);
+	//Do something different
+
+	// Draw space_nomad_SDL_texture
+	SDL_Rect font_dst = { pos - 512, -128, 1024, 256, };
+	display_camera.transform(&font_dst);
+	auto str_surface = renderString("Space Nomad", SDL_Color({255, 255, 128}), font_dst);
+	auto space_tex = createTexture(ren, str_surface);
+	int font_new_w;
+	SDL_QueryTexture(space_tex.get(), NULL, NULL, &font_new_w, &font_dst.h);
+	font_dst.x += (font_dst.w - font_new_w)/2;
+	font_dst.w = font_new_w;
+	SDL_RenderCopy(ren, space_tex.get(), NULL, &font_dst);
+	std::cerr << "font=" << font_dst.x << "," << font_dst.y << "," << font_dst.w << "," << font_dst.h << std::endl;
+
 	// Choose bar
 	dst.x = 656;
 	SDL_QueryTexture(tex_choose_bar.get(), NULL, NULL, &dst.w, &dst.h);
 	dst.y = 525 + selection_index * 130;
 	SDL_RenderCopy(ren, tex_choose_bar.get(), NULL, &dst);
+
+
+
+
 }
 
 menu_mode::~menu_mode()

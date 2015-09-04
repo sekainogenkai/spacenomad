@@ -8,6 +8,7 @@
 
 extern "C" {
 #include <SDL.h>
+#include <SDL_ttf.h>
 }
 
 class mode;
@@ -63,5 +64,15 @@ public:
 };
 typedef std::unique_ptr<SDL_Renderer, space_nomad_SDL_Renderer_deleter> space_nomad_SDL_Renderer_unique_ptr;
 extern  space_nomad_SDL_Texture_unique_ptr createTexture(space_nomad_SDL_Renderer_unique_ptr& ren, space_nomad_SDL_Surface_unique_ptr& surface);
+
+class space_nomad_TTF_Font_deleter
+{
+public:
+	void operator()(TTF_Font *font);
+};
+typedef std::unique_ptr<TTF_Font, space_nomad_TTF_Font_deleter> space_nomad_TTF_Font_unique_ptr;
+extern space_nomad_SDL_Surface_unique_ptr renderString(const std::string& str, const SDL_Color& color, int height);
+
+extern space_nomad_SDL_Surface_unique_ptr renderString(const std::string& str, const SDL_Color& color, const SDL_Rect & rect);
 
 #endif /* _TESTSDL_MAIN_HXX */

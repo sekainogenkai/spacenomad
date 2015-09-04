@@ -287,6 +287,24 @@ space_nomad_SDL_Surface_unique_ptr loadSurface(const char *filename)
 	}
 	return space_nomad_SDL_Surface_unique_ptr(bmp);
 }
+space_nomad_SDL_Surface_unique_ptr renderString(const std::string& str, const SDL_Color& color, int height)
+{
+	space_nomad_TTF_Font_unique_ptr font(
+			TTF_OpenFont(
+					"VeraMono.ttf",
+					height));
+	return space_nomad_SDL_Surface_unique_ptr(
+			TTF_RenderText_Solid(
+					font.get(),
+					str.c_str(),
+					color));
+}
+space_nomad_SDL_Surface_unique_ptr renderString(const std::string& str, const SDL_Color& color, const SDL_Rect & rect) {
+	auto first_try = renderString(str, color, rect.h);
+	if (first_try->w > rect.w)
+		return renderString(str, color, rect.h * rect.w/first_try->w);
+	return first_try;
+}
 void
 space_nomad_SDL_Surface_deleter::operator()(SDL_Surface *surface)
 {
@@ -322,6 +340,12 @@ void
 space_nomad_SDL_Renderer_deleter::operator()(SDL_Renderer *ren)
 {
 	SDL_DestroyRenderer(ren);
+}
+
+void
+space_nomad_TTF_Font_deleter::operator()(TTF_Font *font)
+{
+	TTF_CloseFont(font);
 }
 
 static Uint32 tickTimerCallback(Uint32 interval, void *param)
