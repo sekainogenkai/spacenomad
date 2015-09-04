@@ -34,14 +34,19 @@ void camera::clear()
 
 void camera::considerObject(int x, int y, int clearRadius)
 {
-	if (leftMost > x - clearRadius)
-		leftMost = x - clearRadius;
-	if (rightMost < x + clearRadius)
-		rightMost = x + clearRadius;
-	if (topMost > y - clearRadius)
-		topMost = y - clearRadius;
-	if (bottMost < y + clearRadius)
-		bottMost = y + clearRadius;
+	camera::considerObject(SDL_Rect({x, y, clearRadius, clearRadius}));
+}
+
+void camera::considerObject(const SDL_Rect& rect)
+{
+	if (leftMost > rect.x - rect.w)
+		leftMost = rect.x - rect.w;
+	if (rightMost < rect.x + rect.w)
+		rightMost = rect.x + rect.w;
+	if (topMost > rect.y - rect.h)
+		topMost = rect.y - rect.h;
+	if (bottMost < rect.y + rect.h)
+		bottMost = rect.y + rect.h;
 }
 
 void camera::calculateTransforms()
@@ -49,8 +54,8 @@ void camera::calculateTransforms()
 	// Fix aspect of the left/right/top/bottMost rectangle to match display aspect.
 	// aspect_correction is the amount by which the width isn't wide enough
 	int aspect_correction =
-		aspect * (bottMost - topMost) // target width
-		- (rightMost - leftMost); // actual object-encompassing width at the moment
+			aspect * (bottMost - topMost) // target width
+			- (rightMost - leftMost); // actual object-encompassing width at the moment
 	if (aspect_correction > 0)
 	{
 		rightMost += aspect_correction / 2;
@@ -71,11 +76,11 @@ void camera::calculateTransforms()
 
 camera camera::calculateParallax(double parallax_factor) const
 {
-        camera ret(*this);
-        // Parallax about the center of the screen.
-        ret.offsetX = (offsetX - get_display_width()/2) * parallax_factor + get_display_width()/2;
-        ret.offsetY = (offsetY - displayHeight/2) * parallax_factor + displayHeight/2;
-        return ret;
+	camera ret(*this);
+	// Parallax about the center of the screen.
+	ret.offsetX = (offsetX - get_display_width()/2) * parallax_factor + get_display_width()/2;
+	ret.offsetY = (offsetY - displayHeight/2) * parallax_factor + displayHeight/2;
+	return ret;
 }
 
 bool camera::transform(SDL_Rect *r) const

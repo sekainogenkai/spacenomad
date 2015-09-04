@@ -101,7 +101,7 @@ void
 menu_mode::render(SDL_Renderer *ren, camera& display_camera, TTF_Font *font)
 {
 	display_camera.clear();
-	display_camera.considerObject(pos, 0, 512);
+	display_camera.considerObject(SDL_Rect({pos, 0, 512, 400}));
 	display_camera.calculateTransforms();
 
 	stars.draw(ren, display_camera);

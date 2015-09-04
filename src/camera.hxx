@@ -22,6 +22,7 @@ public:
 	 * \brief
 	 *   Pass the camera a circular area that needs to be visible on-screen. Call before calling calculateTransforms().
 	 */
+	void considerObject(const SDL_Rect& rect);
 	void considerObject(int x, int y, int clearRadius);
 	/**
 	 * \brief
