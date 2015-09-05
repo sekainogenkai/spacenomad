@@ -11,8 +11,9 @@
 #include <random>
 #include <memory>
 
-#include "../../../../Downloads/SDL2_ttf-2.0.12/i686-w64-mingw32/include/SDL2/SDL_ttf.h"
-#include "../../../../Downloads/SDL2-2.0.3/i686-w64-mingw32/include/SDL2/SDL.h"
+extern "C" {
+#include <SDL.h>
+}
 #include "../main.hxx"
 #include "../mode.hxx"
 #include "../planet.hxx"

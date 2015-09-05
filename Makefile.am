@@ -40,9 +40,6 @@ nobase_nodist_pkgdata_DATA = \
 	images/astronaut/space_suit.png \
 	images/planet/plain.png \
 	\
-	images/menu/choose_bar.png \
-	images/menu/main.png \
-	\
 	images/star_field/star_0.png \
 	images/star_field/star_1.png \
 	images/star_field/star_2.png 
