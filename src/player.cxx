@@ -44,7 +44,7 @@ void player::animate() {
 	}
 
 	// Moving forwards
-	const auto moveAccelSpeed = .3;
+	const auto moveAccelSpeed = 1;
 	if (up || down) {
 		double xAccel = sin((180-facingDirection)/180*M_PI) * moveAccelSpeed;
 		double yAccel = cos((180+facingDirection)/180*M_PI) * moveAccelSpeed;
