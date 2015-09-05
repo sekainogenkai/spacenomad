@@ -294,7 +294,7 @@ space_nomad_SDL_Surface_unique_ptr renderString(const std::string& str, const SD
 					"VeraMono.ttf",
 					height));
 	return space_nomad_SDL_Surface_unique_ptr(
-			TTF_RenderText_Solid(
+			TTF_RenderUTF8_Blended(
 					font.get(),
 					str.c_str(),
 					color));
@@ -305,6 +305,7 @@ space_nomad_SDL_Surface_unique_ptr renderString(const std::string& str, const SD
 		return renderString(str, color, rect.h * rect.w/first_try->w);
 	return first_try;
 }
+
 void
 space_nomad_SDL_Surface_deleter::operator()(SDL_Surface *surface)
 {

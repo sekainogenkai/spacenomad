@@ -35,8 +35,7 @@ static bool menu_option_quit(main_class& main)
 }
 
 menu_mode::menu_mode(SDL_Renderer *ren)
-: tex_choose_bar(loadTexture(ren, "menu/choose_bar.png"))
-, selection_index(0) // menu bar selection
+: selection_index(0) // menu bar selection
 , menu_options({
 			menu_option(menu_option_start),
 			menu_option(menu_option_option),
@@ -101,35 +100,71 @@ void
 menu_mode::render(SDL_Renderer *ren, camera& display_camera, TTF_Font *font)
 {
 	display_camera.clear();
-	display_camera.considerObject(SDL_Rect({pos, 0, 512, 400}));
+	auto clearRadius = 64;
+	SDL_Rect font_dst = { (int)pos - 512, -300, 1024, 256 };
+	display_camera.considerObject(font_dst, clearRadius);
+	SDL_Rect menu_back_dst({ (int)pos - 550/2, 0, 550, 500 });
+	display_camera.considerObject(menu_back_dst, clearRadius);
 	display_camera.calculateTransforms();
 
 	stars.draw(ren, display_camera);
 
-	SDL_Rect dst;
+
 	// Menu back
-	dst.x = dst.y = 0;
-	//SDL_QueryTexture(tex_menu_back.get(), NULL, NULL, &dst.w, &dst.h);
-	//SDL_RenderCopy(ren, tex_menu_back.get(),NULL, &dst);
-	//Do something different
+	// Draw the menu back. It is a nice blue.
+	display_camera.transform(menu_back_dst);
+	menu_back_dst.h++;
+	SDL_SetRenderDrawColor(ren, 12, 12, 200, 255);
+	SDL_RenderFillRect(ren, &menu_back_dst);
+
 
 	// Draw space_nomad_SDL_texture
-	SDL_Rect font_dst = { pos - 512, -128, 1024, 256, };
-	display_camera.transform(&font_dst);
-	auto str_surface = renderString("Space Nomad", SDL_Color({255, 255, 128}), font_dst);
-	auto space_tex = createTexture(ren, str_surface);
+	display_camera.transform(font_dst);
+	auto space_surf = renderString("Space Nomad", {255, 255, 128}, font_dst);
+	auto space_tex = createTexture(ren, space_surf);
 	int font_new_w;
 	SDL_QueryTexture(space_tex.get(), NULL, NULL, &font_new_w, &font_dst.h);
 	font_dst.x += (font_dst.w - font_new_w)/2;
 	font_dst.w = font_new_w;
 	SDL_RenderCopy(ren, space_tex.get(), NULL, &font_dst);
-	std::cerr << "font=" << font_dst.x << "," << font_dst.y << "," << font_dst.w << "," << font_dst.h << std::endl;
+	//std::cerr << "font=" << font_dst.x << "," << font_dst.y << "," << font_dst.w << "," << font_dst.h << std::endl;
+
+	// Draw the menu options
+	SDL_Rect menu_option_dst({((int)pos - 550/2 + 50), 50, 550 - 2*50, (500 - 150)/4});
+	const std::string menu_option[] = {"Play Game", "Options", "Credits", "Quit"};
+	for (int i = 0; i < 4; i++) {
+		SDL_Rect this_option_dst(menu_option_dst);
+		display_camera.transform(this_option_dst);
+		auto menu_option_surf = renderString(menu_option[i], {255, 255, 255}, this_option_dst);
+		auto menu_option_tex = createTexture(ren, menu_option_surf);
+		SDL_QueryTexture(menu_option_tex.get(), NULL, NULL, &this_option_dst.w, NULL);
+		SDL_RenderCopy(ren, menu_option_tex.get(), NULL, &this_option_dst);
+
+		menu_option_dst.y += (500 - 75)/4;
+	}
+
+
 
 	// Choose bar
-	dst.x = 656;
-	SDL_QueryTexture(tex_choose_bar.get(), NULL, NULL, &dst.w, &dst.h);
-	dst.y = 525 + selection_index * 130;
-	SDL_RenderCopy(ren, tex_choose_bar.get(), NULL, &dst);
+	SDL_Rect choose_dst({(int)pos - 550/2 + 25, 50, 550 - 2*50 + 50, (500 - 150)/4});
+	choose_dst.y += (500 - 75) / 4 * selection_index;
+	display_camera.transform(choose_dst);
+	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(ren, 0, 0, 0, 100);
+	SDL_RenderFillRect(ren, &choose_dst);
+	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_NONE);
+
+	SDL_Rect width_choose_outline;
+	width_choose_outline.w = 10;
+	display_camera.transform(width_choose_outline);
+
+	for (int i = 0; i < width_choose_outline.w; i++) {
+		SDL_RenderDrawRect(ren, &choose_dst);
+		choose_dst.x--;
+		choose_dst.y--;
+		choose_dst.h += 2;
+		choose_dst.w += 2;
+	}
 
 
 

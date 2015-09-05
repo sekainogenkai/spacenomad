@@ -34,17 +34,22 @@ void camera::clear()
 
 void camera::considerObject(int x, int y, int clearRadius)
 {
-	camera::considerObject(SDL_Rect({x, y, clearRadius, clearRadius}));
+	camera::considerObject(SDL_Rect({x - clearRadius, y - clearRadius, 2*clearRadius, 2*clearRadius}));
+}
+
+void camera::considerObject(const SDL_Rect& rect, int clearRadius)
+{
+	considerObject({rect.x - clearRadius, rect.y - clearRadius, rect.w + 2*clearRadius, rect.h + 2*clearRadius});
 }
 
 void camera::considerObject(const SDL_Rect& rect)
 {
-	if (leftMost > rect.x - rect.w)
-		leftMost = rect.x - rect.w;
+	if (leftMost > rect.x)
+		leftMost = rect.x;
 	if (rightMost < rect.x + rect.w)
 		rightMost = rect.x + rect.w;
-	if (topMost > rect.y - rect.h)
-		topMost = rect.y - rect.h;
+	if (topMost > rect.y)
+		topMost = rect.y;
 	if (bottMost < rect.y + rect.h)
 		bottMost = rect.y + rect.h;
 }
@@ -85,18 +90,23 @@ camera camera::calculateParallax(double parallax_factor) const
 
 bool camera::transform(SDL_Rect *r) const
 {
-	r->x = (r->x + offsetX) * scale;
-	r->y = (r->y + offsetY) * scale;
-	r->w = r->w * scale;
-	r->h = r->h * scale;
+	return transform(*r);
+}
+bool
+camera::transform(SDL_Rect& r) const
+{
+	r.x = (r.x + offsetX) * scale;
+	r.y = (r.y + offsetY) * scale;
+	r.w = r.w * scale;
+	r.h = r.h * scale;
 
 	// Calculate if the transformed object would appear on the display.
 	// Be conservative because may be rotated.
-	auto estimating_side_length = 2 * std::max(r->w, r->h);
-	return r->x + estimating_side_length > 0
-			&& r->y + estimating_side_length > 0
-			&& r->x - estimating_side_length < get_display_width()
-			&& r->y - estimating_side_length < displayHeight;
+	auto estimating_side_length = 2 * std::max(r.w, r.h);
+	return r.x + estimating_side_length > 0
+			&& r.y + estimating_side_length > 0
+			&& r.x - estimating_side_length < get_display_width()
+			&& r.y - estimating_side_length < displayHeight;
 }
 
 void camera::get_visible_area(SDL_Rect *r) const

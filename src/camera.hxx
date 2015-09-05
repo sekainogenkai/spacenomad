@@ -23,6 +23,7 @@ public:
 	 *   Pass the camera a circular area that needs to be visible on-screen. Call before calling calculateTransforms().
 	 */
 	void considerObject(const SDL_Rect& rect);
+	void considerObject(const SDL_Rect& rect, int clearRadius);
 	void considerObject(int x, int y, int clearRadius);
 	/**
 	 * \brief
@@ -55,6 +56,7 @@ public:
 	 *   true if the object would appear on the display.
 	 */
 	bool transform(SDL_Rect *r) const;
+	bool transform(SDL_Rect& r) const;
 	/**
 	 * \brief
 	 *   Get the drawing/screen area in game coordinates for a particular parallax layer.
