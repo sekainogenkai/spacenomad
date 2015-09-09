@@ -20,10 +20,18 @@ class menu_option{
 public:
 	typedef bool (*do_thing_func_t)(main_class& main);
 	do_thing_func_t do_thing;
-	menu_option(do_thing_func_t do_thing)
+	menu_option(do_thing_func_t do_thing, std::string&& text)
 	: do_thing(do_thing)
+	, text(text)
 	{
 	}
+	void render(SDL_Renderer *ren, const SDL_Rect& menu_option_dst, const camera& display_camera);
+private:
+	std::string text;
+	space_nomad_SDL_Texture_unique_ptr texture;
+	int last_width=-1;
+	int last_height=-1;
+	int texture_width=-1;
 };
 
 class menu_mode : public mode
@@ -39,6 +47,10 @@ private:
 	menu_option menu_options[4];
 	star_field stars;
 	double pos;
+	space_nomad_SDL_Texture_unique_ptr space_nomad_texture;
+	int space_nomad_width=-1;
+	int space_nomad_height=-1;
+
 };
 
 

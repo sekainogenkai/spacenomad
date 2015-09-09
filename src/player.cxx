@@ -48,7 +48,6 @@ void player::animate() {
 	if (up || down) {
 		double xAccel = sin((180-facingDirection)/180*M_PI) * moveAccelSpeed;
 		double yAccel = cos((180+facingDirection)/180*M_PI) * moveAccelSpeed;
-
 		if (up) {
 			xVel += xAccel;
 			yVel += yAccel;
