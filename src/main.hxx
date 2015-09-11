@@ -75,4 +75,7 @@ extern space_nomad_SDL_Surface_unique_ptr renderString(const std::string& str, c
 
 extern space_nomad_SDL_Surface_unique_ptr renderString(const std::string& str, const SDL_Color& color, const SDL_Rect & rect);
 
+extern double magnitude(double x, double y);
+extern double angle(double x, double y);
+
 #endif /* _TESTSDL_MAIN_HXX */

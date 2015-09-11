@@ -19,8 +19,14 @@ player::player(SDL_Renderer *ren, const char *textureFilename)
 , right(false)
 , shift(false)
 , space(false)
+, gun_barrel_tex(loadTexture(ren, "astronaut/gun_barrel.png"))
 {
         mass = 1;
+}
+
+void player::set_mouse_pos(int x, int y) {
+	mouse_pos.x = x;
+	mouse_pos.y = y;
 }
 
 
@@ -58,6 +64,19 @@ void player::animate() {
 		}
 	}
 	object::animate();
+}
+
+void player::draw(SDL_Renderer *ren, const camera& displayCamera) const {
+	SDL_Rect gun_barrel_dst;
+	SDL_QueryTexture(texture.get(), NULL, NULL, &gun_barrel_dst.w, &gun_barrel_dst.h);
+	gun_barrel_dst.x = x - gun_barrel_dst.w/2;
+	gun_barrel_dst.y = y - gun_barrel_dst.h;
+	if (displayCamera.transform(&gun_barrel_dst)) {
+		auto gun_barrel_facing_direction = angle(mouse_pos.x - gun_barrel_dst.x - gun_barrel_dst.w/2, mouse_pos.y - gun_barrel_dst.y - gun_barrel_dst.h) + 90;
+		SDL_Point center = {gun_barrel_dst.w/2, gun_barrel_dst.h};
+		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst, gun_barrel_facing_direction, &center, SDL_FLIP_NONE);\
+	}
+	object::draw(ren, displayCamera);
 }
 
 

@@ -83,6 +83,11 @@ bool game_mode::processEvents(SDL_Event *event, main_class& main)
 				break;
 			}
 			break;
+		case SDL_MOUSEMOTION:
+			myPlayer.set_mouse_pos(
+					event->motion.x,
+					event->motion.y);
+			break;
 	}
 	return false;
 }

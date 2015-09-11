@@ -90,16 +90,7 @@ void universe::draw(SDL_Renderer *ren, camera& displayCamera){
 universe::~universe() {
 }
 
-static double magnitude(double x, double y) {
-        return sqrt(pow(x, 2) + pow(y, 2));
-}
 
-static double angle(double x, double y) {
-        if (fabs(x) < 0.0001)
-                return y > 0 ? 90 : 270;
-        else
-                return fmod(180 * atanf(y/x) / M_PI + (x > 0 ? 0 : 180) + 360, 360);
-}
 
 // Code copied from pogowars
 static void circleCollisionResponse(object& obj1, object& obj2, double& circleOne_new_velocity_x, double& circleOne_new_velocity_y) {

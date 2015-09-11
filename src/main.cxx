@@ -385,3 +385,14 @@ int SDL_ToggleFS(SDL_Window *win, SDL_Renderer* ren)
 	}
 	return 0;
 }
+
+double magnitude(double x, double y) {
+        return sqrt(pow(x, 2) + pow(y, 2));
+}
+
+double angle(double x, double y) {
+        if (fabs(x) < 0.0001)
+                return y > 0 ? 90 : 270;
+        else
+                return fmod(180 * atanf(y/x) / M_PI + (x > 0 ? 0 : 180) + 360, 360);
+}

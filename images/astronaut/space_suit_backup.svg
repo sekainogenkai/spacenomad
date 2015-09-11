@@ -25,8 +25,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="15.999999"
-     inkscape:cx="45.189805"
-     inkscape:cy="43.669129"
+     inkscape:cx="58.967609"
+     inkscape:cy="61.126438"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -168,42 +168,5 @@
        sodipodi:ry="51.012703"
        d="m 454.56863,250.80614 c 0,28.17353 -47.26124,51.0127 -105.56094,51.0127 -58.2997,0 -105.56094,-22.83917 -105.56094,-51.0127 0,-28.17354 47.26124,-51.01271 105.56094,-51.01271 58.2997,0 105.56094,22.83917 105.56094,51.01271 z"
        transform="matrix(0.125,0,0,0.125,-6.119939,939.72367)" />
-    <rect
-       style="fill:#4d4d4d;fill-opacity:0.14285715;stroke:none"
-       id="rect2996"
-       width="12.890626"
-       height="7.2812505"
-       x="31.050823"
-       y="992.13599"
-       ry="2.3589365"
-       rx="2.217315" />
-    <rect
-       style="fill:#4d4d4d;fill-opacity:0.14285715;stroke:none"
-       id="rect3000"
-       width="9.8332043"
-       height="0.86178643"
-       x="29.588001"
-       y="38.571575"
-       transform="translate(3.0976965,954.86928)"
-       rx="2.217315"
-       ry="0.86178643" />
-    <rect
-       style="fill:#4d4d4d;fill-opacity:0.14285715;stroke:none"
-       id="rect3000-1"
-       width="9.8332043"
-       height="0.86178643"
-       x="32.696747"
-       y="995.30804"
-       rx="2.217315"
-       ry="0.86178643" />
-    <rect
-       style="fill:#4d4d4d;fill-opacity:0.14285715;stroke:none"
-       id="rect3000-7"
-       width="9.8332043"
-       height="0.86178643"
-       x="32.674648"
-       y="997.40729"
-       rx="2.217315"
-       ry="0.86178643" />
   </g>
 </svg>
