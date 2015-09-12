@@ -82,7 +82,7 @@ void universe::animate() {
 }
 
 void universe::draw(SDL_Renderer *ren, camera& displayCamera){
-	objects.draw(ren, displayCamera);
+	//objects.draw(ren, displayCamera);
 	// Draw player
 	myPlayer.draw(ren, displayCamera);
 }

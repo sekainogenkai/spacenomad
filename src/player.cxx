@@ -68,9 +68,10 @@ void player::animate() {
 
 void player::draw(SDL_Renderer *ren, const camera& displayCamera) const {
 	SDL_Rect gun_barrel_dst;
-	SDL_QueryTexture(texture.get(), NULL, NULL, &gun_barrel_dst.w, &gun_barrel_dst.h);
+	SDL_QueryTexture(gun_barrel_tex.get(), NULL, NULL, &gun_barrel_dst.w, &gun_barrel_dst.h);
 	gun_barrel_dst.x = x - gun_barrel_dst.w/2;
 	gun_barrel_dst.y = y - gun_barrel_dst.h;
+	std::cout << "Gun Barrel Height: " << gun_barrel_dst.h << std::endl;
 	if (displayCamera.transform(&gun_barrel_dst)) {
 		auto gun_barrel_facing_direction = angle(mouse_pos.x - gun_barrel_dst.x - gun_barrel_dst.w/2, mouse_pos.y - gun_barrel_dst.y - gun_barrel_dst.h) + 90;
 		SDL_Point center = {gun_barrel_dst.w/2, gun_barrel_dst.h};
