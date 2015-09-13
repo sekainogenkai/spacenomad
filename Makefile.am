@@ -37,6 +37,7 @@ nobase_nodist_pkgdata_DATA = \
 	images/favicon.png \
 	images/cursor.png \
 	\
+	images/astronaut/gun_barrel.png \
 	images/astronaut/space_suit.png \
 	images/planet/plain.png \
 	\
