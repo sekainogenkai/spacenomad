@@ -22,6 +22,7 @@ public:
 	virtual void animate();
 	void draw(SDL_Renderer *ren, const camera& displayCamera) const;
 	void set_mouse_pos(int x, int y);
+	void shoot();
 	virtual ~player();
 private:
 	space_nomad_SDL_Texture_unique_ptr gun_barrel_tex;

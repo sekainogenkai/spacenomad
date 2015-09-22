@@ -7,6 +7,7 @@
 
 
 #include "game_mode.hxx"
+#include <iostream>
 
 game_mode::game_mode(
 		SDL_Renderer *ren,
@@ -83,11 +84,17 @@ bool game_mode::processEvents(SDL_Event *event, main_class& main)
 				break;
 			}
 			break;
-		case SDL_MOUSEMOTION:
-			myPlayer.set_mouse_pos(
-					event->motion.x,
-					event->motion.y);
-			break;
+			case SDL_MOUSEMOTION:
+				myPlayer.set_mouse_pos(
+						event->motion.x,
+						event->motion.y);
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if (event->button.button == SDL_BUTTON_LEFT) {
+					myPlayer.shoot();
+					std::cout << "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIiIIIIIIIIIIII" << std::endl;
+				}
+				break;
 	}
 	return false;
 }

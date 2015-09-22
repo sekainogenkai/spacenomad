@@ -29,6 +29,10 @@ void player::set_mouse_pos(int x, int y) {
 	mouse_pos.y = y;
 }
 
+void player::shoot() {
+	std::cout << "SHOOTING" << std::endl;
+}
+
 
 void player::animate() {
 	// Turning
