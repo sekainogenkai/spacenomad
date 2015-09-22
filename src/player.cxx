@@ -1,8 +1,5 @@
 /*
  * player.cxx
- *
- *  Created on: Mar 20, 2015
- *      Author: Kristofer
  */
 
 #include "player.hxx"
@@ -27,6 +24,11 @@ player::player(SDL_Renderer *ren, const char *textureFilename)
 void player::set_mouse_pos(int x, int y) {
 	mouse_pos.x = x;
 	mouse_pos.y = y;
+	std::cout << "Menu Pos:" << mouse_pos.x << ", " << mouse_pos.y << std::endl;
+}
+
+void player::shoot() {
+	std::cout << "shooting";
 }
 
 
