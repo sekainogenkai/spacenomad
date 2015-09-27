@@ -9,6 +9,7 @@
 #include <cmath>
 #include <iostream>
 
+#include "object.hxx"
 static void circleCollisionResponse(object& obj1, object& obj2, double& circleOne_new_velocity_x, double& circleOne_new_velocity_y);
 
 universe::universe(SDL_Renderer *ren, player& player)
@@ -79,12 +80,19 @@ static void interact(object& obj1, object& obj2) {
 void universe::animate() {
 	objects.animate(interact, myPlayer);
 	myPlayer.animate();
+	for (auto iter = universal_objects.begin(); iter != universal_objects.end(); iter++) {
+			iter->get()->animate();
+		}
 }
 
 void universe::draw(SDL_Renderer *ren, camera& displayCamera){
-	//objects.draw(ren, displayCamera);
+	objects.draw(ren, displayCamera);
 	// Draw player
-	myPlayer.draw(ren, displayCamera);
+	myPlayer.draw(ren, displayCamera, *this);
+	// Draw universal objects (right now only projectiles)
+	for (auto iter = universal_objects.begin(); iter != universal_objects.end(); iter++) {
+		iter->get()->draw(ren, displayCamera);
+	}
 }
 
 universe::~universe() {

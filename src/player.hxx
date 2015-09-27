@@ -9,6 +9,7 @@
 #define SRC_PLAYER_HXX_
 
 #include "object.hxx"
+class universe;
 
 class player : public object {
 public:
@@ -19,12 +20,17 @@ public:
 	bool right;
 	bool shift;
 	bool space;
+	bool shot;
 	virtual void animate();
-	void draw(SDL_Renderer *ren, const camera& displayCamera) const;
+	void draw(SDL_Renderer *ren, const camera& displayCamera, universe& universe);
 	void set_mouse_pos(int x, int y);
-	void shoot();
+	void start_shooting();
+	void stop_shooting();
 	virtual ~player();
 private:
+	void shoot(double angle, int barrel_length, int speed, universe& universe);
+	double x_vec;
+	double y_vec;
 	space_nomad_SDL_Texture_unique_ptr gun_barrel_tex;
 	SDL_Point mouse_pos;
 };

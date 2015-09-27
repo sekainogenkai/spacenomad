@@ -8,6 +8,8 @@
 #ifndef SRC_PROJECTILE_HXX_
 #define SRC_PROJECTILE_HXX_
 
+#include "object.hxx"
+
 namespace spacenomad {
 
 class projectile : public object {

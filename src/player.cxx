@@ -6,6 +6,7 @@
  */
 
 #include "player.hxx"
+#include "universe.hxx"
 
 #include <algorithm>
 #include <iostream>
@@ -19,6 +20,7 @@ player::player(SDL_Renderer *ren, const char *textureFilename)
 , right(false)
 , shift(false)
 , space(false)
+,shot(false)
 , gun_barrel_tex(loadTexture(ren, "astronaut/gun_barrel.png"))
 {
         mass = 1;
@@ -30,10 +32,24 @@ void player::set_mouse_pos(int x, int y) {
 	std::cout << "MOUSE MOVING: " << mouse_pos.x << ", " << mouse_pos.y << std::endl;
 }
 
-void player::shoot() {
-	std::cout << "SHOOTING" << std::endl;
+void player::start_shooting() {
+	shot = true;
 }
 
+void player::stop_shooting(){
+	shot = false;
+}
+
+void player::shoot(double angle, int barrel_length, int speed, universe& universe) {
+	std::cout << "SHOOTING" << std::endl;
+
+	// Get vector of gun trajectory
+	x_vec = barrel_length * cos(angle/180.0*M_PI);
+	y_vec = barrel_length * sin(angle/180.0*M_PI);
+
+	// Make the bullets appear
+
+}
 
 void player::animate() {
 	// Turning
@@ -71,18 +87,34 @@ void player::animate() {
 	object::animate();
 }
 
-void player::draw(SDL_Renderer *ren, const camera& displayCamera) const {
+void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& universe) {
 	SDL_Rect gun_barrel_dst;
 	SDL_QueryTexture(gun_barrel_tex.get(), NULL, NULL, &gun_barrel_dst.w, &gun_barrel_dst.h);
 	gun_barrel_dst.x = x - gun_barrel_dst.w/2;
 	gun_barrel_dst.y = y - gun_barrel_dst.h;
-	std::cout << "Gun Barrel Height: " << gun_barrel_dst.h << std::endl;
+	auto gun_barrel_length = gun_barrel_dst.h;
+	std::cout << "Gun Barrel Height: " << gun_barrel_length << std::endl;
 	if (displayCamera.transform(&gun_barrel_dst)) {
-		auto gun_barrel_facing_direction = angle(mouse_pos.x - gun_barrel_dst.x - gun_barrel_dst.w/2, mouse_pos.y - gun_barrel_dst.y - gun_barrel_dst.h) + 90;
+		auto gun_barrel_facing_direction = angle(mouse_pos.x - gun_barrel_dst.x - gun_barrel_dst.w/2, mouse_pos.y - gun_barrel_dst.y - gun_barrel_dst.h);
 		SDL_Point center = {gun_barrel_dst.w/2, gun_barrel_dst.h};
-		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst, gun_barrel_facing_direction, &center, SDL_FLIP_NONE);\
+		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst, gun_barrel_facing_direction + 90, &center, SDL_FLIP_NONE);
+
+		if (shot) {
+			shoot(gun_barrel_facing_direction, gun_barrel_length, 1, universe);
+		}
 	}
 	object::draw(ren, displayCamera);
+
+	// Draw location of bullets exit
+	SDL_Rect transformed_barrel_end_dst = {x_vec + x - 5, y + y_vec - 5, 10, 10};
+	if (displayCamera.transform(&transformed_barrel_end_dst)) {
+
+		SDL_SetRenderDrawColor(ren , 0, 255, 255, 255);
+		SDL_RenderFillRect(ren, &transformed_barrel_end_dst);
+	}
+	std::cout << "Player (X, Y) " << x << ", " << y << std::endl << "Barrel(X,Y) " << transformed_barrel_end_dst.x << ", " << transformed_barrel_end_dst.y << std::endl;
+
+
 }
 
 

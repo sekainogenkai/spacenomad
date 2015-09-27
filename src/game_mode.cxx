@@ -91,10 +91,15 @@ bool game_mode::processEvents(SDL_Event *event, main_class& main)
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				if (event->button.button == SDL_BUTTON_LEFT) {
-					myPlayer.shoot();
-					std::cout << "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIiIIIIIIIIIIII" << std::endl;
+					myPlayer.start_shooting();
 				}
 				break;
+			case SDL_MOUSEBUTTONUP:
+				if (event->button.button == SDL_BUTTON_LEFT) {
+					myPlayer.stop_shooting();
+				}
+				break;
+
 	}
 	return false;
 }

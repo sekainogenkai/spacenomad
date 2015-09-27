@@ -25,6 +25,7 @@ public:
 	virtual ~universe();
 private:
 	object_field objects;
+	std::vector<std::unique_ptr<object>> universal_objects;
 	player& myPlayer;
 };
 
