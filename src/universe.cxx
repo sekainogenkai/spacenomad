@@ -53,18 +53,19 @@ static void gravity(object& obj1, object& obj2, double distance) {
 }
 
 static void collision(object& obj1, object& obj2, double distance) {
-        if (circlesAreCollidingByDistance(obj1, obj2, distance))
-        {
-                double obj1_new_vel_x, obj1_new_vel_y;
-                double obj2_new_vel_x, obj2_new_vel_y;
-                circleCollisionResponse(obj1, obj2, obj1_new_vel_x, obj1_new_vel_y);
-                circleCollisionResponse(obj2, obj1, obj2_new_vel_x, obj2_new_vel_y);
-                obj1.setVelocity(obj1_new_vel_x, obj1_new_vel_y);
-                obj2.setVelocity(obj2_new_vel_x, obj2_new_vel_y);
-        }
+	if (circlesAreCollidingByDistance(obj1, obj2, distance))
+	{
+		double obj1_new_vel_x, obj1_new_vel_y;
+		double obj2_new_vel_x, obj2_new_vel_y;
+		circleCollisionResponse(obj1, obj2, obj1_new_vel_x, obj1_new_vel_y);
+		circleCollisionResponse(obj2, obj1, obj2_new_vel_x, obj2_new_vel_y);
+		obj1.setVelocity(obj1_new_vel_x, obj1_new_vel_y);
+		obj2.setVelocity(obj2_new_vel_x, obj2_new_vel_y);
+	}
 }
 
 static void interact(object& obj1, object& obj2) {
+
         double distance;
 
         // Verify that things are allowed to interact with each
@@ -90,9 +91,12 @@ void universe::draw(SDL_Renderer *ren, camera& displayCamera){
 	// Draw player
 	myPlayer.draw(ren, displayCamera, *this);
 	// Draw universal objects (right now only projectiles)
+
 	for (auto iter = universal_objects.begin(); iter != universal_objects.end(); iter++) {
 		iter->get()->draw(ren, displayCamera);
 	}
+
+
 }
 
 universe::~universe() {
@@ -128,3 +132,9 @@ static void circleCollisionResponse(object& obj1, object& obj2, double& circleOn
                 obj1.getX() + cos(contactAngle) * contactDistance,
                 obj1.getY() + sin(contactAngle) * contactDistance);
 }
+
+void universe::add_universal_object(std::unique_ptr<object>&& object) {
+	universal_objects.push_back(std::move(object));
+
+}
+

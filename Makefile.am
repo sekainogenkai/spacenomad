@@ -24,6 +24,7 @@ spacenomad_SOURCES = \
 	src/planet_generation/planet_generator.cxx src/planet_generation/planet_generator.hxx \
 	src/planet_generation/planet_type.cxx src/planet_generation/planet_type.hxx \
 	src/player.cxx src/player.hxx \
+	src/projectile.cxx src/projectile.hxx \
 	src/sprite.cxx src/sprite.hxx \
 	src/star_block.cxx src/star_block.hxx \
 	src/star_field.cxx src/star_field.hxx \
@@ -43,7 +44,10 @@ nobase_nodist_pkgdata_DATA = \
 	\
 	images/star_field/star_0.png \
 	images/star_field/star_1.png \
-	images/star_field/star_2.png 
+	images/star_field/star_2.png \
+	\
+	images/projectiles/normal_bullet/bullet.png \
+	images/projectiles/normal_bullet/trail.png
 
 mainres.o: mainres.rc images/favicon.ico app.manifest
 

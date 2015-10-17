@@ -28,9 +28,7 @@ public:
 	void stop_shooting();
 	virtual ~player();
 private:
-	void shoot(double angle, int barrel_length, int speed, universe& universe);
-	double x_vec;
-	double y_vec;
+	void shoot(double angle, int barrel_length, int speed, universe& universe, SDL_Renderer *ren);
 	space_nomad_SDL_Texture_unique_ptr gun_barrel_tex;
 	SDL_Point mouse_pos;
 };

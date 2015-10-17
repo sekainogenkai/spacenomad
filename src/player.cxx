@@ -7,10 +7,14 @@
 
 #include "player.hxx"
 #include "universe.hxx"
+#include "projectile.hxx"
+#include "object.hxx"
 
 #include <algorithm>
 #include <iostream>
 #include <cmath>
+#include <memory>
+
 
 player::player(SDL_Renderer *ren, const char *textureFilename)
 : object(ren, textureFilename)
@@ -40,15 +44,19 @@ void player::stop_shooting(){
 	shot = false;
 }
 
-void player::shoot(double angle, int barrel_length, int speed, universe& universe) {
+void player::shoot(double angle, int barrel_length, int speed, universe& universe, SDL_Renderer *ren) {
 	std::cout << "SHOOTING" << std::endl;
 
 	// Get vector of gun trajectory
-	x_vec = barrel_length * cos(angle/180.0*M_PI);
-	y_vec = barrel_length * sin(angle/180.0*M_PI);
+	auto x_vec = barrel_length * cos(angle/180.0*M_PI);
+	auto y_vec = barrel_length * sin(angle/180.0*M_PI);
 
 	// Make the bullets appear
-
+	universe.add_universal_object(std::unique_ptr<object>(
+			new spacenomad::projectile(
+					ren,
+					"projectiles/normal_bullet/bullet.png",
+					"projectiles/normal_bullet/trail.png", x_vec + x, y + y_vec, x_vec + xVel, y_vec + yVel)));
 }
 
 void player::animate() {
@@ -100,19 +108,20 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst, gun_barrel_facing_direction + 90, &center, SDL_FLIP_NONE);
 
 		if (shot) {
-			shoot(gun_barrel_facing_direction, gun_barrel_length, 1, universe);
+			shoot(gun_barrel_facing_direction, gun_barrel_length, 1, universe, ren);
 		}
 	}
 	object::draw(ren, displayCamera);
 
 	// Draw location of bullets exit
-	SDL_Rect transformed_barrel_end_dst = {x_vec + x - 5, y + y_vec - 5, 10, 10};
-	if (displayCamera.transform(&transformed_barrel_end_dst)) {
+	//SDL_Rect transformed_barrel_end_dst = {x_vec + x - 5, y + y_vec - 5, 10, 10};
 
-		SDL_SetRenderDrawColor(ren , 0, 255, 255, 255);
-		SDL_RenderFillRect(ren, &transformed_barrel_end_dst);
-	}
-	std::cout << "Player (X, Y) " << x << ", " << y << std::endl << "Barrel(X,Y) " << transformed_barrel_end_dst.x << ", " << transformed_barrel_end_dst.y << std::endl;
+//	if (displayCamera.transform(&transformed_barrel_end_dst)) {
+//
+//		SDL_SetRenderDrawColor(ren , 0, 255, 255, 255);
+//		SDL_RenderFillRect(ren, &transformed_barrel_end_dst);
+//	}
+	//std::cout << "Player (X, Y) " << x << ", " << y << std::endl << "Barrel(X,Y) " << transformed_barrel_end_dst.x << ", " << transformed_barrel_end_dst.y << std::endl;
 
 
 }

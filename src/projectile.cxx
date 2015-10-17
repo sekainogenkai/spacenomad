@@ -9,17 +9,16 @@
 
 namespace spacenomad {
 
-projectile::projectile(SDL_Renderer *ren, const char * textureFilename, const char * textureTrail) {
-	// TODO Auto-generated constructor stub
-	object::object(SDL_Renderer *ren, const char * textureFilename);
-
+projectile::projectile(SDL_Renderer *ren, const std::string& textureFilename, const std::string& textureTrail,
+		double x, double y, double xVel, double yVel, int spread, int damage)
+: object(ren, textureFilename.c_str(), x, y, xVel, yVel) {
 }
 
-virtual void animate() {
+void projectile::animate() {
 	object::animate();
 }
 
-void draw(SDL_Renderer *ren, const camera& displayCamera) const {
+void projectile::draw(SDL_Renderer *ren, const camera& displayCamera) const {
 	object::draw(ren, displayCamera);
 }
 

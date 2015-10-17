@@ -22,6 +22,7 @@ public:
 	universe(SDL_Renderer *ren, player& player);
 	void animate();
 	void draw(SDL_Renderer *ren, camera& displayCamera);
+	void add_universal_object(std::unique_ptr<object>&& object);
 	virtual ~universe();
 private:
 	object_field objects;
