@@ -47,16 +47,22 @@ void player::stop_shooting(){
 void player::shoot(double angle, int barrel_length, int speed, universe& universe, SDL_Renderer *ren) {
 	std::cout << "SHOOTING" << std::endl;
 
+	// Get vector of gun barrel end
+	double barrel_shot_distance = barrel_length - 10; // Make it start a little bit inside the barrel
+	auto barrel_end_x_vec = barrel_shot_distance * cos(angle/180.0*M_PI);
+	auto barrel_end_y_vec = barrel_shot_distance * sin(angle/180.0*M_PI);
 	// Get vector of gun trajectory
-	auto x_vec = barrel_length * cos(angle/180.0*M_PI);
-	auto y_vec = barrel_length * sin(angle/180.0*M_PI);
+	auto x_vec = speed * cos(angle/180.0*M_PI);
+	auto y_vec = speed * sin(angle/180.0*M_PI);
 
 	// Make the bullets appear
 	universe.add_universal_object(std::unique_ptr<object>(
 			new spacenomad::projectile(
 					ren,
 					"projectiles/normal_bullet/bullet.png",
-					"projectiles/normal_bullet/trail.png", x_vec + x, y + y_vec, x_vec + xVel, y_vec + yVel)));
+					"projectiles/normal_bullet/trail.png",
+					barrel_end_x_vec + x, y + barrel_end_y_vec, // Shooting start location
+					x_vec + xVel, y_vec + yVel))); // Trajectory
 }
 
 void player::animate() {
@@ -108,7 +114,7 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst, gun_barrel_facing_direction + 90, &center, SDL_FLIP_NONE);
 
 		if (shot) {
-			shoot(gun_barrel_facing_direction, gun_barrel_length, 1, universe, ren);
+			shoot(gun_barrel_facing_direction, gun_barrel_length, 0, universe, ren);
 		}
 	}
 	object::draw(ren, displayCamera);
