@@ -164,7 +164,7 @@ planet_generator::generate(SDL_Renderer *ren, std::default_random_engine& random
 	SDL_Rect circle_dst = { 0, 0, size, size, };
 	SDL_SetRenderDrawBlendMode(planet_surface_ren.get(), SDL_BLENDMODE_NONE);
 	SDL_SetRenderDrawColor(planet_surface_ren.get(), 0, 0, 0, 0);
-	brush::fill_circle(planet_surface_ren.get(), circle_dst, true);
+	fill_circle(planet_surface_ren.get(), circle_dst, true);
 
 	// Make the thingy be a texture
 	return planet(ren, std::move(planet_surface), 0, 0, 0, 0, 0, 5);

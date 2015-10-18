@@ -56,13 +56,22 @@ void player::shoot(double angle, int barrel_length, int speed, universe& univers
 	auto y_vec = speed * sin(angle/180.0*M_PI);
 
 	// Make the bullets appear
-	universe.add_universal_object(std::unique_ptr<object>(
-			new spacenomad::projectile(
-					ren,
-					"projectiles/normal_bullet/bullet.png",
-					"projectiles/normal_bullet/trail.png",
+	object::make_projectile(
+					ren, universe,
+					10,
+					{255, 255, 255, 255},
 					barrel_end_x_vec + x, y + barrel_end_y_vec, // Shooting start location
-					x_vec + xVel, y_vec + yVel))); // Trajectory
+					x_vec, y_vec); // Trajectory
+}
+
+void player::make_jet(SDL_Renderer *ren, universe& universe, double x, double y, double angle) {
+
+
+}
+
+void player::make_jet_particles(SDL_Renderer *ren, universe& universe, double x, double y, double angle, SDL_Color color, double distance) {
+	object::make_projectile(ren, universe, 10, {255, 0, 255, 255}, x, y, 10, 10);
+
 }
 
 void player::animate() {
@@ -114,7 +123,7 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst, gun_barrel_facing_direction + 90, &center, SDL_FLIP_NONE);
 
 		if (shot) {
-			shoot(gun_barrel_facing_direction, gun_barrel_length, 0, universe, ren);
+			shoot(gun_barrel_facing_direction, gun_barrel_length, 20, universe, ren);
 		}
 	}
 	object::draw(ren, displayCamera);

@@ -23,7 +23,6 @@ namespace spacenomad {
 
 class brush {
 public:
-	static void fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds, bool inverted = false);
 	brush(std::default_random_engine& random_engine);
 	brush(brush&& orig);
 	space_nomad_SDL_Surface_unique_ptr& get_surface() { return surface; }

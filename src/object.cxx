@@ -6,6 +6,7 @@
  */
 
 #include "object.hxx"
+#include "projectile.hxx"
 #include "universe.hxx"
 
 #include <algorithm>
@@ -46,6 +47,7 @@ object::object(
   // r = \sqrt\(0.01\over G\)\over M_1
 , gravitational_radius_of_influence(sqrt(0.01/universe::G)/mass)
 {
+	std::cout << "I am" << std::endl;
         int w;
         SDL_QueryTexture(texture.get(), NULL, NULL, &w, NULL);
 	radius = w/2;
@@ -127,8 +129,6 @@ void object::draw(SDL_Renderer *ren, const camera& displayCamera) const {
 		SDL_RenderCopyEx(ren, texture.get(), NULL, &dst, facingDirection, NULL, SDL_FLIP_NONE);
 }
 
-
-
 void object::applyForce(double magnitude, double x, double y) {
 
 	auto acceleration_magnitude = magnitude / mass / space_nomad_fps;
@@ -136,7 +136,40 @@ void object::applyForce(double magnitude, double x, double y) {
 	yVel += acceleration_magnitude * y;
 }
 
+// Filename
+void object::make_projectile(SDL_Renderer* ren, universe& universe,
+		const std::string& textureFilename, const std::string& textureTrail,
+		double x, double y, double xVel, double yVel, int spread, int damage) {
+
+	universe.add_universal_object(std::unique_ptr<object>(
+				new spacenomad::projectile(
+						ren,
+						textureFilename,
+						textureTrail,
+						x, y, // Shooting start location
+						xVel + this->xVel, yVel + this->yVel))); // Trajectory
+}
+
+// Radius + Color
+void object::make_projectile(SDL_Renderer* ren, universe& universe, int radius,
+		SDL_Color color, double x, double y, double xVel, double yVel,
+		int spread, int damage) {
+	std::cout << "SHooting 1" << std::endl;
+	universe.add_universal_object(std::unique_ptr<object>(
+					new spacenomad::projectile(
+							ren,
+							radius,
+							color,
+							x, y, // Shooting start location
+							xVel + this->xVel, yVel + this->yVel))); // Trajectory
+	std::cout << "SHooting 2" << std::endl;
+
+}
+
 object::~object() {
 	// TODO Auto-generated destructor stub
 }
+
+
+
 

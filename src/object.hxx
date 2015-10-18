@@ -9,11 +9,14 @@
 #define SRC_OBJECT_HXX_
 
 #include "main.hxx"
+
 extern "C" {
 #include <SDL.h>
 }
 
 #include "camera.hxx"
+
+class universe;
 
 class object {
 public:
@@ -58,6 +61,10 @@ public:
 	 *   Normalized y component of force vector.
 	 */
 	void applyForce(double magnitude, double x, double y);
+	void make_projectile(SDL_Renderer *ren, universe& universe, const std::string& textureFilename, const std::string& textureTrail,
+			double x, double y, double xVel, double yVel, int spread=0, int damage=0);
+	void make_projectile(SDL_Renderer *ren, universe& universe, int radius,
+			SDL_Color color, double x, double y, double xVel, double yVel, int spread = 0, int damage = 0);
 	virtual ~object();
 protected:
 	double x;
