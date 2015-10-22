@@ -36,7 +36,7 @@ private:
 protected:
 	std::default_random_engine random_engine;
 private:
-	std::unique_ptr<::planet> planet;
+	std::unique_ptr<::spacenomad::planet> planet;
 };
 
 }; /* namespace spacenomad */

@@ -12,6 +12,8 @@ extern "C" {
 #include <SDL.h>
 }
 
+namespace spacenomad {
+
 object_block::object_block(
 		SDL_Renderer *ren,
 		std::default_random_engine& random_engine,
@@ -80,4 +82,7 @@ object_block::iterate(std::function<void(object&)> visit)
 
 object_block::~object_block() {
 }
+
+} /* namespace spacenomad */
+
 

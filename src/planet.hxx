@@ -11,6 +11,8 @@
 #include "main.hxx"
 #include "object.hxx"
 
+namespace spacenomad {
+
 class planet : public object {
 public:
 	planet(
@@ -34,5 +36,7 @@ public:
 			planet&& src);
 	virtual ~planet();
 };
+
+} /* namespace spacenomad */
 
 #endif /* SRC_PLANET_HXX_ */

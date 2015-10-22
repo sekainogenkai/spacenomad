@@ -20,6 +20,8 @@ extern "C" {
 #include "menu_mode.hxx"
 #include "mode.hxx"
 
+namespace spacenomad {
+
 static Uint32 tickTimerCallback(Uint32 interval, void *param);
 int SDL_ToggleFS(SDL_Window* win, SDL_Renderer *ren);
 
@@ -39,6 +41,7 @@ void main_class::delete_top_mode()
 	delete modes.top();
 	modes.pop();
 }
+
 int main_class::main_method(int argc, char *argv[])
 {
 	/* http://twinklebear.github.io/sdl2%20tutorials/2013/08/17/lesson-1-hello-world/ */
@@ -256,16 +259,24 @@ int main_class::main_method(int argc, char *argv[])
 	/*system("PAUSE");*/
 	return EXIT_SUCCESS;
 }
+
+
 main_class::~main_class()
 {
 	delete_modes();
 }
 
+} /* namespace spacenomad */
+
+
+// Exclude from namespace spacenomad
 int main(int argc, char *argv[])
 {
-	main_class m;
+	spacenomad::main_class m;
 	return m.main_method(argc, argv);
 }
+
+namespace spacenomad {
 
 // http://stackoverflow.com/a/19054280/2948122
 void
@@ -434,3 +445,7 @@ extern void fill_circle(SDL_Renderer* ren, const SDL_Rect& bounds,
 			//std::cerr << x << "," << y << ": " << ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b)) << std::endl;
 		}
 }
+
+} /* namespace spacenomad */
+
+

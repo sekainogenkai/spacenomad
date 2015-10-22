@@ -6,12 +6,12 @@
  */
 
 #include "object.hxx"
-#include "projectile.hxx"
 #include "universe.hxx"
-
 #include <algorithm>
 #include <iostream>
 #include <math.h>
+
+namespace spacenomad {
 
 object::object(
 		SDL_Renderer *ren,
@@ -136,39 +136,16 @@ void object::applyForce(double magnitude, double x, double y) {
 	yVel += acceleration_magnitude * y;
 }
 
-// Filename
-void object::make_projectile(SDL_Renderer* ren, universe& universe,
-		const std::string& textureFilename, const std::string& textureTrail,
-		double x, double y, double xVel, double yVel, int spread, int damage) {
 
-	universe.add_universal_object(std::unique_ptr<object>(
-				new spacenomad::projectile(
-						ren,
-						textureFilename,
-						textureTrail,
-						x, y, // Shooting start location
-						xVel + this->xVel, yVel + this->yVel))); // Trajectory
-}
 
-// Radius + Color
-void object::make_projectile(SDL_Renderer* ren, universe& universe, int radius,
-		SDL_Color color, double x, double y, double xVel, double yVel,
-		int spread, int damage) {
-	std::cout << "SHooting 1" << std::endl;
-	universe.add_universal_object(std::unique_ptr<object>(
-					new spacenomad::projectile(
-							ren,
-							radius,
-							color,
-							x, y, // Shooting start location
-							xVel + this->xVel, yVel + this->yVel))); // Trajectory
-	std::cout << "SHooting 2" << std::endl;
 
-}
 
 object::~object() {
 	// TODO Auto-generated destructor stub
 }
+
+} /* namespace spacenomad */
+
 
 
 

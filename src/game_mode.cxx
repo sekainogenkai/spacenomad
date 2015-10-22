@@ -9,6 +9,8 @@
 #include "game_mode.hxx"
 #include <iostream>
 
+namespace spacenomad {
+
 game_mode::game_mode(
 		SDL_Renderer *ren,
 		SDL_Window *win)
@@ -124,3 +126,6 @@ game_mode::~game_mode()
 {
 	SDL_SetWindowGrab(win, SDL_FALSE);
 }
+
+} /* namespace spacenomad */
+

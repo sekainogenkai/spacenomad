@@ -15,6 +15,8 @@
 #include "star_field.hxx"
 #include "universe.hxx"
 
+namespace spacenomad {
+
 class game_mode
 : public mode
 {
@@ -34,6 +36,8 @@ private:
 	SDL_Window *win;
 	bool paused;
 };
+
+} /* namespace spacenomad */
 
 
 #endif /* SRC_GAME_MODE_HXX_ */

@@ -13,6 +13,8 @@
 
 #include <iostream>
 
+namespace spacenomad {
+
 static bool menu_option_start(main_class& main)
 {
 	main.push_mode(new game_mode(main.ren, main.win));
@@ -186,4 +188,7 @@ void menu_option::render(SDL_Renderer *ren, const SDL_Rect& menu_option_dst, con
 	this_option_dst.w = texture_width;
 	SDL_RenderCopy(ren, texture.get(), NULL, &this_option_dst);
 }
+
+} /* namespace spacenomad */
+
 

@@ -16,6 +16,8 @@
 
 #include <functional>
 
+namespace spacenomad {
+
 class object_field_layer
 : public field_layer
 {
@@ -41,4 +43,7 @@ private:
 	object_field_layer objects_layer;
 };
 
+} /* namespace spacenomad */
+
 #endif /* SRC_OBJECT_FIELD_HXX_ */
+

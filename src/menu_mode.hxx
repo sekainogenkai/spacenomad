@@ -16,6 +16,8 @@ extern "C" {
 #include "mode.hxx"
 #include "star_field.hxx"
 
+namespace spacenomad {
+
 class menu_option{
 public:
 	typedef bool (*do_thing_func_t)(main_class& main);
@@ -52,6 +54,8 @@ private:
 	int space_nomad_height=-1;
 
 };
+
+} /* namespace spacenomad */
 
 
 #endif /* SRC_MENU_MODE_HXX_ */

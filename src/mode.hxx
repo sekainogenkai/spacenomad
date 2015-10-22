@@ -9,6 +9,8 @@ extern "C" {
 #include "camera.hxx"
 #include "main.hxx"
 
+namespace spacenomad {
+
 class mode {
 public:
 	/**
@@ -22,5 +24,8 @@ public:
 	virtual void render(SDL_Renderer *ren, camera& displayCamera, TTF_Font *font) = 0;
 	virtual ~mode();
 };
+
+} /* namespace spacenomad */
+
 
 #endif /* _TESTSDL_MODE_HXX */

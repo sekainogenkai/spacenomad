@@ -8,10 +8,13 @@
 #ifndef SRC_PLAYER_HXX_
 #define SRC_PLAYER_HXX_
 
-#include "object.hxx"
+#include "active_object.hxx"
+
+namespace spacenomad {
+
 class universe;
 
-class player : public object {
+class player: public active_object {
 public:
 	player(SDL_Renderer *ren, const char *textureFilename);
 	bool up;
@@ -34,5 +37,7 @@ private:
 	space_nomad_SDL_Texture_unique_ptr gun_barrel_tex;
 	SDL_Point mouse_pos;
 };
+
+} /* namespace spacenomad*/
 
 #endif /* SRC_PLAYER_HXX_ */

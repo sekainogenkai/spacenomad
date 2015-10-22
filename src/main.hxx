@@ -11,6 +11,9 @@ extern "C" {
 #include <SDL_ttf.h>
 }
 
+
+namespace spacenomad {
+
 class mode;
 
 class main_class
@@ -79,5 +82,9 @@ extern double magnitude(double x, double y);
 extern double angle(double x, double y);
 
 extern void fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds, bool inverted=false);
+
+
+} /* namespace spacenomad */
+
 
 #endif /* _TESTSDL_MAIN_HXX */

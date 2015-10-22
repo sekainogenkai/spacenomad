@@ -6,18 +6,16 @@
  */
 
 #include "player.hxx"
-#include "universe.hxx"
-#include "projectile.hxx"
-#include "object.hxx"
 
 #include <algorithm>
 #include <iostream>
 #include <cmath>
 #include <memory>
 
+namespace spacenomad {
 
 player::player(SDL_Renderer *ren, const char *textureFilename)
-: object(ren, textureFilename)
+: active_object(ren, textureFilename)
 , up(false)
 , down(false)
 , left(false)
@@ -56,7 +54,7 @@ void player::shoot(double angle, int barrel_length, int speed, universe& univers
 	auto y_vec = speed * sin(angle/180.0*M_PI);
 
 	// Make the bullets appear
-	object::make_projectile(
+	active_object::make_projectile(
 					ren, universe,
 					10,
 					{255, 255, 255, 255},
@@ -70,7 +68,7 @@ void player::make_jet(SDL_Renderer *ren, universe& universe, double x, double y,
 }
 
 void player::make_jet_particles(SDL_Renderer *ren, universe& universe, double x, double y, double angle, SDL_Color color, double distance) {
-	object::make_projectile(ren, universe, 10, {255, 0, 255, 255}, x, y, 10, 10);
+	active_object::make_projectile(ren, universe, 10, {255, 0, 255, 255}, x, y, 10, 10);
 
 }
 
@@ -123,7 +121,7 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst, gun_barrel_facing_direction + 90, &center, SDL_FLIP_NONE);
 
 		if (shot) {
-			shoot(gun_barrel_facing_direction, gun_barrel_length, 20, universe, ren);
+			shoot(gun_barrel_facing_direction, gun_barrel_length, 1, universe, ren);
 		}
 	}
 	object::draw(ren, displayCamera);
@@ -144,4 +142,6 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 
 player::~player() {
 }
+
+} /* namespace spacenomad */
 

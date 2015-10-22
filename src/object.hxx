@@ -16,7 +16,7 @@ extern "C" {
 
 #include "camera.hxx"
 
-class universe;
+namespace spacenomad {
 
 class object {
 public:
@@ -61,10 +61,7 @@ public:
 	 *   Normalized y component of force vector.
 	 */
 	void applyForce(double magnitude, double x, double y);
-	void make_projectile(SDL_Renderer *ren, universe& universe, const std::string& textureFilename, const std::string& textureTrail,
-			double x, double y, double xVel, double yVel, int spread=0, int damage=0);
-	void make_projectile(SDL_Renderer *ren, universe& universe, int radius,
-			SDL_Color color, double x, double y, double xVel, double yVel, int spread = 0, int damage = 0);
+
 	virtual ~object();
 protected:
 	double x;
@@ -79,5 +76,8 @@ protected:
 	space_nomad_SDL_Texture_unique_ptr texture;
 	double gravitational_radius_of_influence;
 };
+
+} /* namespace spacenomad */
+
 
 #endif /* SRC_OBJECT_HXX_ */

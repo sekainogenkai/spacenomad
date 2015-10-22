@@ -8,6 +8,7 @@ spacenomad_CXXFLAGS = $(SDL2_CFLAGS)
 spacenomad_LDADD = $(SDL2_LIBS)
 spacenomad_SOURCES = \
 	$(RES) \
+	src/active_object.cxx src/active_object.hxx \
 	src/block.cxx src/block.hxx \
 	src/camera.cxx src/camera.hxx \
 	src/field.cxx src/field.hxx \

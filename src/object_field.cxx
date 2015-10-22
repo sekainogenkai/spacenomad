@@ -9,6 +9,8 @@
 #include "object_field.hxx"
 #include "planet.hxx"
 
+namespace spacenomad {
+
 object_field_layer::object_field_layer(int block_side_length)
 : field_layer(block_side_length) {
 }
@@ -83,3 +85,5 @@ object_field::iterate(std::function<void(field_layer&)> visit) {
 
 object_field::~object_field() {
 }
+
+} /* namespace spacenomad */

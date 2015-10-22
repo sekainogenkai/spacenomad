@@ -15,6 +15,9 @@
 #include <functional>
 #include <vector>
 
+namespace spacenomad {
+
+
 class object_block
 : public block {
 public:
@@ -32,5 +35,8 @@ public:
 	virtual ~object_block();
 	std::vector<std::unique_ptr<object> > objects;
 };
+
+} /* namespace spacenomad */
+
 
 #endif /* SRC_OBJECT_BLOCK_HXX_ */

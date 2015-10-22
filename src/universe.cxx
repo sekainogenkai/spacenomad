@@ -10,6 +10,9 @@
 #include <iostream>
 
 #include "object.hxx"
+
+namespace spacenomad {
+
 static void circleCollisionResponse(object& obj1, object& obj2, double& circleOne_new_velocity_x, double& circleOne_new_velocity_y);
 
 universe::universe(SDL_Renderer *ren, player& player)
@@ -137,4 +140,7 @@ void universe::add_universal_object(std::unique_ptr<object>&& object) {
 	universal_objects.push_back(std::move(object));
 
 }
+
+} /* namespace spacenomad */
+
 

@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <iostream>
 
+namespace spacenomad {
+
 star_field::star_field(SDL_Renderer *ren)
 : field(4096)
 , layers {
@@ -71,3 +73,4 @@ star_layer::citerate(std::function<bool(const block&)> visit)
 			star_blocks.erase(star_blocks.begin() + i - 1);
 }
 
+} /* namespace spacenomad */

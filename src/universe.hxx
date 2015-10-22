@@ -13,6 +13,7 @@
 #include <memory>
 #include <vector>
 
+namespace spacenomad {
 
 class universe {
 public:
@@ -29,5 +30,7 @@ private:
 	std::vector<std::unique_ptr<object>> universal_objects;
 	player& myPlayer;
 };
+
+} /* namespace spacenomad*/
 
 #endif /* SRC_UNIVERSE_HXX_ */

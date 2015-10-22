@@ -24,7 +24,7 @@ namespace spacenomad {
 planet_generation_mode::planet_generation_mode(SDL_Renderer *ren)
 : meBraggingAbout4k(loadTexture(ren, "planet_generation_mode/This is 4k.png"))
 , random_engine(time(NULL))
-, planet(new ::planet(std::move(planet_generator().generate(ren, prod_random_engine(random_engine))))) {
+, planet(new ::spacenomad::planet(std::move(planet_generator().generate(ren, prod_random_engine(random_engine))))) {
 	planet_switch = false;
 }
 
@@ -147,7 +147,7 @@ void planet_generation_mode::render(SDL_Renderer *ren, camera& displayCamera, TT
 	displayCamera.clear();
 
 	if (planet_switch) {
-		planet = std::move(std::unique_ptr<::planet> (new ::planet(std::move(planet_generator().generate(ren, prod_random_engine(random_engine))))));
+		planet = std::move(std::unique_ptr<::spacenomad::planet> (new ::spacenomad::planet(std::move(planet_generator().generate(ren, prod_random_engine(random_engine))))));
 		planet_switch = false;
 	}
 

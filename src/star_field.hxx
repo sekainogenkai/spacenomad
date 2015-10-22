@@ -18,6 +18,7 @@ extern "C" {
 #include "star_block.hxx"
 #include <vector>
 
+namespace spacenomad{
 
 class star_layer
 : public field_layer {
@@ -45,5 +46,6 @@ private:
 	SDL_Texture *star_texture_ptrs[3];
 };
 
+} /* namespace spacenomad */
 
 #endif /* SRC_STAR_FIELD_HXX_ */

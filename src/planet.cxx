@@ -8,6 +8,8 @@
 #include "planet.hxx"
 #include <cmath>
 
+namespace spacenomad {
+
 planet::planet(
 		SDL_Renderer *ren,
 		space_nomad_SDL_Surface_unique_ptr&& surface,
@@ -35,3 +37,5 @@ planet::planet(
 
 planet::~planet() {
 }
+
+} /* namespace spacenomad */
