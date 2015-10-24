@@ -137,6 +137,10 @@ void object::applyForce(double magnitude, double x, double y) {
 }
 
 
+bool object::deleted() {
+	return delete_self;
+}
+
 
 
 
@@ -145,8 +149,5 @@ object::~object() {
 }
 
 } /* namespace spacenomad */
-
-
-
 
 

@@ -62,6 +62,8 @@ public:
 	 */
 	void applyForce(double magnitude, double x, double y);
 
+
+	bool deleted();
 	virtual ~object();
 protected:
 	double x;
@@ -73,6 +75,7 @@ protected:
 	bool attractive;
 	double mass;
 	int radius;
+	bool delete_self = false;
 	space_nomad_SDL_Texture_unique_ptr texture;
 	double gravitational_radius_of_influence;
 };

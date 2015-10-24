@@ -9,6 +9,7 @@
 #include "object.hxx"
 #include "projectile.hxx"
 #include "universe.hxx"
+#include "fading_projectile.hxx"
 #include <iostream>  /// debugging
 
 
@@ -35,7 +36,8 @@ void active_object::make_projectile(SDL_Renderer* ren, universe& universe,
 						textureFilename,
 						textureTrail,
 						x, y, // Shooting start location
-						xVel + this->xVel, yVel + this->yVel))); // Trajectory
+						xVel + this->xVel, yVel + this->yVel, // Trajectory
+						spread, damage)));
 }
 
 // Radius + Color
@@ -49,8 +51,35 @@ void active_object::make_projectile(SDL_Renderer* ren, universe& universe, int r
 							radius,
 							color,
 							x, y, // Shooting start location
-							xVel + this->xVel, yVel + this->yVel))); // Trajectory
+							xVel + this->xVel, yVel + this->yVel, // Trajectory
+							spread, damage)));
 	std::cout << "SHooting 2" << std::endl;
+}
+
+void active_object::make_fading_projectile(SDL_Renderer* ren, universe& universe, int radius,
+		SDL_Color color, double x, double y, double xVel, double yVel,
+		int spread, int damage, int frame_life, int alpha_start) {
+	std::cout << "Shooting 1" << std::endl;
+	universe.add_universal_object(std::unique_ptr<object>(
+					new spacenomad::fading_projectile(
+							ren,
+							radius,
+							color,
+							x, y, // Shooting start location
+							xVel + this->xVel, yVel + this->yVel, // Trajectory
+							spread, damage,
+							frame_life, alpha_start))); // Trajectory
+	std::cout << "SHooting 2" << std::endl;
+}
+
+
+void active_object::make_jet(SDL_Renderer *ren, universe& universe, double x, double y, double angle) {
+
+
+}
+
+void active_object::make_jet_particles(SDL_Renderer *ren, universe& universe, double x, double y, double angle, SDL_Color color, double distance) {
+	active_object::make_fading_projectile(ren, universe, 10, {255, 0, 255, 255}, x, y, 10, 10, 60);
 
 }
 

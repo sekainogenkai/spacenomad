@@ -11,6 +11,7 @@ spacenomad_SOURCES = \
 	src/active_object.cxx src/active_object.hxx \
 	src/block.cxx src/block.hxx \
 	src/camera.cxx src/camera.hxx \
+	src/fading_projectile.cxx src/fading_projectile.hxx \
 	src/field.cxx src/field.hxx \
 	src/game_mode.cxx src/game_mode.hxx \
 	src/main.cxx src/main.hxx \

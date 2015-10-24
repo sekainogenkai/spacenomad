@@ -54,23 +54,17 @@ void player::shoot(double angle, int barrel_length, int speed, universe& univers
 	auto y_vec = speed * sin(angle/180.0*M_PI);
 
 	// Make the bullets appear
-	active_object::make_projectile(
+	active_object::make_fading_projectile(
 					ren, universe,
 					10,
 					{255, 255, 255, 255},
 					barrel_end_x_vec + x, y + barrel_end_y_vec, // Shooting start location
-					x_vec, y_vec); // Trajectory
+					x_vec, y_vec, // Trajectory
+					500, 1, // Damage and spread
+					1000, 100); // Time and alpha start.. This is for testing it
 }
 
-void player::make_jet(SDL_Renderer *ren, universe& universe, double x, double y, double angle) {
 
-
-}
-
-void player::make_jet_particles(SDL_Renderer *ren, universe& universe, double x, double y, double angle, SDL_Color color, double distance) {
-	active_object::make_projectile(ren, universe, 10, {255, 0, 255, 255}, x, y, 10, 10);
-
-}
 
 void player::animate() {
 	// Turning
@@ -114,7 +108,6 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 	gun_barrel_dst.x = x - gun_barrel_dst.w/2;
 	gun_barrel_dst.y = y - gun_barrel_dst.h;
 	auto gun_barrel_length = gun_barrel_dst.h;
-	std::cout << "Gun Barrel Height: " << gun_barrel_length << std::endl;
 	if (displayCamera.transform(&gun_barrel_dst)) {
 		auto gun_barrel_facing_direction = angle(mouse_pos.x - gun_barrel_dst.x - gun_barrel_dst.w/2, mouse_pos.y - gun_barrel_dst.y - gun_barrel_dst.h);
 		SDL_Point center = {gun_barrel_dst.w/2, gun_barrel_dst.h};

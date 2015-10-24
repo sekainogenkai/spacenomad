@@ -81,11 +81,21 @@ static void interact(object& obj1, object& obj2) {
         }
 }
 
+
+//http://stackoverflow.com/a/13102374/2948122
 void universe::animate() {
 	objects.animate(interact, myPlayer);
 	myPlayer.animate();
-	for (auto iter = universal_objects.begin(); iter != universal_objects.end(); iter++) {
-			iter->get()->animate();
+
+	auto iter = universal_objects.begin();
+
+	while (iter != universal_objects.end()) {
+			if(iter->get()->deleted()) {
+				universal_objects.erase(iter);
+			} else {
+				iter->get()->animate();
+				iter++;
+			}
 		}
 }
 

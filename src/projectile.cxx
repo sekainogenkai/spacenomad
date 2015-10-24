@@ -7,6 +7,7 @@
 
 #include "projectile.hxx"
 #include "main.hxx"
+#include "object.hxx"
 
 #include <iostream> // debugging
 

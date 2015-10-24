@@ -27,7 +27,6 @@ public:
 private:
 	double damage;
 	double spread;
-	bool delete_self = false;
 };
 
 } /* namespace spacenomad */

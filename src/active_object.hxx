@@ -29,6 +29,10 @@ public:
 			double x, double y, double xVel, double yVel, int spread=0, int damage=0);
 	void make_projectile(SDL_Renderer *ren, universe& universe, int radius,
 			SDL_Color color, double x, double y, double xVel, double yVel, int spread = 0, int damage = 0);
+	void make_fading_projectile(SDL_Renderer *ren, universe& universe, int radius,
+				SDL_Color color, double x, double y, double xVel, double yVel, int spread = 0, int damage = 0, int frame_life = 60, int alpha_start = 255);
+	void make_jet(SDL_Renderer *ren, universe& universe, double x, double y, double angle);
+	void make_jet_particles(SDL_Renderer *ren, universe& universe, double x, double y, double angle, SDL_Color color, double distance);
 	virtual ~active_object();
 };
 

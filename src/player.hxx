@@ -29,8 +29,7 @@ public:
 	void set_mouse_pos(int x, int y);
 	void start_shooting();
 	void stop_shooting();
-	void make_jet(SDL_Renderer *ren, universe& universe, double x, double y, double angle);
-	void make_jet_particles(SDL_Renderer *ren, universe& universe, double x, double y, double angle, SDL_Color color, double distance);
+
 	virtual ~player();
 private:
 	void shoot(double angle, int barrel_length, int speed, universe& universe, SDL_Renderer *ren);
