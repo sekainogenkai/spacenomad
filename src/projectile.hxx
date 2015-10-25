@@ -22,7 +22,7 @@ public:
 
 
 	virtual void animate();
-	void draw(SDL_Renderer *ren, const camera& displayCamera) const;
+	virtual void draw(SDL_Renderer *ren, const camera& displayCamera) const;
 	virtual ~projectile();
 private:
 	double damage;

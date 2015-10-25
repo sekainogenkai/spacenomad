@@ -41,7 +41,7 @@ public:
 	object(
 			object&& src);
 	virtual void animate();
-	void draw(SDL_Renderer *ren, const camera& displayCamera) const;
+	virtual void draw(SDL_Renderer *ren, const camera& displayCamera) const;
 	void angularVel_dampening(double dampening);
 	void movement_dampening(double dampening);
 	void considerCamera(camera& displayCamera, int clearFactor);

@@ -10,6 +10,9 @@
 
 #include "object.hxx"
 
+#include <ctime>
+#include <random>
+
 
 namespace spacenomad {
 
@@ -31,9 +34,19 @@ public:
 			SDL_Color color, double x, double y, double xVel, double yVel, int spread = 0, int damage = 0);
 	void make_fading_projectile(SDL_Renderer *ren, universe& universe, int radius,
 				SDL_Color color, double x, double y, double xVel, double yVel, int spread = 0, int damage = 0, int frame_life = 60, int alpha_start = 255);
-	void make_jet(SDL_Renderer *ren, universe& universe, double x, double y, double angle);
-	void make_jet_particles(SDL_Renderer *ren, universe& universe, double x, double y, double angle, SDL_Color color, double distance);
+	void make_jet(SDL_Renderer *ren, universe& universe, SDL_Color color,
+			double x, double y,
+			double x_vec, double y_vec,
+			int frame_life_min, int frame_life_max,
+			int next_frame_min, int next_frame_max,
+			double speed_varient_min, double speed_varient_max
+			);
 	virtual ~active_object();
+protected:
+	std::default_random_engine random_engine;
+private:
+	// For making jet
+	int make_jet_next_frame_count = 0;
 };
 
 } /* namespace spacenomad */

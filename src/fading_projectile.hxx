@@ -19,7 +19,7 @@ public:
 	fading_projectile(SDL_Renderer *ren, int radius, SDL_Color color,
 			double x, double y, double xVel, double yVel, int spread = 0, int damage = 10, int frame_life = 60, int alpha_start = 250);
 	virtual void animate();
-	void draw(SDL_Renderer *ren, const camera& displayCamera);
+	virtual void draw(SDL_Renderer *ren, const camera& displayCamera) const override;
 	virtual ~fading_projectile();
 private:
 	int frame_life;

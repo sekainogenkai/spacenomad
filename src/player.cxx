@@ -31,7 +31,7 @@ player::player(SDL_Renderer *ren, const char *textureFilename)
 void player::set_mouse_pos(int x, int y) {
 	mouse_pos.x = x;
 	mouse_pos.y = y;
-	std::cout << "MOUSE MOVING: " << mouse_pos.x << ", " << mouse_pos.y << std::endl;
+
 }
 
 void player::start_shooting() {
@@ -43,7 +43,6 @@ void player::stop_shooting(){
 }
 
 void player::shoot(double angle, int barrel_length, int speed, universe& universe, SDL_Renderer *ren) {
-	std::cout << "SHOOTING" << std::endl;
 
 	// Get vector of gun barrel end
 	double barrel_shot_distance = barrel_length - 10; // Make it start a little bit inside the barrel
@@ -56,7 +55,7 @@ void player::shoot(double angle, int barrel_length, int speed, universe& univers
 	// Make the bullets appear
 	active_object::make_fading_projectile(
 					ren, universe,
-					10,
+					100, // Radius
 					{255, 255, 255, 255},
 					barrel_end_x_vec + x, y + barrel_end_y_vec, // Shooting start location
 					x_vec, y_vec, // Trajectory
@@ -102,6 +101,8 @@ void player::animate() {
 	object::animate();
 }
 
+
+
 void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& universe) {
 	SDL_Rect gun_barrel_dst;
 	SDL_QueryTexture(gun_barrel_tex.get(), NULL, NULL, &gun_barrel_dst.w, &gun_barrel_dst.h);
@@ -117,6 +118,17 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 			shoot(gun_barrel_facing_direction, gun_barrel_length, 1, universe, ren);
 		}
 	}
+
+	// Jet particles
+	active_object::make_jet(ren, universe, {.r = 255, .g = 0, .b = 0, .a = 255},
+				x, y,
+				(double)2, (double)2, // x_vec, y_vec
+				15, 20, // Frame life min/max
+				-9, 2, // Next frame min/max
+				.4, 1.4 // speed varient min/max
+				);
+
+
 	object::draw(ren, displayCamera);
 
 	// Draw location of bullets exit
