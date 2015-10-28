@@ -79,7 +79,9 @@ void active_object::make_jet(SDL_Renderer *ren, universe& universe, SDL_Color co
 		double x_vec, double y_vec,
 		int frame_life_min, int frame_life_max,
 		int next_frame_min, int next_frame_max,
-		double speed_varient_min, double speed_varient_max
+		double speed_varient_min, double speed_varient_max,
+		int radius_min, int radius_max,
+		int alpha_start_min, int alpha_start_max
 ) {
 	make_jet_next_frame_count--;
 	while(make_jet_next_frame_count < 0) {
@@ -89,15 +91,18 @@ void active_object::make_jet(SDL_Renderer *ren, universe& universe, SDL_Color co
 		std::uniform_real_distribution<double> speed_varient_dstr(speed_varient_min, speed_varient_max);
 		int new_x_vec = speed_varient_dstr(random_engine) * x_vec;
 		int new_y_vec = speed_varient_dstr(random_engine) * y_vec;
+		std::uniform_int_distribution<int> radius_dstr(radius_min, radius_max);
+		std::uniform_int_distribution<int> alpha_start_dstr(alpha_start_min, alpha_start_max);
 		// Make the bullets(particles I mean) appear
 		make_fading_projectile(
 				ren, universe,
-				5, // Radius
+				radius_dstr(random_engine), // Radius
 				color, // Color
 				x, y, // Shooting start location
 				new_x_vec, new_y_vec, // Trajectory
 				0, 0, // Damage and spread
-				frame_life_dstr(random_engine), 100); // Time and alpha start.. This is for testing it
+				frame_life_dstr(random_engine), // Time and alpha start.. This is for testing it
+				alpha_start_dstr(random_engine));
 	}
 	if (make_jet_next_frame_count == 0) {
 		std::uniform_int_distribution<int> frame_count_dstr(next_frame_min, next_frame_max); // make the next frame
@@ -106,7 +111,7 @@ void active_object::make_jet(SDL_Renderer *ren, universe& universe, SDL_Color co
 }
 
 
-// TODO make fading projecile.
+// TODO make fading projectile.
 
 // TODO make jet stream.
 

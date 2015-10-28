@@ -39,7 +39,9 @@ public:
 			double x_vec, double y_vec,
 			int frame_life_min, int frame_life_max,
 			int next_frame_min, int next_frame_max,
-			double speed_varient_min, double speed_varient_max
+			double speed_varient_min, double speed_varient_max,
+			int radius_min, int radius_max,
+			int alpha_start_min, int alpha_start_max
 			);
 	virtual ~active_object();
 protected:

@@ -55,7 +55,7 @@ void player::shoot(double angle, int barrel_length, int speed, universe& univers
 	// Make the bullets appear
 	active_object::make_fading_projectile(
 					ren, universe,
-					100, // Radius
+					10, // Radius
 					{255, 255, 255, 255},
 					barrel_end_x_vec + x, y + barrel_end_y_vec, // Shooting start location
 					x_vec, y_vec, // Trajectory
@@ -115,17 +115,19 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst, gun_barrel_facing_direction + 90, &center, SDL_FLIP_NONE);
 
 		if (shot) {
-			shoot(gun_barrel_facing_direction, gun_barrel_length, 1, universe, ren);
+			shoot(gun_barrel_facing_direction, gun_barrel_length, 10, universe, ren);
 		}
 	}
 
 	// Jet particles
-	active_object::make_jet(ren, universe, {.r = 255, .g = 0, .b = 0, .a = 255},
+	active_object::make_jet(ren, universe, {255, 0, 0, 255},
 				x, y,
 				(double)2, (double)2, // x_vec, y_vec
-				15, 20, // Frame life min/max
-				-9, 2, // Next frame min/max
-				.4, 1.4 // speed varient min/max
+				5, 100, // Frame life min/max
+				-100, 2, // Next frame min/max
+				.4, 5, // speed varient min/max
+				2, 20, // Radius min/max
+				50, 255 // Alpha start min/max
 				);
 
 
