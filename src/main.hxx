@@ -80,6 +80,7 @@ extern space_nomad_SDL_Surface_unique_ptr renderString(const std::string& str, c
 
 extern double magnitude(double x, double y);
 extern double angle(double x, double y);
+void to_cartesian(double& x, double& y, double angle, double magnitude=1);
 
 extern void fill_circle(SDL_Renderer *ren, const SDL_Rect& bounds, bool inverted=false);
 

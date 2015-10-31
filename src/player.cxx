@@ -25,7 +25,7 @@ player::player(SDL_Renderer *ren, const char *textureFilename)
 ,shot(false)
 , gun_barrel_tex(loadTexture(ren, "astronaut/gun_barrel.png"))
 {
-        mass = 1;
+	mass = 1;
 }
 
 void player::set_mouse_pos(int x, int y) {
@@ -54,13 +54,13 @@ void player::shoot(double angle, int barrel_length, int speed, universe& univers
 
 	// Make the bullets appear
 	active_object::make_fading_projectile(
-					ren, universe,
-					10, // Radius
-					{255, 255, 255, 255},
-					barrel_end_x_vec + x, y + barrel_end_y_vec, // Shooting start location
-					x_vec, y_vec, // Trajectory
-					500, 1, // Damage and spread
-					1000, 100); // Time and alpha start.. This is for testing it
+			ren, universe,
+			10, // Radius
+			{255, 255, 255, 255},
+			barrel_end_x_vec + x, y + barrel_end_y_vec, // Shooting start location
+			x_vec, y_vec, // Trajectory
+			500, 1, // Damage and spread
+			1000, 100); // Time and alpha start.. This is for testing it
 }
 
 
@@ -87,8 +87,8 @@ void player::animate() {
 	// Moving forwards
 	const auto moveAccelSpeed = 1;
 	if (up || down) {
-		double xAccel = sin((180-facingDirection)/180*M_PI) * moveAccelSpeed;
-		double yAccel = cos((180+facingDirection)/180*M_PI) * moveAccelSpeed;
+		double xAccel, yAccel;
+		to_cartesian(xAccel, yAccel, facingDirection, moveAccelSpeed);
 		if (up) {
 			xVel += xAccel;
 			yVel += yAccel;
@@ -101,9 +101,9 @@ void player::animate() {
 	object::animate();
 }
 
-
-
 void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& universe) {
+
+	// Gun barrel draw
 	SDL_Rect gun_barrel_dst;
 	SDL_QueryTexture(gun_barrel_tex.get(), NULL, NULL, &gun_barrel_dst.w, &gun_barrel_dst.h);
 	gun_barrel_dst.x = x - gun_barrel_dst.w/2;
@@ -120,16 +120,42 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 	}
 
 	// Jet particles
-	active_object::make_jet(ren, universe, {255, 0, 0, 255},
+	if (up || down) {
+		int dir = up?-1 : 1;
+		active_object::make_jet(ren, universe, {0, 200, 0, 255}, // Blue Jet
 				x, y,
-				(double)2, (double)2, // x_vec, y_vec
+				facingDirection, // angle
+				4 * dir, 12 *dir, // magnitude  min/max
+				5, 19, // Frame life min/max
+				-10, 2, // Next frame min/max
+				-10, 10,// angle variant min/max
+				2, 12, // Radius min/max
+				200, 255, // Alpha start min/max
+				.98, 1 // Grow min/max
+		);
+		active_object::make_jet(ren, universe, {200, 0, 0, 255}, // Red Jet
+				x, y,
+				facingDirection, // angle
+				8 * dir, 14 * dir, // magnitude  min/max
 				5, 20, // Frame life min/max
-				-30, 2, // Next frame min/max
-				.4, 2, // speed varient min/max
+				-3, 1, // Next frame min/max
+				-15, 15,// angle variant min/max
 				2, 20, // Radius min/max
 				50, 255, // Alpha start min/max
-				.95, 1 // Grow min/max
-				);
+				.99, 1.02 // Grow min/max
+		);
+		active_object::make_jet(ren, universe, {200, 0, 200, 255}, // Yellow Jet
+				x, y,
+				facingDirection, // mag, angle
+				14 * dir, 20 * dir, // magnitude  min/max
+				5, 25, // Frame life min/max
+				-3, 2, // Next frame min/max
+				-20, 20,// angle variant min/max
+				2, 12, // Radius min/max
+				200, 255, // Alpha start min/max
+				.99, 1.01 // Grow min/max
+		);
+	}
 
 
 	object::draw(ren, displayCamera);
@@ -137,11 +163,11 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 	// Draw location of bullets exit
 	//SDL_Rect transformed_barrel_end_dst = {x_vec + x - 5, y + y_vec - 5, 10, 10};
 
-//	if (displayCamera.transform(&transformed_barrel_end_dst)) {
-//
-//		SDL_SetRenderDrawColor(ren , 0, 255, 255, 255);
-//		SDL_RenderFillRect(ren, &transformed_barrel_end_dst);
-//	}
+	//	if (displayCamera.transform(&transformed_barrel_end_dst)) {
+	//
+	//		SDL_SetRenderDrawColor(ren , 0, 255, 255, 255);
+	//		SDL_RenderFillRect(ren, &transformed_barrel_end_dst);
+	//	}
 	//std::cout << "Player (X, Y) " << x << ", " << y << std::endl << "Barrel(X,Y) " << transformed_barrel_end_dst.x << ", " << transformed_barrel_end_dst.y << std::endl;
 
 

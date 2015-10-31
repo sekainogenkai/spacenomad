@@ -398,14 +398,19 @@ int SDL_ToggleFS(SDL_Window *win, SDL_Renderer* ren)
 }
 
 double magnitude(double x, double y) {
-        return sqrt(pow(x, 2) + pow(y, 2));
+	return sqrt(pow(x, 2) + pow(y, 2));
 }
 
 double angle(double x, double y) {
-        if (fabs(x) < 0.0001)
-                return y > 0 ? 90 : 270;
-        else
-                return fmod(180 * atanf(y/x) / M_PI + (x > 0 ? 0 : 180) + 360, 360);
+	if (fabs(x) < 0.0001)
+		return y > 0 ? 90 : 270;
+	else
+		return fmod(180 * atanf(y/x) / M_PI + (x > 0 ? 0 : 180) + 360, 360);
+}
+
+void to_cartesian(double& x, double& y, double angle, double magnitude) {
+	x = sin((180-angle)/180*M_PI) * magnitude;
+	y = cos((180+angle)/180*M_PI) * magnitude;
 }
 
 extern void fill_circle(SDL_Renderer* ren, const SDL_Rect& bounds,
@@ -419,31 +424,32 @@ extern void fill_circle(SDL_Renderer* ren, const SDL_Rect& bounds,
 	auto y = bounds.y + b;
 
 	for (auto x = bounds.x; x < bounds.x + bounds.w/2 + 1; x++) {
-			// Measure from the center of each pixel rather than something else.
-			double pix_center_x = x + 0.5;
-			double pix_center_y;
-			do {
-				y--;
-				pix_center_y = y + 0.5;
-			} while ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b) <= 1);
-			y++;
-			auto x_mirrored = bounds.x + bounds.w - (x - bounds.x);
-			if (inverted)
-			{
-				SDL_RenderDrawLine(ren, x, y, x, bounds.y);
-				SDL_RenderDrawLine(ren, x, bounds.y + bounds.h - (y - bounds.y), x, bounds.y + bounds.h);
-				SDL_RenderDrawLine(ren, x_mirrored, y, x_mirrored, bounds.y);
-				SDL_RenderDrawLine(ren, x_mirrored, bounds.y + bounds.h - (y - bounds.y), x_mirrored, bounds.y + bounds.h);
-			}
-			else
-			{
-				SDL_RenderDrawLine(ren, x, y, x,  bounds.y + bounds.h - (y - bounds.y));
-				SDL_RenderDrawLine(ren, x_mirrored, y, x_mirrored,  bounds.y + bounds.h - (y - bounds.y));
-			}
-
-			continue;
-			//std::cerr << x << "," << y << ": " << ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b)) << std::endl;
+		// Measure from the center of each pixel rather than something else.
+		double pix_center_x = x + 0.5;
+		double pix_center_y;
+		do {
+			y--;
+			pix_center_y = y + 0.5;
+		} while ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b) <= 1);
+		y++;
+		auto x_mirrored = bounds.x + bounds.w - (x - bounds.x);
+		if (inverted)
+		{
+			SDL_RenderDrawLine(ren, x, y, x, bounds.y);
+			SDL_RenderDrawLine(ren, x, bounds.y + bounds.h - (y - bounds.y), x, bounds.y + bounds.h);
+			SDL_RenderDrawLine(ren, x_mirrored, y, x_mirrored, bounds.y);
+			SDL_RenderDrawLine(ren, x_mirrored, bounds.y + bounds.h - (y - bounds.y), x_mirrored, bounds.y + bounds.h);
 		}
+		else
+		{
+			SDL_RenderDrawLine(ren, x, y, x,  bounds.y + bounds.h - (y - bounds.y));
+			SDL_RenderDrawLine(ren, x_mirrored, y, x_mirrored,  bounds.y + bounds.h - (y - bounds.y));
+		}
+
+		continue;
+		//std::cerr << x << "," << y << ": " << ((pix_center_x - h)*(pix_center_x - h) / (a*a) + (pix_center_y - k)*(pix_center_y - k) / (b*b)) << std::endl;
+	}
+
 }
 
 } /* namespace spacenomad */

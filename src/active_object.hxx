@@ -34,12 +34,12 @@ public:
 			SDL_Color color, double x, double y, double xVel, double yVel, int spread = 0, int damage = 0);
 	void make_fading_projectile(SDL_Renderer *ren, universe& universe, int radius,
 				SDL_Color color, double x, double y, double xVel, double yVel, int spread = 0, int damage = 0, int frame_life = 60, int alpha_start = 255, double grow_factor=1);
-	void make_jet(SDL_Renderer *ren, universe& universe, SDL_Color color,
-			double x, double y,
-			double x_vec, double y_vec,
+	void make_jet(SDL_Renderer *ren, universe& universe, SDL_Color color, double x, double y,
+			double angle,
+			int magnitude_min, int magnitude_max,
 			int frame_life_min, int frame_life_max,
 			int next_frame_min, int next_frame_max,
-			double speed_varient_min, double speed_varient_max,
+			double angle_variant_min, double angle_variant_max,
 			int radius_min, int radius_max,
 			int alpha_start_min, int alpha_start_max,
 			double grow_min, double grow_max

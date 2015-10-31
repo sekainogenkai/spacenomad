@@ -75,12 +75,12 @@ void active_object::make_fading_projectile(SDL_Renderer* ren, universe& universe
 }
 
 
-void active_object::make_jet(SDL_Renderer *ren, universe& universe, SDL_Color color,
-		double x, double y,
-		double x_vec, double y_vec,
+void active_object::make_jet(SDL_Renderer *ren, universe& universe, SDL_Color color, double x, double y,
+		double angle,
+		int magnitude_min, int magnitude_max,
 		int frame_life_min, int frame_life_max,
 		int next_frame_min, int next_frame_max,
-		double speed_varient_min, double speed_varient_max,
+		double angle_variant_min, double angle_variant_max,
 		int radius_min, int radius_max,
 		int alpha_start_min, int alpha_start_max,
 		double grow_min, double grow_max
@@ -90,19 +90,21 @@ void active_object::make_jet(SDL_Renderer *ren, universe& universe, SDL_Color co
 		make_jet_next_frame_count++;
 		std::cout << "I am doing something?aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << std::endl;
 		std::uniform_int_distribution<int> frame_life_dstr(frame_life_min, frame_life_max);
-		std::uniform_real_distribution<double> speed_varient_dstr(speed_varient_min, speed_varient_max);
-		int new_x_vec = speed_varient_dstr(random_engine) * x_vec;
-		int new_y_vec = speed_varient_dstr(random_engine) * y_vec;
+		std::uniform_real_distribution<double> angle_variant_dstr(angle_variant_min, angle_variant_max);
+		std::uniform_real_distribution<double> magnitude_dstr(magnitude_min, magnitude_max);
 		std::uniform_int_distribution<int> radius_dstr(radius_min, radius_max);
 		std::uniform_int_distribution<int> alpha_start_dstr(alpha_start_min, alpha_start_max);
 		std::uniform_real_distribution<double> grow_dstr(grow_min, grow_max);
 		// Make the bullets(particles I mean) appear
+
+		double x_jet_vel,y_jet_vel;
+		to_cartesian(x_jet_vel, y_jet_vel, angle + angle_variant_dstr(random_engine), magnitude_dstr(random_engine));
 		make_fading_projectile(
 				ren, universe,
 				radius_dstr(random_engine), // Radius
 				color, // Color
 				x, y, // Shooting start location
-				new_x_vec, new_y_vec, // Trajectory
+				x_jet_vel, y_jet_vel, // Trajectory
 				0, 0, // Damage and spread
 				frame_life_dstr(random_engine), // Time and alpha start.. This is for testing it
 				alpha_start_dstr(random_engine), // Alpha start 255 is opaque
