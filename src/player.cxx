@@ -123,11 +123,12 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 	active_object::make_jet(ren, universe, {255, 0, 0, 255},
 				x, y,
 				(double)2, (double)2, // x_vec, y_vec
-				5, 100, // Frame life min/max
-				-100, 2, // Next frame min/max
-				.4, 5, // speed varient min/max
+				5, 20, // Frame life min/max
+				-30, 2, // Next frame min/max
+				.4, 2, // speed varient min/max
 				2, 20, // Radius min/max
-				50, 255 // Alpha start min/max
+				50, 255, // Alpha start min/max
+				.95, 1 // Grow min/max
 				);
 
 
