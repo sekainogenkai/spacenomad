@@ -122,16 +122,18 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 	// Jet particles
 	if (up || down) {
 		int dir = up?-1 : 1;
-		active_object::make_jet(ren, universe, {0, 200, 0, 255}, // Blue Jet
+
+
+		active_object::make_jet(ren, universe, {200, 0, 200, 255}, // Yellow Jet
 				x, y,
-				facingDirection, // angle
-				4 * dir, 12 *dir, // magnitude  min/max
-				5, 19, // Frame life min/max
+				facingDirection, // mag, angle
+				14 * dir, 20 * dir, // magnitude  min/max
+				5, 25, // Frame life min/max
 				-10, 2, // Next frame min/max
-				-10, 10,// angle variant min/max
-				2, 12, // Radius min/max
+				-20, 20,// angle variant min/max
+				2, 5, // Radius min/max
 				200, 255, // Alpha start min/max
-				.98, 1 // Grow min/max
+				1, 1.1 // Grow min/max
 		);
 		active_object::make_jet(ren, universe, {200, 0, 0, 255}, // Red Jet
 				x, y,
@@ -144,16 +146,16 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 				50, 255, // Alpha start min/max
 				.99, 1.02 // Grow min/max
 		);
-		active_object::make_jet(ren, universe, {200, 0, 200, 255}, // Yellow Jet
+		active_object::make_jet(ren, universe, {0, 200, 0, 255}, // Blue Jet
 				x, y,
-				facingDirection, // mag, angle
-				14 * dir, 20 * dir, // magnitude  min/max
-				5, 25, // Frame life min/max
-				-3, 2, // Next frame min/max
-				-20, 20,// angle variant min/max
+				facingDirection, // angle
+				4 * dir, 12 *dir, // magnitude  min/max
+				5, 19, // Frame life min/max
+				-10, 2, // Next frame min/max
+				-10, 10,// angle variant min/max
 				2, 12, // Radius min/max
 				200, 255, // Alpha start min/max
-				.99, 1.01 // Grow min/max
+				.98, 1 // Grow min/max
 		);
 	}
 
