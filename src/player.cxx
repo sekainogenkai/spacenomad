@@ -14,17 +14,10 @@
 
 namespace spacenomad {
 
-player::player(SDL_Renderer *ren, const char *textureFilename)
-: active_object(ren, textureFilename)
-, up(false)
-, down(false)
-, left(false)
-, right(false)
-, shift(false)
-, space(false)
-,shot(false)
-, gun_barrel_tex(loadTexture(ren, "astronaut/gun_barrel.png"))
-{
+player::player(SDL_Renderer *ren, const char *textureFilename):
+		active_object(ren, textureFilename), up(false), down(false), left(
+				false), right(false), shift(false), space(false), shot(false), gun_barrel_tex(
+				loadTexture(ren, "astronaut/gun_barrel.png")) {
 	mass = 1;
 }
 
@@ -38,32 +31,28 @@ void player::start_shooting() {
 	shot = true;
 }
 
-void player::stop_shooting(){
+void player::stop_shooting() {
 	shot = false;
 }
 
-void player::shoot(double angle, int barrel_length, int speed, universe& universe, SDL_Renderer *ren) {
+void player::shoot(double angle, int barrel_length, int speed,
+		universe& universe, SDL_Renderer *ren) {
 
 	// Get vector of gun barrel end
 	double barrel_shot_distance = barrel_length - 10; // Make it start a little bit inside the barrel
-	auto barrel_end_x_vec = barrel_shot_distance * cos(angle/180.0*M_PI);
-	auto barrel_end_y_vec = barrel_shot_distance * sin(angle/180.0*M_PI);
+	auto barrel_end_x_vec = barrel_shot_distance * cos(angle / 180.0 * M_PI);
+	auto barrel_end_y_vec = barrel_shot_distance * sin(angle / 180.0 * M_PI);
 	// Get vector of gun trajectory
-	auto x_vec = speed * cos(angle/180.0*M_PI);
-	auto y_vec = speed * sin(angle/180.0*M_PI);
+	auto x_vec = speed * cos(angle / 180.0 * M_PI);
+	auto y_vec = speed * sin(angle / 180.0 * M_PI);
 
 	// Make the bullets appear
-	active_object::make_fading_projectile(
-			ren, universe,
-			10, // Radius
-			{255, 255, 255, 255},
-			barrel_end_x_vec + x, y + barrel_end_y_vec, // Shooting start location
+	active_object::make_fading_projectile(ren, universe, 10, // Radius
+			{ 255, 255, 255, 255 }, barrel_end_x_vec + x, y + barrel_end_y_vec, // Shooting start location
 			x_vec, y_vec, // Trajectory
 			500, 1, // Damage and spread
 			1000, 100); // Time and alpha start.. This is for testing it
 }
-
-
 
 void player::animate() {
 	// Turning
@@ -80,7 +69,7 @@ void player::animate() {
 		}
 		angularVel += turnAccelSpeed;
 	}
-	if (!right && !left){
+	if (!right && !left) {
 		object::angularVel_dampening(1.2);
 	}
 
@@ -101,66 +90,119 @@ void player::animate() {
 	object::animate();
 }
 
-void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& universe) {
+void player::draw(SDL_Renderer *ren, const camera& displayCamera,
+		universe& universe) {
 
 	// Gun barrel draw
 	SDL_Rect gun_barrel_dst;
-	SDL_QueryTexture(gun_barrel_tex.get(), NULL, NULL, &gun_barrel_dst.w, &gun_barrel_dst.h);
-	gun_barrel_dst.x = x - gun_barrel_dst.w/2;
+	SDL_QueryTexture(gun_barrel_tex.get(), NULL, NULL, &gun_barrel_dst.w,
+			&gun_barrel_dst.h);
+	gun_barrel_dst.x = x - gun_barrel_dst.w / 2;
 	gun_barrel_dst.y = y - gun_barrel_dst.h;
 	auto gun_barrel_length = gun_barrel_dst.h;
 	if (displayCamera.transform(&gun_barrel_dst)) {
-		auto gun_barrel_facing_direction = angle(mouse_pos.x - gun_barrel_dst.x - gun_barrel_dst.w/2, mouse_pos.y - gun_barrel_dst.y - gun_barrel_dst.h);
-		SDL_Point center = {gun_barrel_dst.w/2, gun_barrel_dst.h};
-		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst, gun_barrel_facing_direction + 90, &center, SDL_FLIP_NONE);
+		auto gun_barrel_facing_direction = angle(
+				mouse_pos.x - gun_barrel_dst.x - gun_barrel_dst.w / 2,
+				mouse_pos.y - gun_barrel_dst.y - gun_barrel_dst.h);
+		SDL_Point center = { gun_barrel_dst.w / 2, gun_barrel_dst.h };
+		SDL_RenderCopyEx(ren, gun_barrel_tex.get(), NULL, &gun_barrel_dst,
+				gun_barrel_facing_direction + 90, &center, SDL_FLIP_NONE);
 
+		// Shoot the thingy
 		if (shot) {
-			shoot(gun_barrel_facing_direction, gun_barrel_length, 10, universe, ren);
+			shoot(gun_barrel_facing_direction, gun_barrel_length, 40, universe,
+					ren);
 		}
 	}
 
 	// Jet particles
 	if (up || down) {
-		int dir = up?-1 : 1;
+		int dir = up ? -1 : 1;
 
-
-		active_object::make_jet(ren, universe, {200, 0, 200, 255}, // Yellow Jet
-				x, y,
-				facingDirection, // mag, angle
+		active_object::make_jet(ren, universe, { 200, 0, 200, 255 }, // Yellow Jet
+				x, y, facingDirection, // angle
 				14 * dir, 20 * dir, // magnitude  min/max
 				5, 25, // Frame life min/max
 				-10, 2, // Next frame min/max
-				-20, 20,// angle variant min/max
+				-20, 20, // angle variant min/max
 				2, 5, // Radius min/max
 				200, 255, // Alpha start min/max
 				1, 1.1 // Grow min/max
-		);
-		active_object::make_jet(ren, universe, {200, 0, 0, 255}, // Red Jet
-				x, y,
-				facingDirection, // angle
+				);
+		active_object::make_jet(ren, universe, { 200, 0, 0, 255 }, // Red Jet
+				x, y, facingDirection, // angle
 				8 * dir, 14 * dir, // magnitude  min/max
 				5, 20, // Frame life min/max
 				-3, 1, // Next frame min/max
-				-15, 15,// angle variant min/max
+				-15, 15, // angle variant min/max
 				2, 20, // Radius min/max
 				50, 255, // Alpha start min/max
 				.99, 1.02 // Grow min/max
-		);
-		active_object::make_jet(ren, universe, {0, 200, 0, 255}, // Blue Jet
-				x, y,
-				facingDirection, // angle
-				4 * dir, 12 *dir, // magnitude  min/max
+				);
+		active_object::make_jet(ren, universe, { 0, 200, 0, 255 }, // Blue Jet
+				x, y, facingDirection, // angle
+				4 * dir, 12 * dir, // magnitude  min/max
 				5, 19, // Frame life min/max
 				-10, 2, // Next frame min/max
-				-10, 10,// angle variant min/max
+				-10, 10, // angle variant min/max
 				2, 12, // Radius min/max
 				200, 255, // Alpha start min/max
 				.98, 1 // Grow min/max
-		);
+				);
 	}
 
-
 	object::draw(ren, displayCamera);
+
+	// Hand jets.
+	double left_jet_x, left_jet_y;
+	double right_jet_x, right_jet_y;
+
+	// Guess the angle
+	double hand_angle = 118;
+	// Guess the mag
+	double hand_mag = 44;
+	to_cartesian(right_jet_x, right_jet_y, hand_angle + facingDirection,
+			hand_mag);
+	to_cartesian(left_jet_x, left_jet_y, -hand_angle + facingDirection,
+			hand_mag);
+	right_jet_x += x; // Right
+	right_jet_y += y;
+	left_jet_x += x; // Left
+	left_jet_y += y;
+
+	// Left hand Jet
+	if (left || right) {
+		double x_hand = left ? right_jet_x : left_jet_x;
+		double y_hand = left ? right_jet_y : left_jet_y;
+		active_object::make_jet(ren, universe, { 0, 200, 0, 255 }, // Blue Jet
+				x_hand, y_hand, facingDirection, // angle
+				-10, -20, // magnitude  min/max
+				5, 19, // Frame life min/max
+				-10, 2, // Next frame min/max
+				-10, 10, // angle variant min/max
+				2, 12, // Radius min/max
+				200, 255, // Alpha start min/max
+				.98, 1 // Grow min/max
+				);
+	}
+
+//	//Draw location of hand jet right (Well right to me but not the other guy you know the mirror thingy whatever
+//	SDL_Rect transformed_barrel_end_dst = {right_jet_x - 5, right_jet_y - 5, 10, 10};
+//
+//	if (displayCamera.transform(&transformed_barrel_end_dst)) {
+//		SDL_SetRenderDrawColor(ren , 0, 255, 100, 40);
+//		SDL_RenderFillRect(ren, &transformed_barrel_end_dst);
+//	}
+//	std::cout << "Player (X, Y) " << x << ", " << y << std::endl << "Barrel(X,Y) " << transformed_barrel_end_dst.x << ", " << transformed_barrel_end_dst.y << std::endl;
+//
+//	//Draw location of hand jet left (Well right to me but not the other guy you know the mirror thingy whatever
+//	transformed_barrel_end_dst = {left_jet_x - 5, left_jet_y - 5, 10, 10};
+//
+//	if (displayCamera.transform(&transformed_barrel_end_dst)) {
+//		SDL_SetRenderDrawColor(ren , 0, 255, 100, 40);
+//		SDL_RenderFillRect(ren, &transformed_barrel_end_dst);
+//	}
+//	std::cout << "Player (X, Y) " << x << ", " << y << std::endl << "Barrel(X,Y) " << transformed_barrel_end_dst.x << ", " << transformed_barrel_end_dst.y << std::endl;
 
 	// Draw location of bullets exit
 	//SDL_Rect transformed_barrel_end_dst = {x_vec + x - 5, y + y_vec - 5, 10, 10};
@@ -172,9 +214,7 @@ void player::draw(SDL_Renderer *ren, const camera& displayCamera, universe& univ
 	//	}
 	//std::cout << "Player (X, Y) " << x << ", " << y << std::endl << "Barrel(X,Y) " << transformed_barrel_end_dst.x << ", " << transformed_barrel_end_dst.y << std::endl;
 
-
 }
-
 
 player::~player() {
 }
