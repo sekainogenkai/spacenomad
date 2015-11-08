@@ -1,6 +1,12 @@
 #ifndef _TESTSDL_MAIN_HXX
 #define _TESTSDL_MAIN_HXX
 
+#include <cmath>
+/* M_PI does not exist in some environments. */
+#ifndef M_PI
+#define M_PI (acos(-1))
+#endif
+
 #include <memory>
 #include <stack>
 #include <sstream>

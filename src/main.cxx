@@ -1,3 +1,4 @@
+#include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <iomanip>
@@ -9,7 +10,7 @@
 #include <streambuf>
 
 extern "C" {
-#include <math.h>
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -272,8 +273,8 @@ main_class::~main_class()
 // Exclude from namespace spacenomad
 int main(int argc, char *argv[])
 {
-	spacenomad::main_class m;
-	return m.main_method(argc, argv);
+	SDL_SetMainReady();
+	return spacenomad::main_class().main_method(argc, argv);
 }
 
 namespace spacenomad {

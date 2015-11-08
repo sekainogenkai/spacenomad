@@ -40,6 +40,9 @@ AS_IF(
 		[CPPFLAGS="$CPPFLAGS '-I$with_meganz_mingw_std_threads'"])])
 
 PKG_CHECK_MODULES([SDL2], [sdl2 SDL2_image SDL2_ttf])
+# Get rid of the SDLMain thing.
+[SDL2_CFLAGS=$(echo "${SDL2_CFLAGS}" | sed -e 's/-Dmain=[^ ]*//g')]
+[SDL2_LIBS=$(echo "${SDL2_LIBS}" | sed -e 's/-lSDL2main//g')]
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
